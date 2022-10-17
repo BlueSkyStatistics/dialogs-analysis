@@ -1,14 +1,5 @@
 
 
-
-
-
-
-
-
-
-
-
 var localization = {
     en: {
         title: "t-test, Independent Samples",
@@ -38,6 +29,10 @@ var localization = {
         label4: "Options for Hedges' g",
         label5: "Options for Glass's delta",
         showEffectSizes: "Display effect sizes",
+        label21: "Center",
+        median: "Median",
+        mean: "Mean",
+        LevenesTest:"Options for Levene's Test",
         help: {
             title: "t-test, Independent Samples",
             r_help: "help(t.test, package ='stats')",
@@ -112,7 +107,7 @@ require(effectsize)
 					hedgesg_correction = {{if (options.selected.hedgesg =="1")}}TRUE{{#else}}FALSE{{/if}},
 					glass_d = {{if (options.selected.glassd =="0")}}TRUE{{#else}}FALSE{{/if}},  
 					glassd_correction = {{if (options.selected.glassd =="1")}}TRUE{{#else}}FALSE{{/if}},
-					missing ={{selected.Missvals | safe}},
+					missing ={{selected.Missvals | safe}}, center = "{{selected.gpbox1 | safe}}",
 					datasetNameOrDatasetGlobalIndex='{{dataset.name}}') %>%
 						BSkyFormat()			
 {{#else}}
@@ -123,7 +118,7 @@ require(effectsize)
 				 BSkyIndSmTTest(  
 					conf.level = {{selected.conflevel | safe}}, 
 					alternative = '{{selected.gpbox2 | safe}}', 
-					missing ={{selected.Missvals | safe}},
+					missing ={{selected.Missvals | safe}}, center = "{{selected.gpbox1 | safe}}",
 					datasetNameOrDatasetGlobalIndex='{{dataset.name}}') %>%
 						BSkyFormat()
 {{/if}}
@@ -262,8 +257,6 @@ require(effectsize)
                 })
             },
             label4: { el: new labelVar(config, { label: localization.en.label4, style: "mb-1, mt-1", h: 6 }) },
-
-
             label5: { el: new labelVar(config, { label: localization.en.label5, style: "mb-1, mt-1", h: 6 }) },
             glassdNoCorrection: {
                 el: new radioButton(config, {
@@ -285,6 +278,9 @@ require(effectsize)
                     extraction: "ValueAsIs"
                 })
             },
+            label21: { el: new labelVar(config, { label: localization.en.label21, style: "mt-3",h: 5 }) },
+            median: { el: new radioButton(config, { label: localization.en.median, no: "gpbox1", increment: "median", value: "median", state: "", extraction: "ValueAsIs" }) },
+            mean: { el: new radioButton(config, { label: localization.en.mean, no: "gpbox1", increment: "mean", value: "mean", state: "checked", extraction: "ValueAsIs" }) },
         }
         var effectsizes = {
             el: new optionsVar(config, {
@@ -315,12 +311,23 @@ require(effectsize)
                 ]
             })
         };
+        var LevenesTest = {
+            el: new optionsVar(config, {
+                no: "LevenesTest",
+                name: localization.en.LevenesTest,
+                content: [
+                    objects.label21.el,
+                    objects.mean.el,
+                    objects.median.el
+                ]
+            })
+        };
         const content = {
             left: [objects.content_var.el.content],
             right: [objects.Target.el.content, objects.Target2.el.content,
             objects.label1.el.content, objects.twosided.el.content, objects.greater.el.content, objects.less.el.content,
             objects.conf_level.el.content],
-            bottom: [effectsizes.el.content, MissingVals.el.content],
+            bottom: [effectsizes.el.content, MissingVals.el.content, LevenesTest.el.content],
             nav: {
                 name: localization.en.navigation,
                 icon: "icon-t2",

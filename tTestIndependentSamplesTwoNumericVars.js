@@ -124,25 +124,25 @@ BSkyFormat(BSky_Paired_t_Test)
 {{ if( options.selected.showEffectSizes == "TRUE")}}
 {{if (options.selected.cohensd =="1")}}
 BSky_Cohensd_Res <- cohens_d("{{selected.tvarbox1 | safe}}", "{{selected.tvarbox3 | safe}}", 
-    data = {{dataset.name}}, correction = TRUE)
+    data = {{dataset.name}}, paired = TRUE, correction = TRUE)
 BSkyFormat(as.data.frame(BSky_Cohensd_Res), 
     singleTableOutputHeader = c("Cohen's d results with bias corrected"))
 {{/if}}
 {{if (options.selected.cohensd == "0")}}
 BSky_Cohensd_Res <- cohens_d("{{selected.tvarbox1 | safe}}", "{{selected.tvarbox3 | safe}}", 
-    data = {{dataset.name}}, correction = FALSE)
+    data = {{dataset.name}}, paired = TRUE, correction = FALSE)
 BSkyFormat(as.data.frame(BSky_Cohensd_Res), 
     singleTableOutputHeader = c("Cohen's d results"))
 {{/if}}
 {{if (options.selected.hedgesg =="1")}}
 BSky_hedgesg_Res <- hedges_g("{{selected.tvarbox1 | safe}}", "{{selected.tvarbox3 | safe}}",
-    data = {{dataset.name}}, adjust = TRUE)
+    data = {{dataset.name}}, paired = TRUE, adjust = TRUE)
 BSkyFormat(as.data.frame(BSky_hedgesg_Res), 
     singleTableOutputHeader = c("Hedges' g results with bias corrected"))
 {{/if}}
 {{if (options.selected.hedgesg == "0")}}
 BSky_hedgesg_Res <- hedges_g("{{selected.tvarbox1 | safe}}", "{{selected.tvarbox3 | safe}}", 
-    data = {{dataset.name}}, adjust = FALSE)
+    data = {{dataset.name}}, paired = TRUE, adjust = FALSE)
 BSkyFormat(as.data.frame(BSky_hedgesg_Res), 
     singleTableOutputHeader = c("Hedges' g Results"))
 {{/if}}
@@ -154,7 +154,7 @@ BSkyFormat(as.data.frame(BSky_glassd_Res),
 {{/if}}
 {{if (options.selected.glassd == "0")}}
 BSky_glassd_Res <- glass_delta("{{selected.tvarbox1 | safe}}", "{{selected.tvarbox3 | safe}}",
-    data = {{dataset.name}}, correction=FALSE)
+    data = {{dataset.name}}, correction = FALSE)
 BSkyFormat(as.data.frame(BSky_glassd_Res), 
     singleTableOutputHeader = c("Glass's d Results"))
 {{/if}}
