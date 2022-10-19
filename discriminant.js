@@ -134,7 +134,7 @@ class discriminant extends baseModal {
             },
         }
         var opts = {
-            el: new options(config, {
+            el: new optionsVar(config, {
                 no: "MANOVA_options",
                 name: localization.en.options,
                 content: [

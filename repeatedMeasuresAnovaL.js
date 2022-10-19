@@ -296,7 +296,7 @@ if (exists('BSkyLevenesFactor')) rm(BSkyLevenesFactor)
             },
         };
         var opts = {
-            el: new options(config, {
+            el: new optionsVar(config, {
                 no: "RepeatedMeasures_options",
                 name: localization.en.options,
                 content: [
