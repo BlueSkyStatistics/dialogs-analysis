@@ -84,15 +84,7 @@ Click the R Help button to get detailed R help. You can also enter help(aov_ez, 
     `}
     }
 }
-var baseModal = require('../base/baseModal').baseModal
-var srcVariableList = require('../library/srcVariableList').element
-var dstVariableList = require('../library/dstVariableList').element
-var dstVariable = require('../library/dstVariable').element
-var checkbox = require('../library/checkBox').element
-var input = require('../library/inputVariable').element
-var labelVar = require('../library/label').element
-var comboBox = require('../library/comboBox').element
-var options = require('../library/options').element
+
 class repeatedMeasuresAnovaW extends baseModal {
     constructor() {
         var config = {
