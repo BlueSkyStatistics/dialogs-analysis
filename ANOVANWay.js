@@ -85,10 +85,11 @@ class ANOVANWay extends baseModal {
             formulaBuilder: {
                 el: new formulaBuilder(config, {
                     no: "formula",
-                    default: "plus"
+                    default: "plus",
+                    required:true
                 })
             },
-            label4: { el: new labelVar(config, { label: localization.en.label4, h: 6 }) },
+            label4: { el: new labelVar(config, { label: localization.en.label4, h: 5 , style: "mt-2"}) },
             horizontalAxis: {
                 el: new dstVariable(config, {
                     label: localization.en.horizontalAxis,
