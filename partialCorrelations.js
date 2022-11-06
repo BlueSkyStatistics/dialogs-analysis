@@ -11,61 +11,44 @@ var localization = {
             r_help: "help(pcor.test, package=ppcor)",
             body: `
 <b>Description</b></br>
-Performs Bartlett's test of the null that the variances in each of the groups (samples) are the same.
+Partial correlation for two variables given a third variable. We will calculate the pairwise partial correlation between each of the variables specified in the select variables control, controlling for the variables specified in the control variables control.<br/>
+We have written a wrapper around the function pcor.test that calls pcor.test for each pair of the variables specified.
 <br/>
 <b>Usage</b>
 <br/>
 <code> 
-bartlett.test(x, ...)</br>
-## Default S3 method:</br>
-bartlett.test(x, g, ...)</br>
-## S3 method for class 'formula'</br>
-bartlett.test(formula, data, subset, na.action, ...)
+pcor.test(x, y, z, method = c("pearson", "kendall", "spearman"))</br>
 </code> <br/>
 <b>Arguments</b><br/>
 <ul>
 <li>
 Arguments
-x: a numeric vector of data values, or a list of numeric data vectors representing the respective samples, or fitted linear model objects (inheriting from class "lm").
+x: a numeric vector.
 </li>
 <li>
-g: a vector or factor object giving the group for the corresponding elements of x. Ignored if x is a list.
+y: a numeric vector.
 </li>
 <li>
-formula: a formula of the form lhs ~ rhs where lhs gives the data values and rhs the corresponding groups.
+y: a numeric vector.
 </li>
 <li>
-data: an optional matrix or data frame (or similar: see model.frame) containing the variables in the formula formula. By default the variables are taken from environment(formula).
-</li>
-<li>
-subset: an optional vector specifying a subset of observations to be used.
-</li>
-<li>
-na.action: a function which indicates what should happen when the data contain NAs. Defaults to getOption("na.action").
-</li>
-<li>
-...: further arguments to be passed to or from methods.
+method: a character string indicating which partial correlation coefficient is to be computed. One of "pearson" (default), "kendall", or "spearman" can be abbreviated..
 </li>
 </ul>
 <b>Details</b></br>
-If x is a list, its elements are taken as the samples or fitted linear models to be compared for homogeneity of variances. In this case, the elements must either all be numeric data vectors or fitted linear model objects, g is ignored, and one can simply use bartlett.test(x) to perform the test. If the samples are not yet contained in a list, use bartlett.test(list(x, ...)).</br>
-Otherwise, x must be a numeric data vector, and g must be a vector or factor object of the same length as x giving the group for the corresponding elements of x.</br>
+Partial correlation is the correlation of two variables while controlling for a third variable. When the determinant of variance-covariance matrix is numerically zero, Moore-Penrose generalized matrix inverse is used. In this case, no p-value and statistic will be provided if the number of variables are greater than or equal to the sample size.</br>
 <b>Value</b><br/>
-A list of class "htest" containing the following components:<br/>
-statistic: Bartlett's K-squared test statistic.<br/>
-parameter: the degrees of freedom of the approximate chi-squared distribution of the test statistic.<br/>
+estimate: the partial correlation coefficient between two variables.<br/>
 p.value: the p-value of the test.<br/>
-method: the character string "Bartlett test of homogeneity of variances".<br/>
-data.name: a character string giving the names of the data.<br/>
+n: The number of samples.<br/>
 <b>Examples</b><br/>
 <code> 
-Dataset <- data.frame(Age=c(20,23,19,25,26), Weight=c(48,50,55,51,49), Gender=c('m','f','f','m','m' ))
-Result_Bartlett_Test = bartlett.test(sales ~ interaction(Dataset$Gender),data=Dataset)
+pcor.test(y.data$hl,y.data$disp,y.data[,c("deg","BC")])
 </code> <br/>
 <b>Package</b></br>
-stats</br>
+ppcor</br>
 <b>Help</b></br>
-help(bartlett.test, package=stats)
+help(pcor.test, package=ppcor)
 `}
     }
 }
