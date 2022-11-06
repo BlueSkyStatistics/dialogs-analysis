@@ -466,8 +466,8 @@ print(emmeans::lsmip(MultiAnova, {{selected.stringInteractionPlots | safe}}  ,CI
         let snippet14 = {
             RCode: `
 {{if (options.selected.diag =="TRUE") }}#Displaying diagnostic plots\nplot(MultiAnova, main = "Diagnostic Plots")\n{{/if}}
-{{if (options.selected.effectsizes == "eta_squared") }}BSkyEffectSizeResults <- eta_squared(MultiAnova, partial = TRUE, ci={{selected.confInterval | safe}}){{/if}}
-{{if (options.selected.effectsizes == "partial_eta_squared") }}BSkyEffectSizeResults <- eta_squared(MultiAnova, partial = FALSE, ci={{selected.confInterval | safe}}){{/if}}
+{{if (options.selected.effectsizes == "eta_squared") }}BSkyEffectSizeResults <- eta_squared(MultiAnova, partial = FALSE, ci={{selected.confInterval | safe}}){{/if}}
+{{if (options.selected.effectsizes == "partial_eta_squared") }}BSkyEffectSizeResults <- eta_squared(MultiAnova, partial = TRUE, ci={{selected.confInterval | safe}}){{/if}}
 {{if (options.selected.effectsizes == "omega_squared") }}BSkyEffectSizeResults <- omega_squared(MultiAnova, ci={{selected.confInterval | safe}} ){{/if}}
 {{if (options.selected.effectsizes == "epsilon_squared") }}BSkyEffectSizeResults <- epsilon_squared(MultiAnova, ci={{selected.confInterval | safe}}){{/if}}
 {{if (options.selected.effectsizes == "cohens_f") }}BSkyEffectSizeResults <- cohens_f(MultiAnova, ci={{selected.confInterval | safe}}){{/if}}

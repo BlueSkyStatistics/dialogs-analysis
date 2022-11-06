@@ -9,7 +9,8 @@ const nav = {
                 "./correlationTestMultivariable",
                 "./polychorserial",
                 "./correlationTestMultivariableLegacy",
-                "./partialCorrelations"
+                "./partialCorrelations",
+                "./semipartialCorrelations"
 
             ]
         },
