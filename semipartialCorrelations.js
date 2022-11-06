@@ -1,14 +1,15 @@
 
 var localization = {
     en: {
-        title: "Partial Correlations",
-        navigation: "Partial",
-        tvarbox1: "Select variables",
+        title: "Semi-partial Correlations",
+        navigation: "Semi-partial",
         statistic: "Select a method",
+        tvarbox1: "Select variables",
+        correlationType: "Type of correlation",
         tvarbox2: "Select control variables",
         help: {
-            title: "Partial Correlations",
-            r_help: "help(pcor.test, package=ppcor)",
+            title: "Semi-partial Correlations",
+            r_help: "help(spcor.test, package=ppcor)",
             body: `
 <b>Description</b></br>
 Performs Bartlett's test of the null that the variances in each of the groups (samples) are the same.
@@ -76,17 +77,17 @@ help(bartlett.test, package=stats)
 
 
 
-class semipartialCorrelation extends baseModal {
+class partialCorrelation extends baseModal {
     constructor() {
         var config = {
-            id: "semipartialCorrelation",
+            id: "partialCorrelation",
             label: localization.en.title,
             modalType: "two",
             RCode: `
 library(ppcor)
 #Running the test
 BSkyResults <- BSkyPartialSemiCorrelations ( vars = c({{selected.tvarbox1 | safe }}), constants = c({{selected.tvarbox2 | safe}}), 
-    type = "partial", method = {{selected.statistic | safe}}, data = "{{dataset.name}}")
+    type = "semipartial", method = {{selected.statistic | safe}}, data = "{{dataset.name}}")
 #Formatting the results
 BSkyFormat(BSkyResults, "Results")
 #Removing the R object after displaying the results
@@ -125,7 +126,7 @@ rm(BSkyResults)
             },
         }
         const content = {
-            left: [ objects.content_var.el.content],
+            left: [objects.content_var.el.content],
             right: [objects.statistic.el.content, objects.tvarbox1.el.content, objects.tvarbox2.el.content],
             nav: {
                 name: localization.en.navigation,
@@ -137,4 +138,4 @@ rm(BSkyResults)
         this.help = localization.en.help;
     }
 }
-module.exports.item = new semipartialCorrelation().render()
+module.exports.item = new partialCorrelation().render()
