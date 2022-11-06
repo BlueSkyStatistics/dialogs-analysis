@@ -8,7 +8,9 @@ const nav = {
             "children": [
                 "./correlationTestMultivariable",
                 "./polychorserial",
-                "./correlationTestMultivariableLegacy"
+                "./correlationTestMultivariableLegacy",
+                "./partialCorrelations"
+
             ]
         },
         "./crossTabMultiWay",
