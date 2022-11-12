@@ -5,7 +5,7 @@ var localization = {
             r_help: "help(CrossTable, package=gmodels)",
             body: `
             <b>Description</b></br>
-Creates crosstab with row, column and layer variables and optionally displays the following<br/>
+Creates crosstab with row, column and layer variables. When multiple row and column variables are specified, we generate a separate cross table for each pair of row and column variables. Additionally the following are displayed<br/>
 Expected counts<br/>
 Row and column percentages<br/>
 Unstandardized, standardized and adjusted residuals<br/>
