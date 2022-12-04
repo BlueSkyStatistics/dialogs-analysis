@@ -67,13 +67,25 @@ class semipartialCorrelation extends baseModal {
             modalType: "two",
             RCode: `
 library(ppcor)
+local({
+#Removing the temporary object if it exists
+if (exists("BSkyTemp", envir = .GlobalEnv))
+{ 
+    rm(BSkyTemp, envir = .GlobalEnv)    
+}
+##Removing missing values
+BSkyTemp <<- na.omit({{dataset.name}}[,c({{selected.tvarbox1 | safe }},{{selected.tvarbox2 | safe}})])
 #Running the test
 BSkyResults <- BSkyPartialSemiCorrelations ( vars = c({{selected.tvarbox1 | safe }}), constants = c({{selected.tvarbox2 | safe}}), 
-    type = "partial", method = {{selected.statistic | safe}}, data = "{{dataset.name}}")
+    type = "partial", method = {{selected.statistic | safe}}, data = "BSkyTemp")
 #Formatting the results
 BSkyFormat(BSkyResults, "Results")
 #Removing the R object after displaying the results
-rm(BSkyResults)
+if (exists("BSkyResults"))
+{
+    rm(BSkyResults)
+}
+})
 `
         }
         var objects = {
