@@ -14,7 +14,13 @@ const nav = {
 
             ]
         },
-        "./crossTabMultiWay",
+        {
+            "name": "Crosstab",
+            "icon": "icon-crosstab",
+            "children": [
+                "./crossTabMultiWay"
+            ]
+        },        
         {
             "name": "Cluster",
             "icon": "icon-cluster",
@@ -116,7 +122,15 @@ const nav = {
                 "./Survival/KaplanMeierEstimationOneGroup"
 
             ]
-        },                
+        },    
+        {
+            "name": "Tables",
+            "icon": "icon-table_basic",
+            "children": [
+                "./TablesBasic",
+                "./TablesAdvanced"
+            ]
+        },                   
         {
             "name": "Variance",
             "icon": "icon-variance",

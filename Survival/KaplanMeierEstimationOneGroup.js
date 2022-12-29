@@ -9,15 +9,23 @@ var localization = {
         survivalradio:"Survival",
         inciradio: "Failure",
         printallest: "Estimate Table Including All Times",
+		printspecest: "Estimate Table for Specific Times",
+		spectimes: "Specify times as time1, time2, time3, etc. or as seq(1,5,by=1)",
         styleoptions: "Style Options",
         axisoptions: "Axis Options",
 		label12: "Click on the ? button on the top right of the dialog for details on sample datasets and the data format supported.",
         titlebox: "Plot Title",
+		plottitlesizelabel: "Plot Title Size (5-50)",
         themedropdown: "Plot Theme",
         label2: "Number at Risk",
         natriskchkbox: "Include Number at Risk",
-        risktableprop: "Risk Table Height(0-1)",
+        risktableprop: "Risk Table Height (0-1)",
         risktablepos: "Risk Table Position",
+		risktablevaluesize: "Risk Table Value Size (1-15)",
+		risktabletitlesize: "Risk Table Title Size (5-50)",
+		risktableaxislabelsize: "Risk Table Axis Label Size (5-50)",
+		risktableticklabelsize: "Risk Table Tick Label Size (5-50)",
+		risktableclean: "Remove Axes and Gridlines from Risk Table",
 
         label3: "Line Options",
         linesize: "Size (0-5)",
@@ -34,16 +42,19 @@ var localization = {
 		
 		label6: "Survival Axis",
 		survaxislabel:"Label",
+		axislabelsize: "Axis Label Size (5-50)",		
 		label7: "Scale",
 		defbutton:"proportion",
 		pctbutton:"percent",
-		survaxislimits:"Axis limits on proportion scale(0-1) - enter 'c(min, max)'",
+		survaxislimits:"Axis limits on proportion scale (0-1) - enter 'c(min, max)'",
 		survtickinc : "Tick Mark Increments (0-1)",
 		
         label8: "Time Axis",
         timeaxislabel: "Label",
-        timeaxislimits: "Axis Limits (NULL is default, enter 'c(min,max)' to change e.g. 'c(0,20)'",
-        timetickinc: "Tick Mark Increments (NULL is default, enter a number to change, min=0",
+        timeaxislimits: "Axis Limits (NULL is default, enter 'c(min,max)' to change e.g. 'c(0,20) )'",
+        timetickinc: "Tick Mark Increments (NULL is default, enter a number to change, min=0)",
+		
+		ticklabelsize: "Axis Tick Mark Label Size (5-50)",
 
 
 
@@ -68,6 +79,10 @@ var localization = {
             <b>Estimate Table Including All Times:</b> Option to include a table that has the survival and event estimate probabilities for each observed time in the dataset
             <br/>
             <br/>
+			<b>Estimate Table for Specific Times:</b> Option to include a table that has the survival estimate probabilities for a user-selected set of times.
+			<br/><br/>
+			<b>Specify times as time1, time2, time3, etc. or as seq(1,5,by=1):</b> These are the specific times that will be included in the table for specific times.  They can be specified individually with commas, or as a sequence of evenly-spaced values.
+			<br/><br/>
             Tables are output with the sample size, the number of subjects with the event, the median survival time (if defined), the restricted mean survival time, and the median follow-up time.  The median follow-up time is computed using the reverse Kaplan-Meier estimator, which treats true events as censored observations and true censored observations as events.  Thus, the "event" in this estimator is "following the subjects for as long as the study could".
             <br/>
             A table of Kaplan-Meier survival and event estimates is provided at each observed time in the dataset, with 95% confidence intervals. 
@@ -82,9 +97,15 @@ var localization = {
             <br/>
             <b>Plot Title:</b> Title of the plot; delete all text for no title
             <br/><br/>
+			<b>Plot Title Size:</b> Size of the plot title.
+			<br/><br/>
             <b>Plot Theme:</b> General style of the plot
             <br/><br/>
-            <b>Number at Risk:</b> Optionally, include a table for the number of subjects still at risk over time at the bottom of the plot.  <b>Risk Table Position</b> specifies whether you want the table outside the axes or inside the axes.  The <b>Risk Table Height</b> controls the proportion of the plotting area that the table will take up.  This option is ignored when the risk table position is inside the axes.
+            <b>Include Number at Risk:</b> Optionally, include a table for the number of subjects still at risk over time at the bottom of the plot.  <b>Risk Table Position</b> specifies whether you want the table outside the axes or inside the axes.  The <b>Risk Table Height</b> controls the proportion of the plotting area that the table will take up.  This option is ignored when the risk table position is inside the axes. 
+			The <b>Risk Table Value Size</b> controls the size of the numbers at risk. The <b>Risk Table Title Size</b> controls the size of the title for the number at risk table.
+			The <b>Risk Table Axis Label Size</b> controls the size of the axis labels.
+			The <b>Risk Table Tick Label Size</b> controls the size of the tick mark labels for the times in the number at risk table. If it's desired to remove all axes and gridlines 
+			from the number at risk table, the <b>Remove Axes and Gridlines from Risk Table</b> option can be checked.  This will only include the numbers at risk in the table.
             <br/>
             <br/>
             <b>Line Options:</b>
@@ -97,7 +118,11 @@ var localization = {
             <br/> 
             The <b>Label</b> option specifies the text label for the axis.  The <b>Axis Limits</b> specifies the minimum and maximum values of the axis.  The <b>Tick Mark Increments</b> option controls the spacing of the tick marks on the axis.  The increments on the time axis also control the times for the optional number at risk table.
             <br/> 
-            The survival axis <b>Scale</b> option specifies whether you want the estimates to be on a proportion (0-1) or percent (0-100) scale.                          
+            The survival axis <b>Scale</b> option specifies whether you want the estimates to be on a proportion (0-1) or percent (0-100) scale.
+			<br/><br/>
+			<b>Axis Label Size:</b>  This controls the size of both the survival and time axis label sizes.
+			<br/><br/>
+			<b>Axis Tick Mark Label Size:</b>  This controls the size of both the survival and time axis tick mark label sizes.
 `}
     }
 }
@@ -109,56 +134,74 @@ class KaplanMeierEstimationOneGroup extends baseModal {
             label: localization.en.title,
             modalType: "two",
             RCode: `
-            require(survival)
-            require(broom)
-            require(survminer)
-            require(dplyr)
-            require(arsenal)
-            require(ggthemes)
+require(survival)
+require(broom)
+require(survminer)
+require(dplyr)
+require(arsenal)
+require(ggthemes)
 
-            fit <- survfit(Surv({{selected.timevar | safe}},{{selected.eventvar | safe}}) ~ 1, data={{dataset.name}})
+fit <- survfit(Surv({{selected.timevar | safe}},{{selected.eventvar | safe}}) ~ 1, data={{dataset.name}})
 
-            # summaries
-            
-            kmsummary <- tableby(~Surv({{selected.timevar | safe}},{{selected.eventvar | safe}}),data={{dataset.name}},surv.stats=c("N","Nmiss","Nevents","medSurv","medTime"))
-            BSkyFormat(as.data.frame(summary(kmsummary,text=TRUE)),singleTableOutputHeader="Survival Summary: Surv({{selected.timevar | safe}},{{selected.eventvar | safe}})")
-            
-            
-            # mean and median survival estimates
-            
-            meanmed <- as.data.frame(glance(fit))
-            meanmed <- meanmed %>% dplyr::select(rmean:conf.high)
-            BSkyFormat(meanmed,singleTableOutputHeader="Restricted Mean and Median Survival Times")
-            
-            # KM estimates
-            
-            kmest <- surv_summary(fit,data={{dataset.name}})
-            kmest <- kmest %>% dplyr::select(time:std.err,lower,upper)
-            
-            kmest <- mutate(kmest,
+# summaries
+
+kmsummary <- tableby(~Surv({{selected.timevar | safe}},{{selected.eventvar | safe}}),data={{dataset.name}},surv.stats=c("N","Nmiss","Nevents","medSurv","medTime"))
+BSkyFormat(as.data.frame(summary(kmsummary,text=TRUE)),singleTableOutputHeader="Survival Summary: Surv({{selected.timevar | safe}},{{selected.eventvar | safe}})")
+
+# mean and median survival estimates
+
+meanmed <- as.data.frame(glance(fit))
+meanmed <- meanmed %>% dplyr::select(rmean:conf.high)
+BSkyFormat(meanmed,singleTableOutputHeader="Restricted Mean and Median Survival Times")
+
+# KM estimates
+
+kmest <- surv_summary(fit,data={{dataset.name}})
+kmest <- kmest %>% dplyr::select(time:std.err,lower,upper)
+
+kmest <- mutate(kmest,
                 prob.event=1-surv,
                 prob.lower=1-upper,
                 prob.upper=1-lower)
-            
-            if ({{selected.printallest | safe}})
-            {
-            BSkyFormat(kmest,singleTableOutputHeader="Kaplan-Meier Estimates and 95% Confidence Intervals")
-            }
-            
-            # survival curve
-            
-            ggsurvplot(fit,data={{dataset.name}},
-                       size={{selected.linesize | safe}},linetype=1,palette="{{selected.linecolor | safe}}",                                  
-                       conf.int={{selected.cichkbox | safe}},conf.int.style="{{selected.cistyle | safe}}",conf.int.alpha={{selected.citransparency | safe}},            
-                       legend="none",legend.labs=" ",legend.title=" ",                       
-                       censor={{selected.censorchkbox | safe}},censor.size={{selected.censorsize | safe}},                                        
-                       risk.table={{selected.natriskchkbox | safe}},risk.table.height={{selected.risktableprop | safe}},risk.table.pos="{{selected.risktablepos | safe}}",        
-                       ggtheme={{selected.themedropdown | safe}},                                         
-                       fun={{selected.plottypegroup | safe}},                                                       
-                       xlim={{selected.timeaxislimits | safe}},break.time.by={{selected.timetickinc | safe}},                                 
-                       surv.scale="{{selected.scalebox | safe}}",ylim={{selected.survaxislimits | safe}},break.y.by={{selected.survtickinc | safe}},                   
-                       title="{{selected.titlebox | safe}}",xlab="{{selected.timeaxislabel | safe}}",ylab="{{selected.survaxislabel | safe}}",                   
-                       surv.median.line="{{selected.medsurvivalline | safe}}")  
+
+{{if (options.selected.printallest=="TRUE")}}
+BSkyFormat(kmest,singleTableOutputHeader="Kaplan-Meier Estimates and 95% Confidence Intervals")
+{{/if}}
+
+{{if ((options.selected.printspecest=="TRUE") & (options.selected.spectimes!=""))}}
+cat("Kaplan-Meier Estimates and 95% Confidence Intervals\n")
+summary(fit, times=c({{selected.spectimes | safe}}))
+{{/if}}
+
+# survival curve
+
+km_plot <- ggsurvplot(fit,data={{dataset.name}},
+	size={{selected.linesize | safe}},linetype=1,palette="{{selected.linecolor | safe}}",                                  
+	conf.int={{selected.cichkbox | safe}},conf.int.style="{{selected.cistyle | safe}}",conf.int.alpha={{selected.citransparency | safe}},            
+	legend="none",legend.labs=" ",legend.title=" ",                       
+	censor={{selected.censorchkbox | safe}},censor.size={{selected.censorsize | safe}},                                        
+	risk.table={{selected.natriskchkbox | safe}},risk.table.height={{selected.risktableprop | safe}},risk.table.pos="{{selected.risktablepos | safe}}",fontsize={{selected.risktablevaluesize | safe}},        
+	ggtheme={{selected.themedropdown | safe}},                                         
+	fun={{selected.plottypegroup | safe}},                                                       
+	xlim={{selected.timeaxislimits | safe}},break.time.by={{selected.timetickinc | safe}},                                 
+	surv.scale="{{selected.scalebox | safe}}",ylim={{selected.survaxislimits | safe}},break.y.by={{selected.survtickinc | safe}},                   
+	title="{{selected.titlebox | safe}}",font.main={{selected.plottitlesize | safe}},
+	font.x={{selected.axislabelsize | safe}},xlab="{{selected.timeaxislabel | safe}}",font.y={{selected.axislabelsize | safe}},ylab="{{selected.survaxislabel | safe}}",font.tickslab={{selected.ticklabelsize | safe}},                   
+	surv.median.line="{{selected.medsurvivalline | safe}}")
+
+{{if (options.selected.natriskchkbox=="TRUE")}}
+# number at risk title size and axis label size
+km_plot$table <- km_plot$table + theme(plot.title=element_text(size={{selected.risktabletitlesize | safe}}), axis.title.x.bottom=element_text(size={{selected.risktableaxislabelsize | safe}}), axis.text.x=element_text(size={{selected.risktableticklabelsize}}))
+{{/if}}
+
+{{if ((options.selected.natriskchkbox=="TRUE") & (options.selected.risktableclean=="TRUE"))}}
+# removing axis and grid lines
+km_plot$table <- km_plot$table + theme(axis.line=element_blank(), axis.ticks=element_blank(),
+	axis.text.x=element_blank(), axis.title.x.bottom=element_blank(),
+	panel.grid.major=element_blank(), panel.grid.minor=element_blank())
+{{/if}}
+
+km_plot		   
 `
         }
         var objects = {
@@ -215,7 +258,24 @@ class KaplanMeierEstimationOneGroup extends baseModal {
                     style: "mt-3"
                 })
             },
-
+            printspecest: {
+                el: new checkbox(config, {
+                    label: localization.en.printspecest,
+                    no: "printspecest",
+                    extraction: "Boolean",
+					newline: true
+                })
+            },
+            spectimes: {
+                el: new input(config, {
+                    no: 'spectimes',
+                    label: localization.en.spectimes,
+					style: "ml-5",
+                    extraction: "TextAsIs",
+                    allow_spaces:true,
+                    type: "character",
+                })
+            },			
             titlebox: {
                 el: new input(config, {
                     no: 'titlebox',
@@ -227,6 +287,18 @@ class KaplanMeierEstimationOneGroup extends baseModal {
                     type: "character",
                 })
             },
+			plottitlesize: {
+				el: new inputSpinner(config,{
+				no: 'plottitlesize',
+				label: localization.en.plottitlesizelabel,
+				style: "mt-3",
+				min: 5,
+				max: 50,
+				step: 1,
+				value: 20,
+				extraction: "NoPrefix|UseComma"
+				})
+			},			
             themedropdown: {
                 el: new comboBox(config, {
                     no: 'themedropdown',
@@ -276,7 +348,63 @@ class KaplanMeierEstimationOneGroup extends baseModal {
                     style:"ml-3"
                 })
             },                      
-
+			risktablevaluesize: {
+				el: new inputSpinner(config,{
+				no: 'risktablevaluesize',
+				label: localization.en.risktablevaluesize,
+				style: "mt-3 ml-1",
+				min: 1,
+				max: 15,
+				step: 0.5,
+				value: 4.5,
+				extraction: "NoPrefix|UseComma"
+				})
+			},
+			risktabletitlesize: {
+				el: new inputSpinner(config,{
+				no: 'risktabletitlesize',
+				label: localization.en.risktabletitlesize,
+				style: "ml-1",
+				min: 5,
+				max: 50,
+				step: 1,
+				value: 16,
+				extraction: "NoPrefix|UseComma"
+				})
+			},
+			risktableaxislabelsize: {
+				el: new inputSpinner(config,{
+				no: 'risktableaxislabelsize',
+				label: localization.en.risktableaxislabelsize,
+				style: "ml-1",
+				min: 5,
+				max: 50,
+				step: 1,
+				value: 16,
+				extraction: "NoPrefix|UseComma"
+				})
+			},			
+			risktableticklabelsize: {
+				el: new inputSpinner(config,{
+				no: 'risktableticklabelsize',
+				label: localization.en.risktableticklabelsize,
+				style: "ml-1 mb-3",
+				min: 5,
+				max: 50,
+				step: 1,
+				value: 12,
+				extraction: "NoPrefix|UseComma"
+				})
+			},			
+            risktableclean: {
+                el: new checkbox(config, {
+                    label: localization.en.risktableclean,
+                    no: "risktableclean",
+                    extraction: "Boolean",
+                    newline: true,
+                    style:"ml-3 mb-3"
+                })
+            }, 			
             label3: { el: new labelVar(config, { label: localization.en.label3, h: 5 }) },
             linesize: {
                 el: new advancedSlider(config, {
@@ -379,7 +507,19 @@ class KaplanMeierEstimationOneGroup extends baseModal {
                     allow_spaces:true,
                     type: "character",
                 })
-            },            
+            },
+			axislabelsize: {
+				el: new inputSpinner(config,{
+				no: 'axislabelsize',
+				label: localization.en.axislabelsize,
+				style: "mt-5",
+				min: 5,
+				max: 50,
+				step: 1,
+				value: 16,
+				extraction: "NoPrefix|UseComma"
+				})
+			},            
             label7: { el: new labelVar(config, { label: localization.en.label7, style: "mt-3 ml-4", h: 6 }) },
             defbutton: {
                 el: new radioButton(config, {
@@ -409,6 +549,7 @@ class KaplanMeierEstimationOneGroup extends baseModal {
                     label: localization.en.survaxislimits,
                     placeholder: "c(0,1)",
                     style:"ml-4 mt-3",
+					width: "w-25",
                     extraction: "TextAsIs",
                     value: "c(0,1)",
                     allow_spaces:true,
@@ -440,13 +581,14 @@ class KaplanMeierEstimationOneGroup extends baseModal {
                     type: "character",
                 })
             }, 
-
             timeaxislimits: {
                 el: new input(config, {
                     no: 'timeaxislimits',
                     label: localization.en.timeaxislimits,
                     placeholder: "NULL",
+					required: true,
                     style:"ml-4 mt-3",
+					width: "w-25",
                     extraction: "TextAsIs",
                     value: "NULL",
                     allow_spaces:true,
@@ -458,13 +600,26 @@ class KaplanMeierEstimationOneGroup extends baseModal {
                     no: 'timetickinc',
                     label: localization.en.timetickinc,
                     placeholder: "NULL",
+					required: true,
                     style:"ml-4 mt-3",
+					width: "w-25",
                     extraction: "TextAsIs",
                     value: "NULL",
                     allow_spaces:true,
                     Type: "character"
                 })
             },
+			ticklabelsize: {
+				el: new inputSpinner(config,{
+				no: 'ticklabelsize',
+				label: localization.en.ticklabelsize,
+				min: 5,
+				max: 50,
+				step: 1,
+				value: 12,
+				extraction: "NoPrefix|UseComma"
+				})
+			},			
             label12: {
                 el: new labelVar(config, {
                   label: localization.en.label12, 
@@ -480,11 +635,17 @@ class KaplanMeierEstimationOneGroup extends baseModal {
                 name: localization.en.styleoptions,
                 content: [
                     objects.titlebox.el,
+					objects.plottitlesize.el,
                     objects.themedropdown.el,
                     objects.label2.el,
                     objects.natriskchkbox.el,
                     objects.risktableprop.el,
                     objects.risktablepos.el,
+					objects.risktablevaluesize.el,
+					objects.risktabletitlesize.el,
+					objects.risktableaxislabelsize.el,
+					objects.risktableticklabelsize.el,
+					objects.risktableclean.el,
                     objects.label3.el,
                     objects.linesize.el,
                     objects.linecolor.el,
@@ -516,7 +677,9 @@ class KaplanMeierEstimationOneGroup extends baseModal {
                     objects.label8.el,
                     objects.timeaxislabel.el,
                     objects.timeaxislimits.el,
-                    objects.timetickinc.el
+                    objects.timetickinc.el,
+					objects.axislabelsize.el,
+					objects.ticklabelsize.el
 
                 ]
             })
@@ -529,8 +692,9 @@ class KaplanMeierEstimationOneGroup extends baseModal {
             objects.label1.el.content,
             objects.survivalradio.el.content,
             objects.inciradio.el.content,
-            objects.printallest.el.content
-
+            objects.printallest.el.content,
+			objects.printspecest.el.content,
+			objects.spectimes.el.content
             ],
             bottom: [styleoptions.el.content,
             axisoptions.el.content],
