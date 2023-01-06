@@ -114,24 +114,6 @@ const nav = {
             ]
         },
         {
-            "name": "Survival",
-            "icon": "icon-survival",
-            "children": [
-                "./Survival/competingRisksOneGroup",
-                "./Survival/KaplanMeierEstimationCompareGroups",
-                "./Survival/KaplanMeierEstimationOneGroup"
-
-            ]
-        },    
-        {
-            "name": "Tables",
-            "icon": "icon-table_basic",
-            "children": [
-                "./TablesBasic",
-                "./TablesAdvanced"
-            ]
-        },                   
-        {
             "name": "Variance",
             "icon": "icon-variance",
             "children": [

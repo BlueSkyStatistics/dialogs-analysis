@@ -188,7 +188,7 @@ BSkyFormat(results,singleTableOutputHeader = paste("Anscombe-Glynn test of kurto
           //  bottom: [MissingVals.el.content],
             nav: {
                 name: localization.en.navigation,
-                icon: "icon-target-1",
+                icon: "icon-anscombe-glynn",
                 modal: config.id
             }
         }
