@@ -89,9 +89,16 @@ class crossTabMultiWay extends baseModal {
 {{dataset.name}} %>%
 dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>%
     BSkyCrossTable(
-            chisq={{selected.chisq | safe}},
+            chisq = {{selected.chisq | safe}},
+            chisqCorrect = {{if (options.selected.gpbox1 =="chisqContCorrection")}}TRUE{{#else}}FALSE{{/if}},
+            chisqSimulate = {{if (options.selected.gpbox1 =="chisqSimulatePValues")}}TRUE{{#else}}FALSE{{/if}},
+            chisqNoOfSimulations = {{selected.chisqNoOfReplicates | safe}},
+            fisher = {{selected.fisher | safe}},
+            fisherSimulate = {{selected.fisherSimulatePValues | safe}},
+            fisherNoOfSimulations = {{selected.fisherNoOfReplicates | safe}},
+            fisherAlternate = "{{selected.fishersAlternative | safe}}",
             mcnemar={{selected.mcnemar | safe}}, 
-            fisher={{selected.fisher | safe}},
+            mcnemarCorrect={{selected.mcnemarContCorrection | safe}}, 
             prop.r={{selected.rowpercent | safe}}, 
             prop.c={{selected.colpercent | safe}},
             resid={{selected.unstandardized | safe}}, 
@@ -148,24 +155,133 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             chisq: {
                 el: new checkbox(config, {
                     label: "Chisq",
+                    style: "mt-2",
                     no: "chisq",
                     extraction: "Boolean",
                 })
             },
+
+            chisqNoContCorrection: {
+                el: new radioButton(config, {
+                    label: "No continuity correction for Chi-squared test",
+                    style: "ml-2",
+                 //   dependant_objects: ['chisq'],
+                    increment: "chisqNoContCorrection",
+                    no: "gpbox1",
+                    value: "chisqNoContCorrection",
+                    state: "checked",
+                    extraction: "ValueAsIs"
+
+                })
+            },
+
+            chisqContCorrection: {
+                el: new radioButton(config, {
+                    label: "Apply continuity correction for Chi-squared test (Applies to a 2 by 2 table)",
+                    style: "ml-2",
+                  //  dependant_objects: ['chisq'],
+                    increment: "chisqContCorrection",
+                    value: "chisqContCorrection",
+                    no: "gpbox1",
+                    extraction: "ValueAsIs"
+                })
+            },
+
+            chisqSimulatePValues: {
+                el: new radioButton(config, {
+                    label: "Compute p-values using Monte Carlo simulation",
+                    increment: "chisqSimulatePValues",
+                    style: "ml-2",
+                  //  dependant_objects: ['chisq'],
+                    extraction: "ValueAsIs",
+                    no: "gpbox1",
+                    value: "chisqSimulatePValues",
+                })
+            },
+
+            chisqNoOfReplicates: {
+                el: new inputSpinner(config, {
+                  no: 'chisqNoOfReplicates',
+                  label: "Number of replicates used in the Monte Carlo test",
+                  min: 0,
+                  style: "ml-4",
+                  max: 999999999999999,
+                  step: 1000,
+                  value: 2000,
+                  extraction: "NoPrefix|UseComma"
+                })
+              },
+
             mcnemar: {
                 el: new checkbox(config, {
                     label: "McNemar",
                     no: "mcnemar",
+                    style: "mt-4",
                     extraction: "Boolean",
                 })
             },
+            mcnemarContCorrection: {
+                el: new checkbox(config, {
+                    label: "Apply continuity correction for McNemar's test (Applies to a 2 by 2 table)",
+                    style: "ml-2",
+                   // dependant_objects: ['mcnemar'],
+                    newline:true,
+                    no: "mcnemarContCorrection",
+                    extraction: "Boolean",
+                })
+            },
+
+
+
+
             fisher: {
                 el: new checkbox(config, {
                     label: "Fisher",
                     no: "fisher",
+                    style: "mt-4",
+                    newline:true,
                     extraction: "Boolean",
                 })
             },
+
+
+            fisherSimulatePValues: {
+                el: new checkbox(config, {
+                    label: "Compute p-values using Monte Carlo simulation",
+                    style: "ml-2",
+                    newline:true,
+                    no: "fisherSimulatePValues",
+                    extraction: "Boolean",
+                   // dependant_objects: ['fisher']
+                })
+            },
+
+            fisherNoOfReplicates: {
+                el: new inputSpinner(config, {
+                  no: 'fisherNoOfReplicates',
+                  label: "Number of replicates used in the Monte Carlo test",
+                  min: 0,
+                  style: "ml-4",
+                  max: 999999999999999,
+                  step: 1000,
+                  value: 2000,
+                  extraction: "NoPrefix|UseComma"
+                })
+              },
+
+              fishersAlternative: {
+                el: new comboBox(config, {
+                  no: "fishersAlternative",
+                  label: "Alternative hypothesis for Fisher's Exact test",
+                  multiple: false,
+                  style: "ml-2",
+                  extraction: "NoPrefix|UseComma",
+                  options: ["two.sided", "greater", "less"],
+                  default: "two.sided"
+                })
+              },
+
+
             label2: { el: new labelVar(config, { no: "label2", label: "Residuals", h: 5 }) },
             unstandardized: {
                 el: new checkbox(config, {
@@ -214,7 +330,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             label5: { el: new labelVar(config, { no: "label5", label: "Output format", h: 5 }) },
             longTbl: {
                 el: new checkbox(config, {
-                    label: "Long table (Keep width of output table fixed when many levels in column variables)",
+                    label: "List-style table (Constrain table width when many levels)",
                     no: "longTbl",
                     extraction: "Boolean",
                 })
@@ -227,8 +343,21 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
                 content: [
                     objects.label1.el,
                     objects.chisq.el,
+                    objects.chisqNoContCorrection.el,
+                    objects.chisqContCorrection.el,
+                    objects.chisqSimulatePValues.el,
+                    objects.chisqNoOfReplicates.el,
+
                     objects.mcnemar.el,
+                    objects.mcnemarContCorrection.el,
+
+
+
                     objects.fisher.el,
+                    objects.fisherSimulatePValues.el,
+                    objects.fisherNoOfReplicates.el,
+                    objects.fishersAlternative.el,
+
                     objects.label2.el,
                     objects.unstandardized.el,
                     objects.standardized.el,

@@ -221,7 +221,8 @@ class competingRisksOneGroup extends baseModal {
             labs(x = "{{selected.timeaxislabel | safe}}", 
                  y = "{{selected.incaxislabelall | safe}}",
                  title = "{{selected.titleboxall | safe}}",
-                 color = "{{selected.legendtitle | safe}}")
+                 color = "{{selected.legendtitle | safe}}") +
+            {{selected.BSkyThemes | safe}}
           
             ci_type <- "{{selected.cistyle | safe}}"  
             
@@ -266,7 +267,8 @@ class competingRisksOneGroup extends baseModal {
                     {{selected.themedropdown | safe}} +
                     labs(x = "{{selected.timeaxislabel | safe}}", 
                         y = "{{selected.incaxislabelsingle | safe}}",
-                        title = "{{selected.titleboxsingle | safe}}")     
+                        title = "{{selected.titleboxsingle | safe}}") +
+                    {{selected.BSkyThemes | safe}} 
                         
                 # addition of ribbon CIs (conditions are want CI and ribbon)
                 if ({{selected.cichkbox | safe}} & ci_type=="ribbon") {

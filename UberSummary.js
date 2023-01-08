@@ -167,7 +167,7 @@ dplyr::group_by({{selected.tvarbox2 | safe}}) %>%
                 el: new inputSpinner(config, {
                     no: 'txtNumTopFactorsToShow',
                     label: localization.en.txtNumTopFactorsToShow,
-                    style: "mb-2",
+                    style: "ml-2 mb-1",
                     min: 1,
                     max: 9999999,
                     step: 1,
@@ -179,6 +179,7 @@ dplyr::group_by({{selected.tvarbox2 | safe}}) %>%
             longTbl: { el: new checkbox(config, {
                 label: "Summary statistics in columns",
                 state: "checked",
+                style: "mt-2",
                 no: "longTbl",
                 extraction: "Boolean",
             })},            
