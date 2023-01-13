@@ -190,7 +190,7 @@ BSkyFormat(results, singleTableOutputHeader =paste("Bonett-Seier test of Geary's
           //  bottom: [MissingVals.el.content],
             nav: {
                 name: localization.en.navigation,
-                icon: "icon-target-1",
+                icon: "icon-bonett-seier",
                 modal: config.id
             }
         }

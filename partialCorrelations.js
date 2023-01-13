@@ -124,7 +124,7 @@ if (exists("BSkyResults"))
             right: [objects.statistic.el.content, objects.tvarbox1.el.content, objects.tvarbox2.el.content],
             nav: {
                 name: localization.en.navigation,
-                icon: "icon-link",
+                icon: "icon-partial-correlation",
                 modal: config.id
             }
         }
