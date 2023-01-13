@@ -127,7 +127,7 @@ BSkyFormat(BSkySummaries, singleTableOutputHeader = "Summary Statistics")
 ggplot(data={{dataset.name}}, aes( x = {{selected.tvarbox2 | safe}}, y = {{selected.tvarbox1 | safe}}  )) +
     geom_boxplot( alpha=1,) +
     labs(x="{{selected.tvarbox2 | safe}}",y="{{selected.tvarbox1 | safe}}", title= "Boxplot for variable: {{selected.tvarbox1 | safe}}, grouped by: {{selected.tvarbox2 | safe}}") +
-    xlab("{{selected.tvarbox2 | safe}}") + ylab("{{selected.tvarbox1 | safe}}")
+    xlab("{{selected.tvarbox2 | safe}}") + ylab("{{selected.tvarbox1 | safe}}") + {{selected.BSkyThemes | safe}}
 
 #Run the test
 {{if (options.selected.testmethodbox =="0") }}BSky_Kruskal_Test = coin::kruskal_test( {{selected.tvarbox1 | safe}} ~ {{selected.tvarbox2 | safe}}, \n\tdata = {{dataset.name}}, distribution = "asymptotic"){{/if}}

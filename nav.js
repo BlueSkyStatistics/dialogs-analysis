@@ -91,6 +91,8 @@ const nav = {
             "name": "Normality Test",
             "icon": "icon-gaussian-function",
             "children": [
+                "./andersonDarling",
+                "./kstest",
                 "./shapiroWilkNormalityTest",
                 "./shapiroWilkNormalityTestLegacy"            
             ]

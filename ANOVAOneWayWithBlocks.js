@@ -101,14 +101,14 @@ if ({{selected.chk1 | safe}})
 {
     #Histogram and plot of residuals
     dataframeResiduals =data.frame(residuals=stats::residuals(model))
-    print(ggplot2::ggplot(dataframeResiduals, aes(x=stats::residuals(model)))+ geom_histogram( colour="black", aes(y=..density..), bins=9)+ stat_function(fun=dnorm,color="red",args=list(mean=mean(stats::residuals(model)), sd=sd(stats::residuals(model))))  + labs(x = "Residuals", title="Histogram plot of model residuals"))
+    print(ggplot2::ggplot(dataframeResiduals, aes(x=stats::residuals(model)))+ geom_histogram( colour="black", aes(y=..density..), bins=9)+ stat_function(fun=dnorm,color="red",args=list(mean=mean(stats::residuals(model)), sd=sd(stats::residuals(model))))  + labs(x = "Residuals", title="Histogram plot of model residuals") + {{selected.BSkyThemes | safe}})
     #Plot residuals vs. fitted
     plot(fitted(model), residuals(model),main ="Residuals vs. Fitted")
 }
 if ({{selected.chk2 | safe}})
 {
     #pairwise comparisons
-    marginal = emmeans::lsmeans(model,   ~ {{selected.tvarbox2 | safe}})
+    marginal = emmeans::lsmeans(model, ~ {{selected.tvarbox2 | safe}})
     pairwiseComparisons <-graphics::pairs(marginal,adjust="tukey")
     BSkyFormat(as.data.frame(pairwiseComparisons) , singleTableOutputHeader="Pairwise comparisons")
     cat(sprintf("Results are averaged over levels of: %s \nP value adjustment: %s method for comparing a family of %d estimates",paste(pairwiseComparisons@misc$avgd.over, collapse=","),pairwiseComparisons@misc$adjust,pairwiseComparisons@misc$famSize  ))

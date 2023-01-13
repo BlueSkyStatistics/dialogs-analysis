@@ -84,7 +84,7 @@ BSkyFormat(as.data.frame(Anova(modelInteractionCtrl)), decimalDigitsRounding=4, 
 #We provide the option to generating a scatter plot for of dependent variable against the covariate variable for each level of the fixed factor
     if ({{selected.chk3 | safe}})
     {
-        print(ggplot({{dataset.name}},aes(x = {{selected.blockVar | safe}},y ={{selected.tvarbox1 | safe}},color = {{selected.tvarbox2 | safe}})) + geom_point() + labs(x = "{{selected.blockVar | safe}}",y = "{{selected.tvarbox1 | safe}}",color = "{{selected.tvarbox2 | safe}}") +geom_smooth(method ="lm",se=TRUE) +ggtitle(paste('Scatter plot of the response variable', c('{{selected.tvarbox1 | safe}}'), 'against the covariate variable' ,c('{{selected.blockVar | safe}}'),'\nusing separate symbols for each level of the factor variable \n(lines should have the same slope)' ,c('{{selected.tvarbox2 | safe}}') )))
+        print(ggplot({{dataset.name}},aes(x = {{selected.blockVar | safe}},y ={{selected.tvarbox1 | safe}},color = {{selected.tvarbox2 | safe}})) + geom_point() + labs(x = "{{selected.blockVar | safe}}",y = "{{selected.tvarbox1 | safe}}",color = "{{selected.tvarbox2 | safe}}") +geom_smooth(method ="lm",se=TRUE) +ggtitle(paste('Scatter plot of the response variable', c('{{selected.tvarbox1 | safe}}'), 'against the covariate variable' ,c('{{selected.blockVar | safe}}'),'\nusing separate symbols for each level of the factor variable \n(lines should have the same slope)' ,c('{{selected.tvarbox2 | safe}}') ) + {{selected.BSkyThemes | safe}}))
     }
     # We provide the option to plot the residuals vs. fitted plot For the model where we have controlled the interaction term. The residuals should be unbiased and homoscedastic.
     if ({{selected.chk2  | safe}})

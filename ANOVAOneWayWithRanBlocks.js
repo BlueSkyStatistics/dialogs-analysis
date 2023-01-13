@@ -159,7 +159,7 @@ cldComparisons <-multcomp::cld(marginal, alpha = 0.05, Letters = letters,
 BSkyFormat(as.data.frame(cldComparisons), singleTableOutputHeader="Compact letter display of pairwise comparisons")
 cat(sprintf("%s\\n%s \\n%s \\n%s",attr(cldComparisons,"mesg")[1],attr(cldComparisons,"mesg")[2],attr(cldComparisons,"mesg")[3],attr(cldComparisons,"mesg")[4]))
 cat("\\n\\n")
-plot <- ggplot(cldComparisons,aes(x = {{selected.tvarbox2 | safe}},y = lsmean,label = .group)) +\n\tgeom_point(shape  = 15,size   = 4) +\n\t geom_errorbar(aes(ymin  =  lower.CL,ymax  =  upper.CL),width =  0.2,size  =  0.7) +\n\t theme_bw() +\n\ttheme(axis.title   = element_text(face = "bold"),axis.text = element_text(face = "bold"),plot.caption = element_text(hjust = 0)) +\n\tgeom_text(nudge_x = c(0,0,0),nudge_y = c(120,120,120),color = "black") +\n\tggtitle("Least square means of the fixed effect (adjusted for means of other factors in model)")
+plot <- ggplot(cldComparisons,aes(x = {{selected.tvarbox2 | safe}},y = lsmean,label = .group)) +\n\tgeom_point(shape  = 15,size   = 4) +\n\t geom_errorbar(aes(ymin  =  lower.CL,ymax  =  upper.CL),width =  0.2,size  =  0.7) +\n\t theme_bw() +\n\ttheme(axis.title   = element_text(face = "bold"),axis.text = element_text(face = "bold"),plot.caption = element_text(hjust = 0)) +\n\tgeom_text(nudge_x = c(0,0,0),nudge_y = c(120,120,120),color = "black") +\n\tggtitle("Least square means of the fixed effect (adjusted for means of other factors in model)")+ \n\t{{selected.BSkyThemes | safe}}
 print(plot)
 }
 }
