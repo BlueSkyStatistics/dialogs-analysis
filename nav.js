@@ -6,10 +6,10 @@ const nav = {
             "name": "Correlations",
             "icon": "icon-link",
             "children": [
+                "./partialCorrelations",
+                "./correlationTestMultivariableLegacy",
                 "./correlationTestMultivariable",
                 "./polychorserial",
-                "./correlationTestMultivariableLegacy",
-                "./partialCorrelations",
                 "./semipartialCorrelations"
 
             ]
@@ -42,9 +42,9 @@ const nav = {
             "icon": "icon-mean",
             "children": [
                 "./ANCOVA",
-                "./ANOVAOneWayWithBlocks",
-                "./ANOVAOneWayWithRanBlocks",
                 "./ANOVAOneWayTwoWay",
+                "./ANOVAOneWayWithRanBlocks",
+                "./ANOVAOneWayWithBlocks",
                 "./ANOVANWay",
                 "./repeatedMeasuresAnovaL",  
                 "./repeatedMeasuresAnovaW",
@@ -60,8 +60,9 @@ const nav = {
             "name": "Missing Values",
             "icon": "icon-na",
             "children": [
-                "./missingValueAnalysis",
-                "./missingValsColOutput"
+                "./missingValsColOutput",
+                "./missingValueAnalysis"
+                
             ]
         },
         {
@@ -102,19 +103,34 @@ const nav = {
             "name": "Proportions",
             "icon": "icon-percent",
             "children": [
+                "./proportionIndependentSamples",
                 "./binomialTestSingleSample",
-                "./proportionTestSingleSample",
-                "./proportionIndependentSamples"
+                "./proportionTestSingleSample"
             ]
         },
         {
             "name": "Summary",
             "icon": "icon-sigma",
             "children": [
-                "./frequencyTable",
-                "./UberSummary"             
+                "./UberSummary",
+                "./frequencyTable"
+                            
             ]
         },
+        {
+			"name": "Survival",
+			"icon": "icon-survival",
+            "children": [
+      
+            ]
+        },	
+        {
+            "name": "Tables",
+            "icon": "icon-table_basic",
+            "children": [
+      
+            ]
+        },	        	
         {
             "name": "Variance",
             "icon": "icon-variance",
