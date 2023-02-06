@@ -79,9 +79,29 @@ class principalComponentAnalysis extends baseModal {
             modalType: "two",
             RCode: `
 #Runs the principal component analysis
-BSkyPCARes <-BSkyPrinCompAnalysis(vars=c({{selected.destination | safe}}),cor ={{selected.grp | safe}}, componentsToRetain ={{selected.noOfComponents | safe}}, generateScreeplot={{selected.screeplot | safe}},prefixForComponents ="{{selected.variablePrefix | safe}}",dataset="{{dataset.name}}")
+BSkyPCARes <-BSkyPrinCompAnalysis(vars=c({{selected.destination | safe}}), cor ={{selected.grp | safe}}, 
+    componentsToRetain ={{selected.noOfComponents | safe}}, generateScreeplot={{selected.screeplot | safe}},
+    prefixForComponents ="{{selected.variablePrefix | safe}}",dataset="{{dataset.name}}")
 #Displays the results in the output window
 BSkyFormat(BSkyPCARes)
+#biplot
+stats::biplot(BSkyPCA,ylab = "Second component", xlab = "First component",main = "Loading plot")
+#Mahalanobis distance
+ggplot2::ggplot() + geom_point(aes( x = mahalanobis({{dataset.name}}[,c({{selected.destination | safe}})], 
+    colMeans({{dataset.name}}[,c({{selected.destination | safe}})]),
+    cov({{dataset.name}}[,c({{selected.destination | safe}})]),
+    inverted = FALSE), y = 1:nrow({{dataset.name}}))) + 
+    ylab("Mahalanobis distances") + 
+    xlab("Observations") +
+    ggtitle("Outcome plot") + {{selected.BSkyThemes | safe}}\n
+{{if(options.selected.addToDataset)}}
+##Score Plot
+ggplot2::ggplot() + geom_point(aes( x = {{dataset.name}}\${{selected.variablePrefix | safe}}1, 
+    y = {{dataset.name}}\${{selected.variablePrefix | safe}}2)) +
+    ylab("Second component") + 
+    xlab("First component") +
+    ggtitle("Score plot") + {{selected.BSkyThemes | safe}}\n
+{{/if}}
 #Refreshes the dataset in the output window
 BSkyLoadRefresh("{{dataset.name}}",{{selected.addToDataset | safe}})
             `
