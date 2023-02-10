@@ -1,7 +1,7 @@
 var localization = {
     en: {
         title: "Kolmogorov-Smirnov Test of Normality",
-        navigation: "Kolmogorov-Smirnov Test",
+        navigation: "Kolmogorov-Smirnov Normality Test",
         trg: "Target variables",
         help: {
             title: "Kolmogorov-Smirnov Test of Normality",
