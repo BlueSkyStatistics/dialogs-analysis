@@ -1,7 +1,7 @@
 var localization = {
     en: {
         title: "Kolmogorov-Smirnov Test of Normality",
-        navigation: "Kolmogorov-Smirnov Test",
+        navigation: "Kolmogorov-Smirnov Normality Test",
         trg: "Target variables",
         help: {
             title: "Kolmogorov-Smirnov Test of Normality",
@@ -55,7 +55,7 @@ class kstest extends baseModal {
             RCode: `
 #Runs a Kolmogorov-Smirnov Test to test whether the variable: {{selected.varname | safe}} conforms to a normal distribution
 BSkyResults <- stats::ks.test(x={{selected.vars | safe}}, y="pnorm")
-BSkyFormat( BSkyResults, outputTableRenames = c("Kolmogorov-Smirnov Test resusts for variable: {{selected.varname | safe}}", "."))
+BSkyFormat( BSkyResults, outputTableRenames = c("Kolmogorov-Smirnov Test results for variable: {{selected.varname | safe}}", "."))
 `
         }
         var objects = {

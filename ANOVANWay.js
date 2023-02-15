@@ -21,8 +21,8 @@ var localization = {
         plot1: "Plot all comparisons",
         //We may reintroduce this based on feedback
         // showEffectSizes: "Display effect sizes",
-        horizontalAxis: "Horizontal axis",
-        separateLines: "Separate lines",
+        horizontalAxis: "Separate lines",
+        separateLines: "Horizontal axis",
         separatePlots: "Separate plots",
         help: {
             title: "ANOVA, N way",
