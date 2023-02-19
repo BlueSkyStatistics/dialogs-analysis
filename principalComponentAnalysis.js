@@ -87,14 +87,14 @@ BSkyFormat(BSkyPCARes)
 #biplot
 stats::biplot(BSkyPCA,ylab = "Second component", xlab = "First component",main = "Loading plot")
 #Mahalanobis distance
-ggplot2::ggplot() + geom_point(aes( x = mahalanobis({{dataset.name}}[,c({{selected.destination | safe}})], 
-    colMeans({{dataset.name}}[,c({{selected.destination | safe}})]),
-    cov({{dataset.name}}[,c({{selected.destination | safe}})]),
+ggplot2::ggplot() + geom_point(aes( x = stats::mahalanobis({{dataset.name}}[,c({{selected.destination | safe}})], 
+    base::colMeans({{dataset.name}}[,c({{selected.destination | safe}})], na.rm=TRUE),
+    {{if (options.selected.grp =="TRUE")}}stats::cor{{#else}}cov{{/if}}({{dataset.name}}[,c({{selected.destination | safe}})],use ="pairwise.complete.obs"),
     inverted = FALSE), y = 1:nrow({{dataset.name}}))) + 
     ylab("Mahalanobis distances") + 
     xlab("Observations") +
     ggtitle("Outcome plot") + {{selected.BSkyThemes | safe}}\n
-{{if(options.selected.addToDataset)}}
+{{if(options.selected.addToDataset =="TRUE" && options.selected.variablePrefix != "" && options.selected.noOfComponents !="" )}}
 ##Score Plot
 ggplot2::ggplot() + geom_point(aes( x = {{dataset.name}}\${{selected.variablePrefix | safe}}1, 
     y = {{dataset.name}}\${{selected.variablePrefix | safe}}2)) +
@@ -123,7 +123,7 @@ BSkyLoadRefresh("{{dataset.name}}",{{selected.addToDataset | safe}})
             screeplot: { el: new checkbox(config, { label: localization.en.screeplot, no: "screeplot", extraction: "Boolean" }) },
             addToDataset: {
                 el: new checkbox(config, {
-                    label: localization.en.addToDataset, no: "addToDataset", extraction: "Boolean",
+                    label: localization.en.addToDataset, no: "addToDataset", required:true,extraction: "boolean",
                     dependant_objects: ["variablePrefix", "noOfComponents"]
                 })
             },
