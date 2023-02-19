@@ -85,6 +85,11 @@ class UberSummary extends baseModal {
             RCode: `
 require(psych);
 require(dplyr);
+
+cv <- function(x, na.rm = TRUE)  {
+			sd(x, na.rm = na.rm)/mean(x, na.rm = na.rm)
+}
+
 {{dataset.name}} %>%
 dplyr::group_by({{selected.tvarbox2 | safe}}) %>%
     dplyr::select({{selected.tvarbox1 | safe}},{{selected.tvarbox2 | safe}}) %>%
@@ -133,8 +138,8 @@ dplyr::group_by({{selected.tvarbox2 | safe}}) %>%
             mean: { el: new checkbox(config, { label: localization.en.mean, state:"checked", newline: true, no: "mean", extraction: "Boolean" }) },
             median: { el: new checkbox(config, { label: localization.en.median, newline: true,state:"checked", no: "median", extraction: "Boolean" }) },
             sum: { el: new checkbox(config, { label: localization.en.sum, newline: true, no: "sum", extraction: "Boolean" }) },
-            sd: { el: new checkbox(config, { label: localization.en.sd, newline: true, no: "sd", extraction: "Boolean" }) },
-            stderror: { el: new checkbox(config, { label: localization.en.stderror, newline: true, no: "stderror", extraction: "Boolean" }) },
+            sd: { el: new checkbox(config, { label: localization.en.sd, newline: true, state:"checked", no: "sd", extraction: "Boolean" }) },
+            stderror: { el: new checkbox(config, { label: localization.en.stderror, newline: true, state:"checked", no: "stderror", extraction: "Boolean" }) },
             skew: { el: new checkbox(config, { label: localization.en.skew, newline: true, no: "skew", extraction: "Boolean" }) },
             mad: { el: new checkbox(config, { label: localization.en.mad, newline: true, no: "mad", extraction: "Boolean" }) },
             kurtos: { el: new checkbox(config, { label: localization.en.kurtos, newline: true, no: "kurtos", extraction: "Boolean" }) },
@@ -158,7 +163,7 @@ dplyr::group_by({{selected.tvarbox2 | safe}}) %>%
                     placeholder: "",
                     extraction: "CreateArray|RemoveSpaces",
                     allow_spaces: true,
-                    value: ""
+                    value: "cv, var"
                 })
             },
             label3: { el: new labelVar(config, { label: localization.en.label3, style: "mt-2", h: 6 }) },
