@@ -135,10 +135,10 @@ BSkyFormat(as.data.frame(Anova(modelInteractionCtrl)), decimalDigitsRounding=4, 
                     required: true,
                 }), r: ['{{ var | safe}}']
             },
-            Summary: { el: new checkbox(config, { label: localization.en.Summary, newline:true, no: "chk5", extraction: "Boolean" }) },
-            Scatter_plot: { el: new checkbox(config, { label: localization.en.Scatter_plot, newline:true,no: "chk3", extraction: "Boolean" }) },
-            Residual: { el: new checkbox(config, { label: localization.en.Residual, no: "chk2", newline:true,extraction: "Boolean" }) },
-            Histogram: { el: new checkbox(config, { label: localization.en.Histogram, no: "chk4", newline:true,extraction: "Boolean" }) }
+            Summary: { el: new checkbox(config, { label: localization.en.Summary, newline:true, no: "chk5", extraction: "boolean" }) },
+            Scatter_plot: { el: new checkbox(config, { label: localization.en.Scatter_plot, newline:true,no: "chk3", extraction: "boolean" }) },
+            Residual: { el: new checkbox(config, { label: localization.en.Residual, no: "chk2", newline:true,extraction: "boolean" }) },
+            Histogram: { el: new checkbox(config, { label: localization.en.Histogram, no: "chk4", newline:true,extraction: "boolean" }) }
         }
         const content = {
             left: [objects.content_var.el.content],
