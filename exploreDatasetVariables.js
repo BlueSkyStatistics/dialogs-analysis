@@ -182,7 +182,8 @@ class DatasetDatasetVariables extends baseModal {
 					color="#000000",size=12,
 					hjust=0.5,vjust=0.5))		
 			{{/if}}
-			plot(histPlot)
+			suppressWarnings(plot(histPlot))
+			
 			
 			qqPlot = ggplot(data={{dataset.name}}, aes(sample = col[[1]])) +
 			stat_qq_point(distribution = "norm", detrend = FALSE) +
@@ -196,7 +197,7 @@ class DatasetDatasetVariables extends baseModal {
 			color="#000000",size=12,
 			hjust=0.5,vjust=0.5))
 			
-			plot(qqPlot)
+			suppressWarnings(plot(qqPlot))
 			
 			BSkyGraphicsFormat(bSkyFormatAppRequest = FALSE, noOfGraphics= 2, isRmarkdownOutputOn = TRUE)
 		}
