@@ -1,7 +1,7 @@
 var localization = {
     en: {
         title: "Anderson-Darling Test of Normality",
-        navigation: "Anderson-Darling Test",
+        navigation: "Anderson-Darling Normality Test",
         trg: "Target variables",
         help: {
             title: "Anderson-Darling Test of Normality",

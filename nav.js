@@ -89,13 +89,16 @@ const nav = {
             ]
         },
         {
-            "name": "Normality Test",
+            "name": "Distribution Analysis",
             "icon": "icon-gaussian-function",
             "children": [
                 "./andersonDarling",
                 "./kstest",
                 "./shapiroWilkNormalityTest",
-                "./shapiroWilkNormalityTestLegacy"            
+                "./shapiroWilkNormalityTestLegacy",
+                "./distributionFits",
+                "./distributionGamlssAutoFitTests",
+                "./distributionDescriptives"
             ]
         },
        
@@ -113,6 +116,7 @@ const nav = {
             "icon": "icon-sigma",
             "children": [
                 "./UberSummary",
+				"./exploreDatasetVariables",
                 "./frequencyTable"
                             
             ]
