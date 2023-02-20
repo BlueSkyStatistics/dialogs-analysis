@@ -164,39 +164,21 @@ class DatasetDatasetVariables extends baseModal {
 					stat_function(fun = dnorm, args = list(mean = mean(var_list[[i]], na.rm = TRUE) , sd = sd(var_list[[i]], na.rm = TRUE)) , col = "#eaf820", size = 2) +
 					labs(x=names(col), title= paste("Histogram for variable", names(col))) +
 					xlab(names(col)) + 
-					ylab("Density") + 
-					theme_grey() + 
-					theme(text=element_text(family="sans",
-					face="plain",
-					color="#000000",size=12,
-					hjust=0.5,vjust=0.5))
+					ylab("Density") + {{selected.BSkyThemes | safe}} \n
 			{{#else}}
 				histPlot = ggplot(data={{dataset.name}}, aes(x = col[[1]])) +
 					geom_histogram(bins = {{selected.histBins | safe}}, alpha=1,  fill ="#727272") +
 					labs(x=names(col), title= paste("Histogram for variable", names(col))) +
 					xlab(names(col)) + 
-					ylab("Counts") + 
-					theme_grey() + 
-					theme(text=element_text(family="sans",
-					face="plain",
-					color="#000000",size=12,
-					hjust=0.5,vjust=0.5))		
+					ylab("Counts") + {{selected.BSkyThemes | safe}}	\n	
 			{{/if}}
 			suppressWarnings(plot(histPlot))
-			
-			
 			qqPlot = ggplot(data={{dataset.name}}, aes(sample = col[[1]])) +
 			stat_qq_point(distribution = "norm", detrend = FALSE) +
 			stat_qq_line(detrend = FALSE) + 
 			labs(x=names(col) , title= paste("Q-Q Plot for variable",names(col))) +
 			xlab("Theoretical Quantiles") +
-			ylab("Sample Quantiles") + 
-			theme_grey() + 
-			theme(text=element_text(family="sans",
-			face="plain",
-			color="#000000",size=12,
-			hjust=0.5,vjust=0.5))
-			
+			ylab("Sample Quantiles") + {{selected.BSkyThemes | safe}} \n
 			suppressWarnings(plot(qqPlot))
 			
 			BSkyGraphicsFormat(bSkyFormatAppRequest = FALSE, noOfGraphics= 2, isRmarkdownOutputOn = TRUE)

@@ -85,15 +85,15 @@ BSkyPCARes <-BSkyPrinCompAnalysis(vars=c({{selected.destination | safe}}), cor =
 #Displays the results in the output window
 BSkyFormat(BSkyPCARes)
 #biplot
-stats::biplot(BSkyPCA,ylab = "Second component", xlab = "First component",main = "Loading plot")
+stats::biplot(BSkyPCA,ylab = "Second component", xlab = "First component",main = "Biplot")
 #Mahalanobis distance
 ggplot2::ggplot() + geom_point(aes( x = stats::mahalanobis({{dataset.name}}[,c({{selected.destination | safe}})], 
     base::colMeans({{dataset.name}}[,c({{selected.destination | safe}})], na.rm=TRUE),
     {{if (options.selected.grp =="TRUE")}}stats::cor{{#else}}cov{{/if}}({{dataset.name}}[,c({{selected.destination | safe}})],use ="pairwise.complete.obs"),
     inverted = FALSE), y = 1:nrow({{dataset.name}}))) + 
-    ylab("Mahalanobis distances") + 
-    xlab("Observations") +
-    ggtitle("Outcome plot") + {{selected.BSkyThemes | safe}}\n
+    xlab("Mahalanobis distances") + 
+    ylab("Observations") +
+    ggtitle("Plotting Mahalanobis distance vs. observations") + {{selected.BSkyThemes | safe}}\n
 {{if(options.selected.addToDataset =="TRUE" && options.selected.variablePrefix != "" && options.selected.noOfComponents !="" )}}
 ##Score Plot
 ggplot2::ggplot() + geom_point(aes( x = {{dataset.name}}\${{selected.variablePrefix | safe}}1, 

@@ -128,15 +128,15 @@ BSkyLoadRefresh("{{dataset.name}}",{{selected.saveScores | safe}})
                     max: 9999999,   
                     ml:4,
                     step: 1,
-                    value:0,
+                    value:2,
                     extraction: "NoPrefix|UseComma"
                 })
             },
             screeplot: { el: new checkbox(config, { label: localization.en.screeplot, no: "screeplot", extraction: "Boolean" }) },
             label2: { el: new labelVar(config, { label: localization.en.label2, style: "mt-2", h: 5 }) },
-            saveScores: { el: new checkbox(config, { label: localization.en.saveScores, no: "saveScores", newline: true, extraction: "Boolean", dependant_objects: ["varForScores"], }) },
-            bartlett: { el: new radioButton(config, { label: localization.en.scores1, style: "ml-3", no: "scores", increment: "bartlett", value: "Bartlett", state: "checked", extraction: "ValueAsIs" }) },
-            regression: { el: new radioButton(config, { label: localization.en.scores2, style: "ml-3",no: "scores", increment: "regression", value: "regression", state: "", extraction: "ValueAsIs" }) },
+            saveScores: { el: new checkbox(config, { label: localization.en.saveScores, no: "saveScores", newline: true, extraction: "Boolean", required:true,dependant_objects: ["varForScores"], }) },
+            bartlett: { el: new radioButton(config, { label: localization.en.scores1, style: "ml-3", no: "scores", increment: "bartlett", value: "Bartlett", state: "checked", extraction: "ValueAsIs",  }) },
+            regression: { el: new radioButton(config, { label: localization.en.scores2, style: "ml-3",no: "scores", increment: "regression", value: "regression", state: "", extraction: "ValueAsIs"}) },
             varForScores: {
                 el: new input(config, {
                     no: 'varForScores',
