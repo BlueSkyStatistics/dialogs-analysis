@@ -106,8 +106,8 @@ class DatasetDatasetVariables extends baseModal {
 		CI_values = c(mean = mean_value, '95% lower bound' = lower_bound, '95% upper bound' = upper_bound)
 		
 		#Calculate the CI for SD
-		lower_bound.sd = standard_deviation - sqrt(n-1)*standard_deviation/sqrt(qchisq(1-alpha/2, df = n-1))
-		upper_bound.sd = standard_deviation + sqrt(n-1)*standard_deviation/sqrt(qchisq(alpha/2, df = n-1))
+		lower_bound.sd = sqrt(n-1)*standard_deviation/sqrt(qchisq(1-alpha/2, df = n-1))
+		upper_bound.sd = sqrt(n-1)*standard_deviation/sqrt(qchisq(alpha/2, df = n-1))
 		
 		CI_values = rbind(CI_values, c(sd = standard_deviation, '95% lower bound' = lower_bound.sd, '95% upper bound' = upper_bound.sd))
 		
