@@ -1,7 +1,7 @@
 
 var localization = {
     en: {
-        title: "Explore dataset variable(s)",
+        title: "Explore variable(s)",
 		navigation: "Explore variables",
 		
 		variableListSelcted: "Select one or more variables to explore",
