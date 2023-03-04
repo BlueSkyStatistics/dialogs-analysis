@@ -10,6 +10,7 @@ Expected counts<br/>
 Row and column percentages<br/>
 Unstandardized, standardized and adjusted residuals<br/>
 Chisq with odds ratio, McNemar and Fisher statistics<br/>
+NOTE: We automatically remove all rows where every count is 0. This may impact how the Chisq, McNemar and Fisher tests are run. For example, you may expect 3 rows and 2 columns as the row variable has 3 levels and the column variable 2 levels. However as a row level has all 0 counts, you get a 2*2 table. While Monte Carlo simulation with Fisher's test runs on a 3*2 table, it does not apply to a 2*2 table and the normal Fisher's Test is run. 
 <br/>
 <b>Usage</b>
 <br/>
