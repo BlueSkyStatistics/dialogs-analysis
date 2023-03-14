@@ -197,11 +197,11 @@ gplots::plotmeans({{selected.tvarbox1 |safe}} ~ {{selected.tvarbox2 |safe}}, \n\
 #Estimated marginal means for {{selected.tvarbox1 |safe}}\n
 BSkyUnivariateModel <- aov({{selected.tvarbox1 |safe}} ~ {{selected.tvarbox2 |safe}}, data = {{dataset.name}})
 BSkyUnivariateEMM <- emmeans::emmeans(BSkyUnivariateModel, "{{selected.tvarbox2 |safe}}")
-BSkyFormat(as.data.frame(BSkyUnivariateEMM), \n\tsingleTableOutputHeader="Marginal means for {{selected.tvarbox1 |safe}} by {{selected.tvarbox2 |safe}}")
+BSkyFormat(data.frame(BSkyUnivariateEMM), \n\tsingleTableOutputHeader="Marginal means for {{selected.tvarbox1 |safe}} by {{selected.tvarbox2 |safe}}")
 {{if (options.selected.posthocs == "TRUE")}}
 \n#Posthocs for {{selected.tvarbox1 |safe}}\n
 BSkyUniContrasts <- emmeans::contrast(BSkyUnivariateEMM, "pairwise")
-BSkyFormat(as.data.frame(BSkyUniContrasts), \n\tsingleTableOutputHeader="Posthocs for {{selected.tvarbox1 |safe}} by {{selected.tvarbox2 |safe}} (using method = {{selected.combon | safe}})")
+BSkyFormat(data.frame(BSkyUniContrasts), \n\tsingleTableOutputHeader="Posthocs for {{selected.tvarbox1 |safe}} by {{selected.tvarbox2 |safe}} (using method = {{selected.combon | safe}})")
 {{/if}}
 {{/if}}
 {{if (options.selected.levenesTest == "TRUE") }}

@@ -128,14 +128,14 @@ afex_plot({{selected.modelname | safe}}, x = "{{selected.response | safe}}", {{i
 #Estimated marginal means
 #Within subjects
 BSkyEmmWithinSubj <- {{selected.modelname | safe}} %>% \n\t emmeans::emmeans(~{{selected.response | safe}})
-BSkyFormat(as.data.frame(BSkyEmmWithinSubj), \n\tsingleTableOutputHeader ="Estimated marginal means for within subjects factor: {{selected.response | safe}}, CI=0.95")
+BSkyFormat(data.frame(BSkyEmmWithinSubj), \n\tsingleTableOutputHeader ="Estimated marginal means for within subjects factor: {{selected.response | safe}}, CI=0.95")
 {{if (options.selected.Fixed !="")}}
 #Between subjects
 BSkyEmmBetweenSubj <- {{selected.modelname | safe}} %>% \n\t emmeans::emmeans(~{{selected.Fixed | safe}})
-BSkyFormat(as.data.frame(BSkyEmmBetweenSubj), \n\tsingleTableOutputHeader ="Estimated marginal means for between subjects factor: {{selected.Fixed | safe}}, CI=0.95")
+BSkyFormat(data.frame(BSkyEmmBetweenSubj), \n\tsingleTableOutputHeader ="Estimated marginal means for between subjects factor: {{selected.Fixed | safe}}, CI=0.95")
 #With interactions
 BSkyEmmWithInteractions <- {{selected.modelname | safe}} %>% \n\temmeans::emmeans(~{{selected.Fixed | safe}}:{{selected.response | safe}})
-BSkyFormat(as.data.frame(BSkyEmmWithInteractions), \n\tsingleTableOutputHeader ="Estimated marginal means with Interactions: {{selected.Fixed | safe}}:{{selected.response | safe}}, CI=0.95")\n
+BSkyFormat(data.frame(BSkyEmmWithInteractions), \n\tsingleTableOutputHeader ="Estimated marginal means with Interactions: {{selected.Fixed | safe}}:{{selected.response | safe}}, CI=0.95")\n
 {{/if}}
 {{/if}}
 {{if (options.selected.chk3=="TRUE")}}
@@ -145,14 +145,14 @@ resContrastsWithinSubj <- emmeans::contrast(BSkyEmmWithinSubj, \n\tmethod = "{{s
 resSummaryContWithinSubj <- summary(resContrastsWithinSubj)
 cat("\\n\\n\\n")
 cat(attributes(resSummaryContWithinSubj)$mesg,sep = "\\n")
-BSkyFormat(as.data.frame(resSummaryContWithinSubj), \n\tsingleTableOutputHeader = "Post-hoc tests for: {{selected.dependentVariable | safe}} as a function of: {{selected.response | safe}} (using method = {{selected.combon | safe}})")
+BSkyFormat(data.frame(resSummaryContWithinSubj), \n\tsingleTableOutputHeader = "Post-hoc tests for: {{selected.dependentVariable | safe}} as a function of: {{selected.response | safe}} (using method = {{selected.combon | safe}})")
 {{if (options.selected.Fixed !="")}}
 #Posthoc for between subject factor
 resContrastsBetweenSubj <- emmeans::contrast(BSkyEmmBetweenSubj, \n\tmethod = "{{selected.combon | safe}}",adjust = "{{selected.adjust | safe}}")
 resSummaryContBetweenSubj <- summary(resContrastsBetweenSubj)
 cat("\\n\\n\\n")
 cat(attributes(resSummaryContBetweenSubj)$mesg,sep = "\\n")
-BSkyFormat(as.data.frame(resSummaryContBetweenSubj),\n\tsingleTableOutputHeader = "Post-hoc tests for: {{selected.dependentVariable | safe}} as a function of: {{selected.Fixed | safe}} (using method = {{selected.combon | safe}})")\n
+BSkyFormat(data.frame(resSummaryContBetweenSubj),\n\tsingleTableOutputHeader = "Post-hoc tests for: {{selected.dependentVariable | safe}} as a function of: {{selected.Fixed | safe}} (using method = {{selected.combon | safe}})")\n
 {{/if}}
 {{/if}}
 {{if (options.selected.simpleEffectsTest=="TRUE" && options.selected.Fixed != "")}}
@@ -161,7 +161,7 @@ resContWithInteractions <- emmeans::contrast(BSkyEmmWithInteractions,\n\tmethod 
 resSummaryContWithInteractions <- summary(resContWithInteractions)
 cat("\\n\\n\\n")
 cat(attributes(resSummaryContWithInteractions)$mesg,sep = "\\n")
-BSkyFormat(as.data.frame(resSummaryContWithInteractions), \n\tsingleTableOutputHeader = "Simple effects test: {{selected.dependentVariable | safe}} for {{selected.response | safe}} by {{selected.Fixed | safe}} (using method = {{selected.combon | safe}})")\n
+BSkyFormat(data.frame(resSummaryContWithInteractions), \n\tsingleTableOutputHeader = "Simple effects test: {{selected.dependentVariable | safe}} for {{selected.response | safe}} by {{selected.Fixed | safe}} (using method = {{selected.combon | safe}})")\n
 {{/if}}
 {{if (options.selected.simpleEffectsTest=="TRUE" && options.selected.Fixed == "")}}
 BSkyFormat(data.frame(Message = "Simple effects tests cannot be run as a between subjects factor is not specified"))

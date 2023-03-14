@@ -304,7 +304,7 @@ BSkyFormat(BSkyMultiAnova,singleTableOutputHeader = "ANOVA table with type III s
 #Displaying estimated marginal means
 resultsEmmeans = list()
 resultsEmmeans<-emmeans::emmeans(MultiAnova,~{{selected.dest | safe}})
-BSkyFormat( as.data.frame(resultsEmmeans),singleTableOutputHeader ="Estimated Marginal Means for {{selected.target | safe}} by {{selected.dest | safe}}")
+BSkyFormat(data.frame(resultsEmmeans),singleTableOutputHeader ="Estimated Marginal Means for {{selected.target | safe}} by {{selected.dest | safe}}")
 {{if (options.selected.levene == "TRUE") }}
 #Levene's Test
 BSky_Levene_Test <-with({{dataset.name}},car::leveneTest({{selected.target | safe}},{{selected.dest | safe}}))
@@ -348,7 +348,7 @@ BSkyFormat(BSkyMultiAnova,singleTableOutputHeader = "Anova table with type {{sel
 #Displaying estimated marginal means
 resultsEmmeans = list()
 resultsEmmeans<-emmeans::emmeans(MultiAnova,~{{selected.dest | safe}})
-BSkyFormat( as.data.frame(resultsEmmeans),singleTableOutputHeader ="Estimated Marginal Means for {{selected.target | safe}} by {{selected.dest | safe}}, CI=0.95")
+BSkyFormat(data.frame(resultsEmmeans),singleTableOutputHeader ="Estimated Marginal Means for {{selected.target | safe}} by {{selected.dest | safe}}, CI=0.95")
 {{if (options.selected.levene == "TRUE") }}
 #Levene's Test
 BSky_Levene_Test <-with({{dataset.name}},car::leveneTest({{selected.target | safe}},{{selected.dest | safe}}))
@@ -363,7 +363,7 @@ BSkyFormat(as.data.frame(resContrasts),singleTableOutputHeader = "Post-hoc tests
 #Compare means compactly
 resultsContrasts = list()
 resultsContrasts <-multcomp::cld(resultsEmmeans,level = {{selected.alpha | safe}})
-BSkyFormat( as.data.frame(resultsContrasts),singleTableOutputHeader = "Comparing means compactly for {{selected.target | safe}} by {{selected.dest | safe}} using {{selected.combon | safe}} comparison (p values adjusted using {{selected.adjust | safe}})"){{/if}}
+BSkyFormat(data.frame(resultsContrasts),singleTableOutputHeader = "Comparing means compactly for {{selected.target | safe}} by {{selected.dest | safe}} using {{selected.combon | safe}} comparison (p values adjusted using {{selected.adjust | safe}})"){{/if}}
 {{if (options.selected.plot1 == "TRUE") }}
 #Plot all comparisons
 print(plot( contrast(resultsEmmeans,method = "{{selected.combon | safe}}", adjust = "{{selected.adjust | safe}}")) + geom_vline(xintercept = 0) + ggtitle ("Plotting all comparisons pairwise for {{selected.target | safe}} by {{selected.dest | safe}}")){{/if}}
@@ -381,7 +381,7 @@ BSkyFormat( as.data.frame(temp),singleTableOutputHeader = "Summaries for {{selec
 temp <-{{dataset.name }} %>%\n\t group_by({{selected.commaSepDest | safe}}) %>%\n\t
     summarise(n = n(),mean = mean({{selected.target | safe}},na.rm = TRUE),median = median({{selected.target | safe}},na.rm = TRUE),min = min({{selected.target | safe}},na.rm = TRUE),max = max({{selected.target | safe}},na.rm = TRUE),sd = sd({{selected.target | safe}},na.rm = TRUE),variance = var({{selected.target | safe}},na.rm = TRUE))
 names(temp)[1] ="{{selected.dest | safe}}"
-BSkyFormat( as.data.frame(temp),singleTableOutputHeader = "Summaries for {{selected.target | safe}} by factor variables {{selected.commaSepDest | safe}}")
+BSkyFormat(as.data.frame(temp),singleTableOutputHeader = "Summaries for {{selected.target | safe}} by factor variables {{selected.commaSepDest | safe}}")
 `};
         let snippet6 = {
             RCode: `
@@ -396,12 +396,12 @@ BSkyFormat(BSkyMultiAnova,singleTableOutputHeader = "Anova table with type {{sel
         let snippet8 = {
             RCode: `
 resEmmeans[[{{selected.counter |safe}}]] <- emmeans::emmeans(MultiAnova,~{{selected.dest | safe}})
-BSkyFormat( as.data.frame(resEmmeans[[{{selected.counter | safe}}]]),singleTableOutputHeader ="Estimated Marginal Means for {{selected.target | safe}} by {{selected.dest | safe}}")`};
+BSkyFormat(data.frame(resEmmeans[[{{selected.counter | safe}}]]),singleTableOutputHeader ="Estimated Marginal Means for {{selected.target | safe}} by {{selected.dest | safe}}")`};
         //Generating conditional means
         let snippet81 = {
             RCode: `
 resEmmeans[[{{selected.counter |safe}}]] <- emmeans::emmeans(MultiAnova,~{{selected.dependentVars | safe}})
-BSkyFormat( as.data.frame(resEmmeans[[{{selected.counter | safe}}]]),singleTableOutputHeader ="Estimated Marginal Means for {{selected.target | safe}} by {{selected.dependentVars | safe}}")`};
+BSkyFormat(data.frame(resEmmeans[[{{selected.counter | safe}}]]),singleTableOutputHeader ="Estimated Marginal Means for {{selected.target | safe}} by {{selected.dependentVars | safe}}")`};
         let snippet9 = {
             RCode: `
 {{if (options.selected.levene == "TRUE") }}
@@ -414,7 +414,7 @@ resContrasts[[{{selected.counter |safe}}]] <- emmeans::contrast(resEmmeans[[{{se
 resSummary <- summary(resContrasts[[{{selected.counter |safe}}]])
 cat("\\n\\n\\n")
 cat(attributes(resSummary)$mesg,sep = "\\n")
-BSkyFormat(as.data.frame(resContrasts[[{{selected.counter |safe}}]]),singleTableOutputHeader = "Post-hoc tests for {{selected.target | safe}} by {{selected.dest | safe}} (using method = {{selected.combon | safe}})")
+BSkyFormat(data.frame(resContrasts[[{{selected.counter |safe}}]]),singleTableOutputHeader = "Post-hoc tests for {{selected.target | safe}} by {{selected.dest | safe}} (using method = {{selected.combon | safe}})")
 `};
         // Simple effects tests
         let snippet101 = {
@@ -423,22 +423,22 @@ resContrasts[[{{selected.counter |safe}}]] <- emmeans::contrast(resEmmeans[[{{se
 resSummary <- summary(resContrasts[[{{selected.counter |safe}}]])
 cat("\\n\\n\\n")
 cat(attributes(resSummary)$mesg,sep = "\\n")
-BSkyFormat(as.data.frame(resContrasts[[{{selected.counter |safe}}]]), singleTableOutputHeader = "Simple effects test for {{selected.target | safe}} by {{selected.dependentVars | safe}} (using method = {{selected.combon | safe}})")`};
+BSkyFormat(data.frame(resContrasts[[{{selected.counter |safe}}]]), singleTableOutputHeader = "Simple effects test for {{selected.target | safe}} by {{selected.dependentVars | safe}} (using method = {{selected.combon | safe}})")`};
         // Simple effects tests
         let newsnippet101 = {
             RCode: `
     #Simple effects test and descriptives
     #Holding the 2st factor variable constant
     simpleEffectsRes <- emmeans(aov(MultiAnova), pairwise ~ {{selected.firstFactor}} | {{selected.secondFactor}} )
-    simpleEffectsDes <- as.data.frame(simpleEffectsRes$emmeans)
+    simpleEffectsDes <- data.frame(simpleEffectsRes$emmeans)
     base::row.names(simpleEffectsDes) <- NULL
     BSkyFormat(simpleEffectsDes, singleTableOutputHeader = 'Descriptive Statistics for Simple Effects Tests')
-    simpleEffectsComp <- as.data.frame(simpleEffectsRes$contrasts)
+    simpleEffectsComp <- data.frame(simpleEffectsRes$contrasts)
     base::row.names(simpleEffectsComp) <- NULL
     BSkyFormat(simpleEffectsComp, singleTableOutputHeader = 'Comparisons for {{selected.firstFactor}} holding {{selected.secondFactor}} constant')
     #Holding the 1st factor variable constant
     simpleEffectsRes <- emmeans(aov(MultiAnova), pairwise ~ {{selected.secondFactor}} | {{selected.firstFactor}} )
-    simpleEffectsComp <- as.data.frame(simpleEffectsRes$contrasts)
+    simpleEffectsComp <- data.frame(simpleEffectsRes$contrasts)
     base::row.names(simpleEffectsComp) <- NULL
     BSkyFormat(simpleEffectsComp, singleTableOutputHeader = 'Comparisons for {{selected.secondFactor}} holding {{selected.firstFactor}} constant')
 `}
@@ -446,12 +446,12 @@ BSkyFormat(as.data.frame(resContrasts[[{{selected.counter |safe}}]]), singleTabl
         let snippet11 = {
             RCode: `
 resultsContrasts[[{{selected.counter | safe}}]] <-multcomp::cld(resEmmeans[[{{selected.counter | safe}}]],level ={{selected.alpha | safe}})
-BSkyFormat( as.data.frame(resultsContrasts[[{{selected.counter | safe}}]]),singleTableOutputHeader = "Comparing means compactly for {{selected.target | safe}} by {{selected.dest | safe}} using {{selected.combon | safe}} comparison (p values adjusted using {{selected.adjust | safe}})")`};
+BSkyFormat( data.frame(resultsContrasts[[{{selected.counter | safe}}]]),singleTableOutputHeader = "Comparing means compactly for {{selected.target | safe}} by {{selected.dest | safe}} using {{selected.combon | safe}} comparison (p values adjusted using {{selected.adjust | safe}})")`};
         //Compare means compactly with interaction
         let snippet111 = {
             RCode: `
 resultsContrasts[[{{selected.counter | safe}}]] <-multcomp::cld(resEmmeans[[{{selected.counter | safe}}]],level ={{selected.alpha | safe}})
-BSkyFormat( as.data.frame(resultsContrasts[[{{selected.counter | safe}}]]),singleTableOutputHeader = "Comparing means compactly for {{selected.target | safe}} by {{selected.dependentVars | safe}} using {{selected.combon | safe}} comparison (p values adjusted using {{selected.adjust | safe}})")`};
+BSkyFormat( data.frame(resultsContrasts[[{{selected.counter | safe}}]]),singleTableOutputHeader = "Comparing means compactly for {{selected.target | safe}} by {{selected.dependentVars | safe}} using {{selected.combon | safe}} comparison (p values adjusted using {{selected.adjust | safe}})")`};
         //Plot all comparisons
         let snippet12 = {
             RCode: `
