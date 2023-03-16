@@ -105,7 +105,7 @@ if (exists("BSkyResults"))
                 el: new dstVariableList(config, {
                     label: localization.en.tvarbox1,
                     no: "tvarbox1",
-                    filter: "Numeric|Date|Logical|Scale",
+                    filter: "Numeric|Scale",
                     extraction: "NoPrefix|UseComma|Enclosed",
                     required: true,
                 }), r: ['{{ var | safe}}']
@@ -114,7 +114,7 @@ if (exists("BSkyResults"))
                 el: new dstVariableList(config, {
                     label: localization.en.tvarbox2,
                     no: "tvarbox2",
-                    filter: "Numeric|Logical|Ordinal|Nominal|Scale",
+                    filter: "Numeric|Scale",
                     extraction: "NoPrefix|UseComma|Enclosed",
                     required: true,
                 }), r: ['{{ var | safe}}']

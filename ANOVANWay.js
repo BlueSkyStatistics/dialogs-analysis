@@ -321,7 +321,7 @@ resContrasts <-emmeans::contrast(resultsEmmeans,method = "{{selected.combon | sa
 resSummary <-summary(resContrasts)
 cat("\\n\\n\\n")
 cat(attributes(resSummary)$mesg,sep = "\\n")
-BSkyFormat(as.data.frame(resContrasts),singleTableOutputHeader = "Post-hoc tests for {{selected.target | safe}} by {{selected.dest | safe}} (using method = {{selected.combon | safe}})")
+BSkyFormat(data.frame(resContrasts),singleTableOutputHeader = "Post-hoc tests for {{selected.target | safe}} by {{selected.dest | safe}} (using method = {{selected.combon | safe}})")
 {{if (options.selected.compactly == "TRUE") }}
 #Compare means compactly
 resultsContrasts = list()
@@ -372,7 +372,7 @@ resContrasts[[{{selected.counter |safe}}]] <- emmeans::contrast(resEmmeans[[{{se
 resSummary <- summary(resContrasts[[{{selected.counter |safe}}]])
 cat("\\n\\n\\n")
 cat(attributes(resSummary)$mesg,sep = "\\n")
-BSkyFormat(as.data.frame(resContrasts[[{{selected.counter |safe}}]]),singleTableOutputHeader = "Post-hoc tests for {{selected.target | safe}} by {{selected.dest | safe}} (using method = {{selected.combon | safe}})")`};
+BSkyFormat(data.frame(resContrasts[[{{selected.counter |safe}}]]),singleTableOutputHeader = "Post-hoc tests for {{selected.target | safe}} by {{selected.dest | safe}} (using method = {{selected.combon | safe}})")`};
         //Compare means compactly
         let snippet11 = {
             RCode: `
