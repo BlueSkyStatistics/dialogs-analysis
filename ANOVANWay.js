@@ -427,7 +427,7 @@ print(emmeans::emmmip(MultiAnova, {{selected.stringInteractionPlots | safe}}  ,C
     simpleEffectsDes <- data.frame(simpleEffectsRes$emmeans)
     base::row.names(simpleEffectsDes) <- NULL
     BSkyFormat(simpleEffectsDes, singleTableOutputHeader = 'Descriptive Statistics for Simple Effects Tests -{{selected.firstFactor}}:{{selected.secondFactor}}:{{selected.thirdFactor}}')
-    simpleEffectsComp <- as.data.frame(simpleEffectsRes$contrasts)
+    simpleEffectsComp <- data.frame(simpleEffectsRes$contrasts)
     base::row.names(simpleEffectsComp) <- NULL
     BSkyFormat(simpleEffectsComp, singleTableOutputHeader = 'Comparisons for {{selected.firstFactor}} holding {{selected.secondFactor}} and {{selected.thirdFactor}} constant')
     #Simple effects test holding the 2nd and 3rd factor variables constant
