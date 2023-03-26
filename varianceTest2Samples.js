@@ -6,9 +6,9 @@ var localization = {
         tvarbox1: "Response variable",
         tvarbox2: "Factor variable, with only two levels",
         label1: "Alternative hypothesis",
-        test1: "Difference != 0",
-        test2: "Difference > 0",
-        test3: "Difference < 0",
+        test1: "Difference != 1",
+        test2: "Difference > 1",
+        test3: "Difference < 1",
         txtbox1: "Confidence level",
         help: {
             title: "Variance Test, F-test)",
@@ -114,6 +114,7 @@ BSkyFormat(BSky_Variance_Test)
                     label: localization.en.tvarbox1,
                     no: "tvarbox1",
                     filter: "Numeric|Scale",
+                    required:true,
                     extraction: "NoPrefix|UseComma",
                 }), r: ['{{ var | safe}}']
             },
@@ -121,6 +122,7 @@ BSkyFormat(BSky_Variance_Test)
                 el: new dstVariable(config, {
                     label: localization.en.tvarbox2,
                     no: "tvarbox2",
+                    required:true,
                     filter: "Numeric|Logical|Ordinal|Nominal",
                     extraction: "NoPrefix|UseComma",
                 }), r: ['{{ var | safe}}']

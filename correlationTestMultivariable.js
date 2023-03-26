@@ -57,7 +57,8 @@ require(stats);
 require(RcmdrMisc);
 require(corrplot);
 require(DescTools); 
-require(dplyr);                 
+require(dplyr); 
+{{if(options.selected.displayErrorMessage)}}cat("WARNING: More than 2 variables need to be selected for the webplot to display")\n{{/if}}
 {{dataset.name}} %>%
 dplyr::select({{selected.tvarbox1 | safe}}) %T>%
     BSkyPlotCorrelationMatrix(
@@ -109,6 +110,32 @@ dplyr::select({{selected.tvarbox1 | safe}}) %T>%
         }
         super(config, objects, content);
         this.help = localization.en.help;
+    }
+
+    prepareExecution(instance) {
+        var res = [];
+        let temp = ""
+        let displayErrorMessage =""
+        if (instance.objects.tvarbox.el.getVal().length ==2)
+        {
+            displayErrorMessage =true
+        }
+        var code_vars = {
+            dataset: {
+                name: $(`#${instance.config.id}`).attr('dataset') ? $(`#${instance.config.id}`).attr('dataset') : getActiveDataset()
+            },
+            selected: instance.dialog.extractData()
+        }
+        code_vars.selected.displayErrorMessage=false
+        if (displayErrorMessage == true && code_vars.selected.plotweb =='TRUE')
+        {
+            code_vars.selected.plotweb ='FALSE'
+            code_vars.selected.displayErrorMessage=displayErrorMessage
+        }
+        temp = temp + instance.dialog.renderR(code_vars);
+        const cmd = temp
+        res.push({ cmd: cmd, cgid: newCommandGroup() })
+        return res;
     }
 }
 module.exports.item = new correlationTestMultivariable().render()

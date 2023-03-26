@@ -24,6 +24,7 @@ var localization = {
         grpBox27: "GeominQ",
         grpBox28: "GeominT",
         grpBox29: "Simplimax",
+        parallel: "Parallel analysis",
         help: {
             title: "Factor Analysis",
             r_help: "help(factanal, package ='stats')",
@@ -104,6 +105,10 @@ BSkyFormat(BSkyFARes)
 #Refresh the dataset in the data grid to show the factor scores 
 BSkyLoadRefresh("{{dataset.name}}",{{selected.saveScores | safe}})
 {{/if}}
+{{if (options.selected.parallel=="TRUE")}}
+require(psych)
+psych::fa.parallel({{dataset.name}}[,c({{selected.destination | safe}})],fa="fa")
+{{/if}}
             `
         }
         var objects = {
@@ -157,12 +162,13 @@ BSkyLoadRefresh("{{dataset.name}}",{{selected.saveScores | safe}})
             Oblimin: { el: new radioButton(config, { label: localization.en.grpBox26, no: "grpBox2", increment: "oblimin", value: "oblimin", state: "", extraction: "ValueAsIs" }) },
             GeominQ: { el: new radioButton(config, { label: localization.en.grpBox27, no: "grpBox2", increment: "geominQ", value: "geominQ", state: "", extraction: "ValueAsIs" }) },
             GeominT: { el: new radioButton(config, { label: localization.en.grpBox28, no: "grpBox2", increment: "geominT", value: "geominT", state: "", extraction: "ValueAsIs" }) },
-            Simplimax: { el: new radioButton(config, { label: localization.en.grpBox29, no: "grpBox2", increment: "simplimax", value: "simplimax", state: "", extraction: "ValueAsIs" }) }
+            Simplimax: { el: new radioButton(config, { label: localization.en.grpBox29, no: "grpBox2", increment: "simplimax", value: "simplimax", state: "", extraction: "ValueAsIs" }) },
+            parallel: { el: new checkbox(config, { label: localization.en.parallel, newline:true,style: "mt:4",no: "parallel", extraction: "Boolean" }) },
         }
         const content = {
             left: [objects.content_var.el.content],
             right: [objects.destination.el.content],
-            bottom: [objects.label1.el.content, objects.autoFactExt.el.content, objects.specifyFactors.el.content, objects.noOfFactors.el.content, objects.screeplot.el.content, objects.label2.el.content, objects.saveScores.el.content, objects.bartlett.el.content, objects.regression.el.content, objects.varForScores.el.content, objects.label3.el.content, objects.None.el.content, objects.Varimax.el.content, objects.Promax.el.content, objects.BentlerQ.el.content, objects.Quartimax.el.content, objects.Oblimin.el.content, objects.GeominQ.el.content, objects.GeominT.el.content, objects.Simplimax.el.content],
+            bottom: [objects.label1.el.content, objects.autoFactExt.el.content, objects.specifyFactors.el.content, objects.noOfFactors.el.content, objects.screeplot.el.content, objects.parallel.el.content,objects.label2.el.content, objects.saveScores.el.content, objects.bartlett.el.content, objects.regression.el.content, objects.varForScores.el.content, objects.label3.el.content, objects.None.el.content, objects.Varimax.el.content, objects.Promax.el.content, objects.BentlerQ.el.content, objects.Quartimax.el.content, objects.Oblimin.el.content, objects.GeominQ.el.content, objects.GeominT.el.content, objects.Simplimax.el.content],
             nav: {
                 name: localization.en.navigation,
                 icon: "icon-fa",

@@ -4,7 +4,7 @@ var localization = {
         repMeasuresConfig: "Configuration",
         modelname: "Enter model name",
         title: "Repeated Measures ANOVA -Wide",
-        subjectID: "Variable to use as a subject identifier",
+        subjectID: "Optionally specify a variable to use as a subject identifier",
         dependentVariable: "Dependent variable",
         navigation: "ANOVA, Repeated Measures, Wide",
         response: "Within-subjects variable(s) e.g. Time",
@@ -33,7 +33,9 @@ NOTE:<br/>
 3. You need to specify a repeated factor name e.g. Blood Sugar and the number of levels. We will create a factor variable e.g. named Blood Sugar with levels created from the names of the variables containing the repeated measures e.g. the levels of the factor will be pretest, posttest and followup<br/>
 4. You need to specify a measure name e.g. Value. We will create a variable e.g. Value with all the Blood Sugar values corresponding to the pretest, posttest and followup for each subject.<br/>
 5. We support a single between-subject and within-subject factor variable.<br/>
-6. Future versions will support multiple measures as well as multiple between subject and within subject factor variables.<br/><br/>
+6. Future versions will support multiple measures as well as multiple between subject and within subject factor variables.<br/>
+7. By default each row of the dataset corresponds to a unique subject, you can also specify a variable for the subject ID.</br>
+<br/>
 With repeated measures ANOVA F statistics are computed for each within subjects factor, between subject factor and the interaction term for mixed ANOVA</br>
 Look for the additional ANOVA values tables in the output which display MSE (mean sum of squares for error) and pes (partial eta squared)</br>
 We currently support a single within subject and between subject factor, the between subject factor is optional.</br>
@@ -84,7 +86,6 @@ Click the R Help button to get detailed R help. You can also enter help(aov_ez, 
     `}
     }
 }
-
 class repeatedMeasuresAnovaW extends baseModal {
     constructor() {
         var config = {
@@ -100,11 +101,18 @@ require(dplyr)
 require(heplots)
 require(tidyr)
 #Using pivot longer to convert the dataset to longer format
+{{if(options.selected.no_subjectID =="TRUE")}}
+.GlobalEnv\${{dataset.name}}_rehapedLonger <- {{dataset.name}} %>% mutate( {{selected.subjectID | safe}} = dplyr::row_number()) %>%
+	pivot_longer( cols = c({{selected.repMeasuresConfig_depVar_1 | safe}}), 
+	names_to = c( "{{selected.repMeasuresConfig_factorList | safe}}"), 
+	values_to = c("{{selected.repMeasuresConfig_measureList | safe}}" ) ) 
+{{#else}}
 .GlobalEnv\${{dataset.name}}_rehapedLonger <- {{dataset.name}} %>% 
 	pivot_longer( cols = c({{selected.repMeasuresConfig_depVar_1 | safe}}), 
 	names_to = c( "{{selected.repMeasuresConfig_factorList | safe}}"), 
 	values_to = c("{{selected.repMeasuresConfig_measureList | safe}}" ) )  
-# WE will reuse code below in a future release  
+{{/if}}
+# We will reuse code below in a future release  
 #.GlobalEnv\${{dataset.name}}_rehapedLonger <- {{dataset.name}} %>% 
 #	pivot_longer( cols = c({{selected.repMeasuresConfig_depVar_1 | safe}}), 
 #	names_to = c(".value", "{{selected.repMeasuresConfig_factorList | safe}}"), 
@@ -199,6 +207,7 @@ BSkyFormat(as.data.frame(BSkyLevenesFactor), \n\tsingleTableOutputHeader = "Leve
 BSkyFormat(data.frame(Message = "Levene's test cannot be run as a between subjects factor is not specified"))
 {{/if}}
 \n#Removing temporary objects
+if (exists('{{dataset.name}}_rehapedLonger')) rm({{dataset.name}}_rehapedLonger)
 if (exists('BSkyRepMeasuresSummary')) rm(BSkyRepMeasuresSummary)
 if (exists('BSkyDescBetweenSubj')) rm(BSkyDescBetweenSubj)
 if (exists('BSkyEmmBetweenSubj')) rm(BSkyEmmBetweenSubj)
@@ -209,7 +218,6 @@ if (exists('resContrastsBetweenSubj')) rm(resContrastsBetweenSubj)
 if (exists('resSummaryContWithinSubj')) rm(resSummaryContWithinSubj) 
 if (exists('resSummaryContBetweenSubj')) rm(resSummaryContBetweenSubj)
 if (exists('resSummaryContWithInteractions')) rm(resSummaryContWithInteractions)
-if (exists('BSkyReshapedData')) rm(BSkyReshapedData)
 if( exists('BSkyBoxMRes')) rm(BSkyBoxMRes) 
 if( exists('boxMFactor')) rm(boxMFactor) 
 if( exists('BSkyBoxMRes')) rm(BSkyBoxMRes)
@@ -227,7 +235,7 @@ if (exists('BSkyLevenesFactor')) rm(BSkyLevenesFactor)
                     extraction: "NoPrefix|UseComma",
                     required: true,
                 }), r: ['{{ var | safe}}']
-            }, 
+            },
             content_var: { el: new srcVariableList(config, { action: "move" }) },
             modelname: {
                 el: new input(config, {
@@ -241,17 +249,15 @@ if (exists('BSkyLevenesFactor')) rm(BSkyLevenesFactor)
                     overwrite: "dataset"
                 })
             },
-           
             subjectID: {
                 el: new dstVariable(config, {
                     label: localization.en.subjectID,
                     no: "subjectID",
                     filter: "Numeric|Scale",
                     extraction: "NoPrefix|UseComma",
-                    required: true,
                 }), r: ['{{ subjectID | safe}}']
             },
-           Fixed: {
+            Fixed: {
                 el: new dstVariable(config, {
                     label: localization.en.Fixed,
                     no: "Fixed",
@@ -318,7 +324,7 @@ if (exists('BSkyLevenesFactor')) rm(BSkyLevenesFactor)
         const content = {
             head: [objects.repMeasuresConfig.el.content,],
             left: [objects.content_var.el.content],
-            right: [  objects.subjectID.el.content, objects.Fixed.el.content, objects.covariates.el.content,objects.modelname.el.content],
+            right: [objects.subjectID.el.content, objects.Fixed.el.content, objects.covariates.el.content, objects.modelname.el.content],
             bottom: [opts.el.content],
             nav: {
                 name: localization.en.navigation,
@@ -337,46 +343,55 @@ if (exists('BSkyLevenesFactor')) rm(BSkyLevenesFactor)
             },
             selected: instance.dialog.extractData()
         }
+        let randomString = '';
+        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        for (let i = 0; i < 2; i++) {
+            randomString += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        code_vars.selected.no_subjectID = "FALSE"
+        if (code_vars.selected.subjectID == "") {
+            code_vars.selected.subjectID = "BSky_Inserted_Row_ID" + "_" + randomString
+            code_vars.selected.no_subjectID = "TRUE"
+        }
         const cmd = instance.dialog.renderR(code_vars);
         res.push({ cmd: cmd, cgid: newCommandGroup() })
         return res;
-       /*  let i=1;
-        let errorRaised =false
-        let firstValue =""
-        code_vars.selected.repMeasuresConfig_depVar_1.split(",").every(function (value) {
-            if (!value.includes("_"))
-            {
-                const cmd ="cat(\"ERROR: Variable names that contain repeated measures must all have a common prefix followed by _ followed by a number that denotes the repetition.\nFor e.g. test_1, test_2 ...or Time_1, Time_2...\nPlease rename your variables accordingly\")";
-                res.push({ cmd: cmd, cgid: newCommandGroup() })
-                dialog.showMessageBoxSync({ type: "error", buttons: ["OK"], title: "Incorrect variable name format", message: "Variable names that contain repeated measures must all have a common prefix followed by _ followed by a number that denotes the repetition.\nFor e.g. test_1, test_2 ...or Time_1, Time_2...\nPlease rename your variables accordingly" })
-                errorRaised =true
-                return 
-            }        
-            if (i==1)
-            {
-                firstValue = value.substring(0,value.indexOf("_"));
-            }
-            i=i+1
-            if (firstValue != value.substring(0,value.indexOf("_")))
-            {
-                const cmd ="cat(\"ERROR: Variable names that contain repeated measures don't have a common prefix. All variables that contain repeated measures must all have a common prefix followed by _ followed by a number that denotes the repetition.\nFor e.g. test_1, test_2 ...or Time_1, Time_2...\nPlease rename your variables accordingly\")";
-                res.push({ cmd: cmd, cgid: newCommandGroup() })
-                dialog.showMessageBoxSync({ type: "error", buttons: ["OK"], title: "Incorrect variable name format", message: "Variable names that contain repeated measures don't have a common prefix. \nAll Variable names that contain repeated measures must all have a common prefix followed by _ followed by a number that denotes the repetition.\nFor e.g. test_1, test_2 ...or Time_1, Time_2...\nPlease rename your variables accordingly" })
-                errorRaised =true
-                return 
-            }
-        })
-
-        if (errorRaised)
-        {
-            return res
-        }
-        else
-        {
-            const cmd = instance.dialog.renderR(code_vars);
-            res.push({ cmd: cmd, cgid: newCommandGroup() })
-            return res;
-        } */
+        /*  let i=1;
+         let errorRaised =false
+         let firstValue =""
+         code_vars.selected.repMeasuresConfig_depVar_1.split(",").every(function (value) {
+             if (!value.includes("_"))
+             {
+                 const cmd ="cat(\"ERROR: Variable names that contain repeated measures must all have a common prefix followed by _ followed by a number that denotes the repetition.\nFor e.g. test_1, test_2 ...or Time_1, Time_2...\nPlease rename your variables accordingly\")";
+                 res.push({ cmd: cmd, cgid: newCommandGroup() })
+                 dialog.showMessageBoxSync({ type: "error", buttons: ["OK"], title: "Incorrect variable name format", message: "Variable names that contain repeated measures must all have a common prefix followed by _ followed by a number that denotes the repetition.\nFor e.g. test_1, test_2 ...or Time_1, Time_2...\nPlease rename your variables accordingly" })
+                 errorRaised =true
+                 return 
+             }        
+             if (i==1)
+             {
+                 firstValue = value.substring(0,value.indexOf("_"));
+             }
+             i=i+1
+             if (firstValue != value.substring(0,value.indexOf("_")))
+             {
+                 const cmd ="cat(\"ERROR: Variable names that contain repeated measures don't have a common prefix. All variables that contain repeated measures must all have a common prefix followed by _ followed by a number that denotes the repetition.\nFor e.g. test_1, test_2 ...or Time_1, Time_2...\nPlease rename your variables accordingly\")";
+                 res.push({ cmd: cmd, cgid: newCommandGroup() })
+                 dialog.showMessageBoxSync({ type: "error", buttons: ["OK"], title: "Incorrect variable name format", message: "Variable names that contain repeated measures don't have a common prefix. \nAll Variable names that contain repeated measures must all have a common prefix followed by _ followed by a number that denotes the repetition.\nFor e.g. test_1, test_2 ...or Time_1, Time_2...\nPlease rename your variables accordingly" })
+                 errorRaised =true
+                 return 
+             }
+         })
+         if (errorRaised)
+         {
+             return res
+         }
+         else
+         {
+             const cmd = instance.dialog.renderR(code_vars);
+             res.push({ cmd: cmd, cgid: newCommandGroup() })
+             return res;
+         } */
     }
 }
 module.exports.item = new repeatedMeasuresAnovaW().render()

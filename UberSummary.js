@@ -106,7 +106,7 @@ dplyr::group_by({{selected.tvarbox2 | safe}}) %>%
                                         iqr={{selected.iqr | safe}}, 
                                         quantiles={{selected.quantile | safe}}), 
                                     quantilesProbs = c({{selected.probs | safe}}), 
-                                    {{if (options.selected.ChkboxShowOnlyTopFewFactors)}}maxsum = {{selected.txtNumTopFactorsToShow | safe}}{{#else}}maxsum = 0{{/if}}, datasetName="{{dataset.name}}",
+                                    {{if (options.selected.ChkboxShowOnlyTopFewFactors=="TRUE")}}maxsum = {{selected.txtNumTopFactorsToShow | safe}}{{#else}}maxsum = 0{{/if}}, datasetName="{{dataset.name}}",
                                     additionalStats = {{selected.addIsstatnames | safe}},
                                     long_table={{selected.longTbl | safe}}) %>%
             BSkyFormat()                        
@@ -167,7 +167,7 @@ dplyr::group_by({{selected.tvarbox2 | safe}}) %>%
                 })
             },
             label3: { el: new labelVar(config, { label: localization.en.label3, style: "mt-2", h: 6 }) },
-            ChkboxShowOnlyTopFewFactors: { el: new checkbox(config, { label: localization.en.ChkboxShowOnlyTopFewFactors, style: "mt-3", dependant_objects: ['txtNumTopFactorsToShow'], no: "ChkboxShowOnlyTopFewFactors", checked: true, extraction: "Boolean" }) },
+            ChkboxShowOnlyTopFewFactors: { el: new checkbox(config, { label: localization.en.ChkboxShowOnlyTopFewFactors, style: "mt-3", dependant_objects: ['txtNumTopFactorsToShow'], no: "ChkboxShowOnlyTopFewFactors", required: true, state:"checked",extraction: "Boolean" }) },
             txtNumTopFactorsToShow: {
                 el: new inputSpinner(config, {
                     no: 'txtNumTopFactorsToShow',
@@ -183,7 +183,6 @@ dplyr::group_by({{selected.tvarbox2 | safe}}) %>%
             label2: { el: new labelVar(config, { label: localization.en.label2, style: "mb-3", h: 6 }) },
             longTbl: { el: new checkbox(config, {
                 label: "Summary statistics in columns",
-                state: "checked",
                 style: "mt-2",
                 no: "longTbl",
                 extraction: "Boolean",

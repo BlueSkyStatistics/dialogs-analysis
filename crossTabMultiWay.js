@@ -161,58 +161,52 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
                     extraction: "Boolean",
                 })
             },
-
             chisqNoContCorrection: {
                 el: new radioButton(config, {
                     label: "No continuity correction for Chi-squared test",
                     style: "ml-2",
-                 //   dependant_objects: ['chisq'],
+                    //   dependant_objects: ['chisq'],
                     increment: "chisqNoContCorrection",
                     no: "gpbox1",
                     value: "chisqNoContCorrection",
                     state: "checked",
                     extraction: "ValueAsIs"
-
                 })
             },
-
             chisqContCorrection: {
                 el: new radioButton(config, {
                     label: "Apply continuity correction for Chi-squared test (Applies to a 2 by 2 table)",
                     style: "ml-2",
-                  //  dependant_objects: ['chisq'],
+                    //  dependant_objects: ['chisq'],
                     increment: "chisqContCorrection",
                     value: "chisqContCorrection",
                     no: "gpbox1",
                     extraction: "ValueAsIs"
                 })
             },
-
             chisqSimulatePValues: {
                 el: new radioButton(config, {
                     label: "Compute p-values using Monte Carlo simulation",
                     increment: "chisqSimulatePValues",
                     style: "ml-2",
-                  //  dependant_objects: ['chisq'],
+                    //  dependant_objects: ['chisq'],
                     extraction: "ValueAsIs",
                     no: "gpbox1",
                     value: "chisqSimulatePValues",
                 })
             },
-
             chisqNoOfReplicates: {
                 el: new inputSpinner(config, {
-                  no: 'chisqNoOfReplicates',
-                  label: "Number of replicates used in the Monte Carlo test",
-                  min: 0,
-                  style: "ml-4",
-                  max: 999999999999999,
-                  step: 1000,
-                  value: 2000,
-                  extraction: "NoPrefix|UseComma"
+                    no: 'chisqNoOfReplicates',
+                    label: "Number of replicates used in the Monte Carlo test",
+                    min: 0,
+                    style: "ml-4",
+                    max: 999999999999999,
+                    step: 1000,
+                    value: 2000,
+                    extraction: "NoPrefix|UseComma"
                 })
-              },
-
+            },
             mcnemar: {
                 el: new checkbox(config, {
                     label: "McNemar",
@@ -225,64 +219,53 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
                 el: new checkbox(config, {
                     label: "Apply continuity correction for McNemar's test (Applies to a 2 by 2 table)",
                     style: "ml-2",
-                   // dependant_objects: ['mcnemar'],
-                    newline:true,
+                    // dependant_objects: ['mcnemar'],
+                    newline: true,
                     no: "mcnemarContCorrection",
                     extraction: "Boolean",
                 })
             },
-
-
-
-
             fisher: {
                 el: new checkbox(config, {
                     label: "Fisher",
                     no: "fisher",
                     style: "mt-4",
-                    newline:true,
+                    newline: true,
                     extraction: "Boolean",
                 })
             },
-
-
             fisherSimulatePValues: {
                 el: new checkbox(config, {
                     label: "Compute p-values using Monte Carlo simulation",
                     style: "ml-2",
-                    newline:true,
+                    newline: true,
                     no: "fisherSimulatePValues",
                     extraction: "Boolean",
-                   // dependant_objects: ['fisher']
                 })
             },
-
             fisherNoOfReplicates: {
                 el: new inputSpinner(config, {
-                  no: 'fisherNoOfReplicates',
-                  label: "Number of replicates used in the Monte Carlo test",
-                  min: 0,
-                  style: "ml-4",
-                  max: 999999999999999,
-                  step: 1000,
-                  value: 2000,
-                  extraction: "NoPrefix|UseComma"
+                    no: 'fisherNoOfReplicates',
+                    label: "Number of replicates used in the Monte Carlo test",
+                    min: 0,
+                    style: "ml-4",
+                    max: 999999999999999,
+                    step: 1000,
+                    value: 2000,
+                    extraction: "NoPrefix|UseComma"
                 })
-              },
-
-              fishersAlternative: {
+            },
+            fishersAlternative: {
                 el: new comboBox(config, {
-                  no: "fishersAlternative",
-                  label: "Alternative hypothesis for Fisher's Exact test",
-                  multiple: false,
-                  style: "ml-2",
-                  extraction: "NoPrefix|UseComma",
-                  options: ["two.sided", "greater", "less"],
-                  default: "two.sided"
+                    no: "fishersAlternative",
+                    label: "Alternative hypothesis for Fisher's Exact test",
+                    multiple: false,
+                    style: "ml-2",
+                    extraction: "NoPrefix|UseComma",
+                    options: ["two.sided", "greater", "less"],
+                    default: "two.sided"
                 })
-              },
-
-
+            },
             label2: { el: new labelVar(config, { no: "label2", label: "Residuals", h: 5 }) },
             unstandardized: {
                 el: new checkbox(config, {
@@ -348,17 +331,12 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
                     objects.chisqContCorrection.el,
                     objects.chisqSimulatePValues.el,
                     objects.chisqNoOfReplicates.el,
-
                     objects.mcnemar.el,
                     objects.mcnemarContCorrection.el,
-
-
-
                     objects.fisher.el,
                     objects.fisherSimulatePValues.el,
                     objects.fisherNoOfReplicates.el,
                     objects.fishersAlternative.el,
-
                     objects.label2.el,
                     objects.unstandardized.el,
                     objects.standardized.el,
@@ -400,8 +378,8 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
         code_vars.selected.row = code_vars.selected.row.split(",");
         code_vars.selected.column = code_vars.selected.column.split(",");
         code_vars.selected.column.forEach(col => {
-        code_vars.selected.col = col
-        temp = temp + instance.dialog.renderR(code_vars);
+            code_vars.selected.col = col
+            temp = temp + instance.dialog.renderR(code_vars);
         });
         const cmd = temp
         res.push({ cmd: cmd, cgid: newCommandGroup() })
