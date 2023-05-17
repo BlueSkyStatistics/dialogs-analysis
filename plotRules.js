@@ -15,10 +15,15 @@ var localization = {
         paracoord:"paracoord",
         grouped:"grouped",
 
-        label3 : "Interactive",
-        inttrue:"TRUE",
-        intfalse:"FALSE",
-
+        label3 : "Engine",
+        engggplot2:"ggplot2",
+        engdefault:"default",
+        enggraphviz:"graphviz",
+        enghtmlwidget:"htmlwidget",
+        enginteractive:"interactive",
+        engigraph:"igraph",
+        engvisnetwork:"visNetwork",
+								
         label4 : "Shading",
         lift:"lift",
         support:"support",
@@ -356,7 +361,7 @@ library(arules);
 library(arulesViz); 
 library(iplots); 
 
-plot({{selected.rulesobj | safe}}, method = "{{selected.methgrp | safe}}", interactive = {{selected.intgrp | safe}}, shading = {{selected.shgrp | safe}})
+plot({{selected.rulesobj | safe}}, method = "{{selected.methgrp | safe}}", engine = '{{selected.enggrp | safe}}', shading = {{selected.shgrp | safe}})
 
 `
         }
@@ -481,27 +486,82 @@ plot({{selected.rulesobj | safe}}, method = "{{selected.methgrp | safe}}", inter
 					h: 5 
 				}) 
 			},
-            inttrue: { 
+
+            engggplot2: { 
 				el: new radioButton(config, { 
-					label: localization.en.inttrue, 
-					no: "intgrp", 
-					increment: "inttrue", 
-					value: "TRUE", 
-					state: "checked", 
+					label: localization.en.engggplot2, 
+					no: "enggrp", 
+					increment: "engggplot2", 
+					value: "ggplot2", 
+					state: "", 
 					extraction: "ValueAsIs"
 				}) 
 			},
 			
-            intfalse: { 
+            engdefault: { 
 				el: new radioButton(config, { 
-					label: localization.en.intfalse, 
-					no: "intgrp", 
-					increment: "intfalse", 
-					value: "FALSE", 
+					label: localization.en.engdefault, 
+					no: "enggrp", 
+					increment: "engdefault", 
+					value: "default", 
+					state: "checked", 
+					extraction: "ValueAsIs"
+				}) 
+			},	
+            enggraphviz: { 
+				el: new radioButton(config, { 
+					label: localization.en.enggraphviz, 
+					no: "enggrp", 
+					increment: "enggraphviz", 
+					value: "graphviz", 
+					state: "", 
+					extraction: "ValueAsIs"
+				}) 
+			},
+	
+            enghtmlwidget: { 
+				el: new radioButton(config, { 
+					label: localization.en.enghtmlwidget, 
+					no: "enggrp", 
+					increment: "enghtmlwidget", 
+					value: "htmlwidget", 
+					state: "", 
+					extraction: "ValueAsIs"
+				}) 
+			},
+			
+            enginteractive: { 
+				el: new radioButton(config, { 
+					label: localization.en.enginteractive, 
+					no: "enggrp", 
+					increment: "enginteractive", 
+					value: "interactive", 
 					state: "", 
 					extraction: "ValueAsIs"
 				}) 
 			},	
+            engigraph: { 
+				el: new radioButton(config, { 
+					label: localization.en.engigraph, 
+					no: "enggrp", 
+					increment: "engigraph", 
+					value: "igraph", 
+					state: "", 
+					extraction: "ValueAsIs"
+				}) 
+			},
+					
+            engvisnetwork: { 
+				el: new radioButton(config, { 
+					label: localization.en.engvisnetwork, 
+					no: "enggrp", 
+					increment: "engvisnetwork", 
+					value: "visNetwork", 
+					state: "", 
+					extraction: "ValueAsIs"
+				}) 
+			},													
+
 
             label4: { 
 				el: new labelVar(config, { 
@@ -576,7 +636,9 @@ plot({{selected.rulesobj | safe}}, method = "{{selected.methgrp | safe}}", inter
                     objects.label2.el.content, 
                     objects.scatterplot.el.content, objects.twokeyplot.el.content,objects.matrix.el.content,objects.matrix3D.el.content,objects.graph.el.content,
                     objects.paracoord.el.content,objects.grouped.el.content,
-                    objects.label3.el.content,objects.inttrue.el.content,objects.intfalse.el.content,
+                    objects.label3.el.content,
+					objects.engggplot2.el.content, objects.engdefault.el.content, objects.enggraphviz.el.content,
+					objects.enghtmlwidget.el.content, objects.enginteractive.el.content, objects.engigraph.el.content, objects.engvisnetwork.el.content,
                     objects.label4.el.content,objects.lift.el.content,objects.support.el.content,
                     objects.confidence.el.content,objects.NA.el.content,
                     objects.warn.el.content
