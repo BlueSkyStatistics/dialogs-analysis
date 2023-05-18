@@ -13,7 +13,9 @@ var localization = {
         matrix3D:"matrix3D",
         graph:"graph",
         paracoord:"paracoord",
-        grouped:"grouped",
+        grouped:"grouped matrix",
+		mosaic: "mosaic",
+		doubledecker: "doubledecker",
 
         label3 : "Engine",
         engggplot2:"ggplot2",
@@ -23,6 +25,9 @@ var localization = {
         enginteractive:"interactive",
         engigraph:"igraph",
         engvisnetwork:"visNetwork",
+		engbase : "base",
+		eng3d	: "3d",
+		engplotly : "plotly",
 								
         label4 : "Shading",
         lift:"lift",
@@ -361,7 +366,7 @@ library(arules);
 library(arulesViz); 
 library(iplots); 
 
-plot({{selected.rulesobj | safe}}, method = "{{selected.methgrp | safe}}", engine = '{{selected.enggrp | safe}}', shading = {{selected.shgrp | safe}})
+plot({{selected.rulesobj | safe}}, method = "{{selected.methgrp | safe}}", engine = "{{selected.enggrp | safe}}", shading = {{selected.shgrp | safe}})
 
 `
         }
@@ -420,7 +425,7 @@ plot({{selected.rulesobj | safe}}, method = "{{selected.methgrp | safe}}", engin
 					label: localization.en.twokeyplot, 
 					no: "methgrp", 
 					increment: "twokeyplot", 
-					value: "twokeyplot", 
+					value: "two-key plot", 
 					state: "", 
 					extraction: "ValueAsIs" 
 				}) 
@@ -470,11 +475,31 @@ plot({{selected.rulesobj | safe}}, method = "{{selected.methgrp | safe}}", engin
 					label: localization.en.grouped, 
 					no: "methgrp", 
 					increment: "grouped", 
-					value: "grouped", 
+					value: "grouped matrix", 
 					state: "", 
 					extraction: "ValueAsIs" 
 				}) 
 			},
+            mosaic: { 
+				el: new radioButton(config, { 
+					label: localization.en.mosaic, 
+					no: "methgrp", 
+					increment: "mosaic", 
+					value: "mosaic", 
+					state: "", 
+					extraction: "ValueAsIs" 
+				}) 
+			},
+            doubledecker: { 
+				el: new radioButton(config, { 
+					label: localization.en.doubledecker, 
+					no: "methgrp", 
+					increment: "doubledecker", 
+					value: "doubledecker", 
+					state: "", 
+					extraction: "ValueAsIs" 
+				}) 
+			},						
                     		
 			
 			
@@ -560,7 +585,37 @@ plot({{selected.rulesobj | safe}}, method = "{{selected.methgrp | safe}}", engin
 					state: "", 
 					extraction: "ValueAsIs"
 				}) 
-			},													
+			},		
+            engbase: { 
+				el: new radioButton(config, { 
+					label: localization.en.engbase, 
+					no: "enggrp", 
+					increment: "engbase", 
+					value: "base", 
+					state: "", 
+					extraction: "ValueAsIs"
+				}) 
+			},
+            eng3d: { 
+				el: new radioButton(config, { 
+					label: localization.en.eng3d, 
+					no: "enggrp", 
+					increment: "eng3d", 
+					value: "3d", 
+					state: "", 
+					extraction: "ValueAsIs"
+				}) 
+			},
+            engplotly: { 
+				el: new radioButton(config, { 
+					label: localization.en.engplotly, 
+					no: "enggrp", 
+					increment: "engplotly", 
+					value: "plotly", 
+					state: "", 
+					extraction: "ValueAsIs"
+				}) 
+			},																				
 
 
             label4: { 
@@ -578,7 +633,7 @@ plot({{selected.rulesobj | safe}}, method = "{{selected.methgrp | safe}}", engin
 					label: localization.en.lift, 
 					no: "shgrp", 
 					increment: "lift", 
-					value: "'lift'", 
+					value: '"lift"', 
 					state: "checked", 
 					extraction: "ValueAsIs"
 				}) 
@@ -589,7 +644,7 @@ plot({{selected.rulesobj | safe}}, method = "{{selected.methgrp | safe}}", engin
 					label: localization.en.support, 
 					no: "shgrp", 
 					increment: "support", 
-					value: "'support'", 
+					value: '"support"', 
 					state: "", 
 					extraction: "ValueAsIs"
 				}) 
@@ -599,7 +654,7 @@ plot({{selected.rulesobj | safe}}, method = "{{selected.methgrp | safe}}", engin
 					label: localization.en.confidence, 
 					no: "shgrp", 
 					increment: "confidence", 
-					value: "'confidence'", 
+					value: '"confidence"', 
 					state: "", 
 					extraction: "ValueAsIs"
 				}) 
@@ -635,10 +690,11 @@ plot({{selected.rulesobj | safe}}, method = "{{selected.methgrp | safe}}", engin
 			bottom: [objects.javanote.el.content, objects.rulesobj.el.content, objects.label1.el.content,
                     objects.label2.el.content, 
                     objects.scatterplot.el.content, objects.twokeyplot.el.content,objects.matrix.el.content,objects.matrix3D.el.content,objects.graph.el.content,
-                    objects.paracoord.el.content,objects.grouped.el.content,
+                    objects.paracoord.el.content,objects.grouped.el.content, objects.mosaic.el.content, objects.doubledecker.el.content,
                     objects.label3.el.content,
 					objects.engggplot2.el.content, objects.engdefault.el.content, objects.enggraphviz.el.content,
 					objects.enghtmlwidget.el.content, objects.enginteractive.el.content, objects.engigraph.el.content, objects.engvisnetwork.el.content,
+					objects.engbase.el.content, objects.eng3d.el.content, objects.engplotly.el.content,
                     objects.label4.el.content,objects.lift.el.content,objects.support.el.content,
                     objects.confidence.el.content,objects.NA.el.content,
                     objects.warn.el.content
