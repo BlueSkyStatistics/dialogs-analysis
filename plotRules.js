@@ -20,11 +20,7 @@ var localization = {
         label3 : "Engine",
         engggplot2:"ggplot2",
         engdefault:"default",
-        enggraphviz:"graphviz",
         enghtmlwidget:"htmlwidget",
-        enginteractive:"interactive",
-        engigraph:"igraph",
-        engvisnetwork:"visNetwork",
 		engbase : "base",
 		eng3d	: "3d",
 		engplotly : "plotly",
@@ -36,7 +32,7 @@ var localization = {
         NA:"supress shading",
         
         warn : "NOTE : Depending on the size of the 'Rules' object, some of these visualization options may take a long or may terminate  because of a lack of resources. Instead of processing the whole set of rules at once, you can specify a small set. e.g. Rules1[1:10]. ",
-		javanote : "Note : This dialog requires Java (JDK/JRE). Install Java and set JAVA_HOME as an environment variable that points to the installed Java location.",
+		// javanote : "Note : This dialog requires Java (JDK/JRE). Install Java and set JAVA_HOME as an environment variable that points to the installed Java location.",
 
         help: {
             title: "Plot Rules",
@@ -364,7 +360,6 @@ class plotRules extends baseModal {
             RCode: `
 library(arules); 
 library(arulesViz); 
-library(iplots); 
 
 plot({{selected.rulesobj | safe}}, method = "{{selected.methgrp | safe}}", engine = "{{selected.enggrp | safe}}", shading = {{selected.shgrp | safe}})
 
@@ -372,14 +367,14 @@ plot({{selected.rulesobj | safe}}, method = "{{selected.methgrp | safe}}", engin
         }
 		
         var objects = {
-			javanote: { 
-				el: new labelVar(config, { 
-					label: localization.en.javanote, 
-                    no:"javanote",
-					style:"mt-2",
-					h: 5 
-				}) 
-			},
+			// javanote: { 
+			// 	el: new labelVar(config, { 
+			// 		label: localization.en.javanote, 
+            //         no:"javanote",
+			// 		style:"mt-2",
+			// 		h: 5 
+			// 	}) 
+			// },
 
 			rulesobj: {
                 el: new input(config, {
@@ -533,16 +528,6 @@ plot({{selected.rulesobj | safe}}, method = "{{selected.methgrp | safe}}", engin
 					extraction: "ValueAsIs"
 				}) 
 			},	
-            enggraphviz: { 
-				el: new radioButton(config, { 
-					label: localization.en.enggraphviz, 
-					no: "enggrp", 
-					increment: "enggraphviz", 
-					value: "graphviz", 
-					state: "", 
-					extraction: "ValueAsIs"
-				}) 
-			},
 	
             enghtmlwidget: { 
 				el: new radioButton(config, { 
@@ -554,38 +539,7 @@ plot({{selected.rulesobj | safe}}, method = "{{selected.methgrp | safe}}", engin
 					extraction: "ValueAsIs"
 				}) 
 			},
-			
-            enginteractive: { 
-				el: new radioButton(config, { 
-					label: localization.en.enginteractive, 
-					no: "enggrp", 
-					increment: "enginteractive", 
-					value: "interactive", 
-					state: "", 
-					extraction: "ValueAsIs"
-				}) 
-			},	
-            engigraph: { 
-				el: new radioButton(config, { 
-					label: localization.en.engigraph, 
-					no: "enggrp", 
-					increment: "engigraph", 
-					value: "igraph", 
-					state: "", 
-					extraction: "ValueAsIs"
-				}) 
-			},
-					
-            engvisnetwork: { 
-				el: new radioButton(config, { 
-					label: localization.en.engvisnetwork, 
-					no: "enggrp", 
-					increment: "engvisnetwork", 
-					value: "visNetwork", 
-					state: "", 
-					extraction: "ValueAsIs"
-				}) 
-			},		
+	
             engbase: { 
 				el: new radioButton(config, { 
 					label: localization.en.engbase, 
@@ -687,13 +641,14 @@ plot({{selected.rulesobj | safe}}, method = "{{selected.methgrp | safe}}", engin
         const content = {
             left: [],
             right: [],
-			bottom: [objects.javanote.el.content, objects.rulesobj.el.content, objects.label1.el.content,
+			bottom: [ //objects.javanote.el.content, 
+				objects.rulesobj.el.content, objects.label1.el.content,
                     objects.label2.el.content, 
                     objects.scatterplot.el.content, objects.twokeyplot.el.content,objects.matrix.el.content,objects.matrix3D.el.content,objects.graph.el.content,
                     objects.paracoord.el.content,objects.grouped.el.content, objects.mosaic.el.content, objects.doubledecker.el.content,
                     objects.label3.el.content,
-					objects.engggplot2.el.content, objects.engdefault.el.content, objects.enggraphviz.el.content,
-					objects.enghtmlwidget.el.content, objects.enginteractive.el.content, objects.engigraph.el.content, objects.engvisnetwork.el.content,
+					objects.engggplot2.el.content, objects.engdefault.el.content, 
+					objects.enghtmlwidget.el.content, 
 					objects.engbase.el.content, objects.eng3d.el.content, objects.engplotly.el.content,
                     objects.label4.el.content,objects.lift.el.content,objects.support.el.content,
                     objects.confidence.el.content,objects.NA.el.content,
