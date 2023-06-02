@@ -3,6 +3,22 @@ const nav = {
     "tab": "analysis",
     "buttons": [
         {
+            "name": "Association Rules",
+            "icon": "icon-shoppingcart_1",
+            "children": [
+                "./generateRuleBasketData",
+                "./ItemFreqPlotBasketData",
+                "./targetingItemsBasketData",
+                "./generateRuleMultilineData",
+                "./ItemFreqPlotMultilineData",
+                "./targetingItemsMultilineData",
+                "./generateRuleMultiVarFormat",
+                "./targetingItemsMultiVarFormat",
+                "./displayRules",
+                "./plotRules"                                                                
+            ]
+        },         
+        {
             "name": "Correlations",
             "icon": "icon-link",
             "children": [
