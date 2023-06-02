@@ -122,7 +122,7 @@ BSkyFormat(as.data.frame(Anova(modelInteractionCtrl)), decimalDigitsRounding=4, 
                     label: localization.en.Fixed,
                     no: "tvarbox2",
                     required: true,
-                    filter: "String|Numeric|Logical|Ordinal|Nominal|Scale   ",
+                    filter: "String|Numeric|Logical|Ordinal|Nominal|Scale",
                     extraction: "NoPrefix|UseComma",
                 }), r: ['{{ var | safe}}']
             },
