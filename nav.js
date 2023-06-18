@@ -127,6 +127,7 @@ const nav = {
                 "./proportionTestSingleSample"
             ]
         },
+        "./sem",           
         {
             "name": "Summary",
             "icon": "icon-sigma",
