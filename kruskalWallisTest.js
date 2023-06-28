@@ -115,6 +115,7 @@ BSkySummaries <- {{dataset.name}} %>%
 		median=stats::median( {{selected.tvarbox1 | safe}}, na.rm =TRUE),
 		Quantile_3rd_75 =stats::quantile( {{selected.tvarbox1 | safe}},
 		probs = 0.75, na.rm = TRUE),
+        max=base::max( {{selected.tvarbox1 | safe}}, na.rm =TRUE),
 		variance = stats::var( {{selected.tvarbox1 | safe}}, na.rm =TRUE),
 		std_err = BlueSky::bskystderr( {{selected.tvarbox1 | safe}}),
 		skewness = moments::skewness( {{selected.tvarbox1 | safe}}, na.rm =TRUE),
