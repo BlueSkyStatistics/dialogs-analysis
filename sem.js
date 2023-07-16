@@ -60,6 +60,8 @@ label104 :"Standardized solutions",
 stdall :"The standardized estimates are based on both the variances of both (continuous) observed and latent variables",
 stdlv :"The standardized estimates are on the variances of the (continuous) latent variables only",
 stdnox :"The standardized estimates are based on both the variances of both (continuous) observed and latent variables, but not the variances of exogenous covariates",
+label105: "Standard errors",
+label106  : "Bootstrap settings",
 automatic:  "Automatic",
 standard: "Standard",
 robust: "Robust",
@@ -150,22 +152,28 @@ require(semPlot)
 require(semTools)      
 {{selected.modelname | safe}} <- '{{selected.sem | safe}} {{selected.modelTermsDst | safe}} {{selected.coVarDst | safe}}'
 \nBSkyRes <- {{if (options.selected.useSemFunction)}}sem{{#else}}cfa{{/if}}({{selected.modelname | safe}},    
-    {{if (options.selected.family =="Maximum likelihood (ML)")}}estimator = "ML",{{/if}}
-    {{if (options.selected.family =="Robust maximum likelihood (MLM)")}}estimator = "MLM",{{/if}}
-    {{if (options.selected.family =="Robust maximum likelihood (MLMV)")}}estimator = "MLMV",{{/if}}
-    {{if (options.selected.family =="Pairwise maximum likelihood (PML)")}}estimator = "PML",{{/if}}
-    {{if (options.selected.family =="Generalized least squares (GLS)")}}estimator = "GLS",{{/if}}
-    {{if (options.selected.family =="Weighted least squares (WLS)")}}estimator = "WLS",{{/if}}
-    {{if (options.selected.family =="Diagonally weighted least squares (DWLS)")}}estimator = "DWLS",{{/if}}
-    {{if (options.selected.family =="Robust weighted least squares (WLSM)")}}estimator = "WLSM",{{/if}}
-    {{if (options.selected.family =="Robust weighted least squares (WLSM)")}}estimator = "WLSMV",{{/if}}
-    {{if (options.selected.family =="Robust weighted least squares (WLSMVS)")}}estimator = "WLSMVS",{{/if}}
-    {{if (options.selected.family =="Unweighted least squares")}}estimator = "ULS",{{/if}}
-    {{if (options.selected.combokid !="")}}\nlikelihood = "{{selected.combokid | safe}}",{{/if}}
-    data = {{dataset.name}})
-BSkySummaryRes <- summary(BSkyRes, fit.measures = TRUE{{if(options.selected.gpbox1 =="endo")}}, rsq = TRUE{{/if}})
+    {{if (options.selected.family =="Maximum likelihood (ML)")}}estimator = "ML",
+    {{/if}}{{if (options.selected.family =="Robust maximum likelihood (MLM)")}}estimator = "MLM",
+    {{/if}}{{if (options.selected.family =="Robust maximum likelihood (MLMV)")}}estimator = "MLMV",
+    {{/if}}{{if (options.selected.family =="Pairwise maximum likelihood (PML)")}}estimator = "PML",
+    {{/if}}{{if (options.selected.family =="Generalized least squares (GLS)")}}estimator = "GLS",{{/if}}
+    {{if (options.selected.family =="Weighted least squares (WLS)")}}estimator = "WLS",
+    {{/if}}{{if (options.selected.family =="Diagonally weighted least squares (DWLS)")}}estimator = "DWLS",
+    {{/if}}{{if (options.selected.family =="Robust weighted least squares (WLSM)")}}estimator = "WLSM",
+    {{/if}}{{if (options.selected.family =="Robust weighted least squares (WLSM)")}}estimator = "WLSMV",
+    {{/if}}{{if (options.selected.family =="Robust weighted least squares (WLSMVS)")}}estimator = "WLSMVS",
+    {{/if}}{{if (options.selected.family =="Unweighted least squares")}}estimator = "ULS",
+    {{/if}}{{if (options.selected.combokid !="")}}\nlikelihood = "{{selected.combokid | safe}}",
+    {{/if}}{{if (options.selected.gpbox2 != "" )}}se ="{{selected.gpbox2 | safe}}", bootstrap = {{selected.bootstratRep   | safe}},
+    {{/if}}data = {{dataset.name}})
+BSkySummaryRes <- summary(BSkyRes, fit.measures = TRUE{{if(options.selected.gpbox1 =="endo")}}, rsq = TRUE{{/if}} {{if (options.selected.gpbox2 == "bootstrap" )}},ci = TRUE{{/if}})
 print.lavaan.summary_bsky(BSkySummaryRes)
-{{if (options.selected.addFitMeasures =="TRUE")}}
+{{if (options.selected.gpbox2 == "bootstrap" )}}
+parameterEstimates({{selected.modelname | safe}}, 
+  level = 0.95, 
+  boot.ci.type="{{selected.gpbox3 | safe}}")
+{{/if}}
+{{if (options.selected.addFitMeasures == "TRUE")}}
 #Additional fit measures
 BSkyfitMeasures <- fitMeasures(BSkyRes)
 BSkyFormat(as.data.frame(BSkyfitMeasures), singleTableOutputHeader="Additional fit measures")
@@ -185,19 +193,16 @@ BSkyFormat(BSkyMardiasSkew, singleTableOutputHeader="Mardia's skew")
 BSkyMardiasKurt <-mardiaKurtosis({{dataset.name}}[, c({{selected.endoExoString | safe}})])
 BSkyFormat(BSkyMardiasKurt, singleTableOutputHeader="Mardia's kurtosis")
 {{/if}}
-
 {{if (options.selected.observed =="TRUE")}}
 #Observed covariances  
 BSKyObservedCov <- cov(x = {{dataset.name}}[, c({{selected.endoExoString | safe}})])
 BSkyFormat(as.data.frame(BSKyObservedCov), singleTableOutputHeader="Observed covariances")
 {{/if}}
-
 {{if (options.selected.modelImplied =="TRUE")}}
 #Model implied (fitted) covariances
 BSkyCov <- fitted(BSkyRes)
 print.lavaan.matrix.symmetric_bsky(BSkyCov$cov, message ="Model-implied fitted covariances")
 {{/if}}
-
 {{if (options.selected.residual =="TRUE")}}
 #Model implied (fitted) covariances
 BSkyResiduals <- resid(BSkyRes)
@@ -206,7 +211,7 @@ print.lavaan.matrix.symmetric_bsky(BSkyCov$cov, message ="Residuals")
 BSkyFormat("Estimated Model")
 
 {{if (options.selected.modIndices =="TRUE")}}
-#Mofification indices
+#Modification indices
 {{if (options.selected.highLowIndices =="TRUE")}}
 BSkyModIndices <- modificationIndices(BSkyRes, high.power = {{selected.threshold | safe}})
 BSkyFormat(as.data.frame(BSkyModIndices), singleTableOutputHeader = "Modification Indices: threshold = {{selected.threshold | safe}}")
@@ -218,7 +223,7 @@ BSkyFormat(as.data.frame(BSkyModIndices), singleTableOutputHeader = "Modificatio
 
 {{if (options.selected.stdall =="TRUE")}}
 #Standardized solution (type ="std.all")
-BSkyStdSol <-standardizedSolution(BSkyRes, type ="std.all")
+BSkyStdSol <- standardizedSolution(BSkyRes, type ="std.all")
 BSkyFormat(as.data.frame(BSkyStdSol), singleTableOutputHeader = "Standardized estimates based on variances of both observed and latent variables")
 {{/if}}
 
@@ -665,14 +670,17 @@ stnox: {
               extraction: "Boolean",
               })
           },
-          
+          label105: {
+            el: new labelVar(config, {
+              label: localization.en.label105,
+            })
+          },       
 automatic: {
   el: new radioButton(config, {
     label: localization.en.automatic,
     no: "gpbox2",
     increment: "automatic",
-    style: "mb-2",
-    value: "endo",
+    value: "",
     extraction: "ValueAsIs",
     state: "checked",
     })
@@ -683,7 +691,6 @@ standard: {
     no: "gpbox2",
     increment: "standard",
     value: "standard",
-    state: "",
     extraction: "ValueAsIs"
   })
 },
@@ -692,11 +699,9 @@ robust: {
     label: localization.en.robust,
     no: "gpbox2",
     increment: "robust",
-    style: "mb-2",
     value: "robust",
     extraction: "ValueAsIs",
-    state: "checked",
-    })
+       })
 },
 pseudoML: {
   el: new radioButton(config, {
@@ -704,7 +709,6 @@ pseudoML: {
     no: "gpbox2",
     increment: "pseudoML",
     value: "robust.huber.white",
-    state: "",
     extraction: "ValueAsIs"
   })
 },
@@ -713,19 +717,21 @@ bootstrap: {
     label: localization.en.bootstrap,
     no: "gpbox2",
     increment: "bootstrap",
-    value: "boot",
-    state: "",
+    value: "bootstrap",
+    dependant_objects: [],
     extraction: "ValueAsIs",
-
   })
 },
-
+label106: {
+  el: new labelVar(config, {
+    label: localization.en.label106,
+  })
+},       
 percentiles: {
   el: new radioButton(config, {
     label: localization.en.percentiles,
     no: "gpbox3",
     increment: "percentiles",
-    style: "mb-2",
     value: "perc",
     extraction: "ValueAsIs",
     state: "checked",
@@ -736,10 +742,8 @@ normal: {
     label: localization.en.normal,
     no: "gpbox3",
     increment: "normal",
-    style: "mb-2",
     value: "norm",
     extraction: "ValueAsIs",
-    state: "checked",
     })
 },
 adjustedBiasCorrected: {
@@ -747,10 +751,8 @@ adjustedBiasCorrected: {
     label: localization.en.adjustedBiasCorrected,
     no: "gpbox3",
     increment: "adjustedBiasCorrected",
-    style: "mb-2",
     value: "bca.simple",
     extraction: "ValueAsIs",
-    state: "checked",
     })
 },
 basic: {
@@ -758,10 +760,8 @@ basic: {
     label: localization.en.basic,
     no: "gpbox3",
     increment: "basic",
-    style: "mb-2",
     value: "basic",
-    extraction: "ValueAsIs",
-    state: "checked",
+    extraction: "ValueAsIs",  
     })
 },
 
@@ -771,8 +771,9 @@ no: 'bootstratRep',
 label: localization.en.bootstratRep,
 placeholder: "",
 extraction: "TextAsIs",
-type: "character",
-value: "",
+type: "numeric",
+allow_spaces: true,
+value: "1000",
 ml: 4,
 width:"w-25",
 })
@@ -849,6 +850,7 @@ width:"w-25",
               layout: "four",
               top: [],
               left: [ 
+                objects.label105.el,
                   objects.automatic.el,               
                   objects.standard.el,
                   objects.robust.el,
@@ -856,6 +858,7 @@ width:"w-25",
                   objects.bootstrap.el,
               ],
               center: [
+                objects.label106.el,
                   objects.percentiles.el,
                   objects.normal.el,
                   objects.adjustedBiasCorrected.el,
