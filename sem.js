@@ -12,11 +12,67 @@ var localization = {
         sem2: "Second order factors",
         label1: "Select an item from the predictor and the outcome lists and click on the button with an arrow to move the selected items to the relationship list",
         label2: "Select an item from the predictor and the outcome lists and click on the button with an arrow to move the selected items to the relationship list",
+        label3: "Information",
+        label4: "Additional outputs",
+        label5: "Covariances and correlations",
+        label6: "R-squared",
+        label7: "Save predicted",
         coVarTerms: "1st variable/factor",
         coVarTerms1: "2nd variable/factor",
         coVarDst: "Selected covariances",
         optionsCoVarTerms: "Covariances",
         parameterizeFormula: "Parameterize formula",
+        modelOptions: "Model options",
+        method: "Select a method and approach (if applicable)",
+        approach: "ML likelihood approach",
+        missing: "Missing values",
+        addFitMeasures: "Additional fit measures",
+        mardiaSkew: "Mardia's skew",
+        mardiaKurt: "Mardia's kurtosis",
+        observed: "Observed",
+modelImplied: "Model-implied (fitted)",
+residual: "Residual",
+r2squareNone: "None",
+r2squareEndo: "Endogenous",
+factorScores: "Factor scores",
+indicators: "Indicators",
+dependentVars: "Dependent variables",
+label8: "Modification Indices",
+modIndices: "Modification Indices",
+highLowIndices: "Hide low indices",
+threshold: "Threshold",
+residuals: "Show residuals",
+intercepts: "Show intercepts",
+includeThresholds: "Show thresholds",
+edgeLabels: "Select options for edge labels",
+layout: "Options for how the nodes should be placed",
+rotate: "Position of the exogenous variables when tree or tree2 layout is used",
+abbNodeLabels: "No of characters to abbreviate node labels to",
+abbEdgeLabels: "No of characters to abbreviate edge labels to",
+label101: "Paths",
+label102: "Layout",
+label103: "Nodes",
+semPlotOptions: "Plot options",
+manifestShapes: "Manifest shapes",
+latentShapes: "Latent shapes",
+outputOptions: "Output options",
+label104 :"Standardized solutions",
+stdall :"The standardized estimates are based on both the variances of both (continuous) observed and latent variables",
+stdlv :"The standardized estimates are on the variances of the (continuous) latent variables only",
+stdnox :"The standardized estimates are based on both the variances of both (continuous) observed and latent variables, but not the variances of exogenous covariates",
+automatic:  "Automatic",
+standard: "Standard",
+robust: "Robust",
+pseudoML: "Pseudo ML",
+bootstrap: "Bootstrap",
+percentiles: "Percentiles",
+ normal: "Normal",
+ adjustedBiasCorrected: "Adjusted bias-corrected",
+ basic: "basic",
+ bootstratRep: "Bootstrap repetitions",
+
+
+
         help: {
             title: "SEM",
             r_help: "help(sem, package=lavaan)",
@@ -90,11 +146,101 @@ class sem extends baseModal {
             parameterCount: 0,
             RCode: `
 require(lavaan)
-require(semPlot)        
+require(semPlot)  
+require(semTools)      
 {{selected.modelname | safe}} <- '{{selected.sem | safe}} {{selected.modelTermsDst | safe}} {{selected.coVarDst | safe}}'
-\nBSkyRes <- {{if (options.selected.useSemFunction)}}sem{{#else}}cfa{{/if}}({{selected.modelname | safe}}, data = {{dataset.name}})
-summary(BSkyRes, fit.measures = TRUE)
-semPaths(BSkyRes)
+\nBSkyRes <- {{if (options.selected.useSemFunction)}}sem{{#else}}cfa{{/if}}({{selected.modelname | safe}},    
+    {{if (options.selected.family =="Maximum likelihood (ML)")}}estimator = "ML",{{/if}}
+    {{if (options.selected.family =="Robust maximum likelihood (MLM)")}}estimator = "MLM",{{/if}}
+    {{if (options.selected.family =="Robust maximum likelihood (MLMV)")}}estimator = "MLMV",{{/if}}
+    {{if (options.selected.family =="Pairwise maximum likelihood (PML)")}}estimator = "PML",{{/if}}
+    {{if (options.selected.family =="Generalized least squares (GLS)")}}estimator = "GLS",{{/if}}
+    {{if (options.selected.family =="Weighted least squares (WLS)")}}estimator = "WLS",{{/if}}
+    {{if (options.selected.family =="Diagonally weighted least squares (DWLS)")}}estimator = "DWLS",{{/if}}
+    {{if (options.selected.family =="Robust weighted least squares (WLSM)")}}estimator = "WLSM",{{/if}}
+    {{if (options.selected.family =="Robust weighted least squares (WLSM)")}}estimator = "WLSMV",{{/if}}
+    {{if (options.selected.family =="Robust weighted least squares (WLSMVS)")}}estimator = "WLSMVS",{{/if}}
+    {{if (options.selected.family =="Unweighted least squares")}}estimator = "ULS",{{/if}}
+    {{if (options.selected.combokid !="")}}\nlikelihood = "{{selected.combokid | safe}}",{{/if}}
+    data = {{dataset.name}})
+BSkySummaryRes <- summary(BSkyRes, fit.measures = TRUE{{if(options.selected.gpbox1 =="endo")}}, rsq = TRUE{{/if}})
+print.lavaan.summary_bsky(BSkySummaryRes)
+{{if (options.selected.addFitMeasures =="TRUE")}}
+#Additional fit measures
+BSkyfitMeasures <- fitMeasures(BSkyRes)
+BSkyFormat(as.data.frame(BSkyfitMeasures), singleTableOutputHeader="Additional fit measures")
+{{/if}}
+{{if (options.selected.mardiaSkew =="TRUE")}}
+#Mardia's skew
+psych::skew({{dataset.name}}[, c({{selected.endoExoString | safe}})])
+psych::kurtosi({{dataset.name}}[, c({{selected.endoExoString | safe}})])
+psych::mardia({{dataset.name}}[, c({{selected.endoExoString | safe}})],na.rm = TRUE,plot=TRUE)
+semTools::mardiaSkew({{dataset.name}}[, c({{selected.endoExoString | safe}})])
+semTools::mardiaKurtosis({{dataset.name}}[, c({{selected.endoExoString | safe}})])
+BSkyMardiasSkew <-mardiaSkew({{dataset.name}}[, c({{selected.endoExoString | safe}})])
+BSkyFormat(BSkyMardiasSkew, singleTableOutputHeader="Mardia's skew")
+{{/if}}
+{{if (options.selected.mardiaKurt =="TRUE")}}
+#Mardia's kurtosis
+BSkyMardiasKurt <-mardiaKurtosis({{dataset.name}}[, c({{selected.endoExoString | safe}})])
+BSkyFormat(BSkyMardiasKurt, singleTableOutputHeader="Mardia's kurtosis")
+{{/if}}
+
+{{if (options.selected.observed =="TRUE")}}
+#Observed covariances  
+BSKyObservedCov <- cov(x = {{dataset.name}}[, c({{selected.endoExoString | safe}})])
+BSkyFormat(as.data.frame(BSKyObservedCov), singleTableOutputHeader="Observed covariances")
+{{/if}}
+
+{{if (options.selected.modelImplied =="TRUE")}}
+#Model implied (fitted) covariances
+BSkyCov <- fitted(BSkyRes)
+print.lavaan.matrix.symmetric_bsky(BSkyCov$cov, message ="Model-implied fitted covariances")
+{{/if}}
+
+{{if (options.selected.residual =="TRUE")}}
+#Model implied (fitted) covariances
+BSkyResiduals <- resid(BSkyRes)
+print.lavaan.matrix.symmetric_bsky(BSkyCov$cov, message ="Residuals")
+{{/if}}
+BSkyFormat("Estimated Model")
+
+{{if (options.selected.modIndices =="TRUE")}}
+#Mofification indices
+{{if (options.selected.highLowIndices =="TRUE")}}
+BSkyModIndices <- modificationIndices(BSkyRes, high.power = {{selected.threshold | safe}})
+BSkyFormat(as.data.frame(BSkyModIndices), singleTableOutputHeader = "Modification Indices: threshold = {{selected.threshold | safe}}")
+{{#else}}
+BSkyModIndices <- modificationIndices(BSkyRes)
+BSkyFormat(as.data.frame(BSkyModIndices), singleTableOutputHeader = "Modification Indices")
+{{/if}}
+{{/if}}
+
+{{if (options.selected.stdall =="TRUE")}}
+#Standardized solution (type ="std.all")
+BSkyStdSol <-standardizedSolution(BSkyRes, type ="std.all")
+BSkyFormat(as.data.frame(BSkyStdSol), singleTableOutputHeader = "Standardized estimates based on variances of both observed and latent variables")
+{{/if}}
+
+{{if (options.selected.stdlv =="TRUE")}}
+#Standardized solution (type ="std.lv")
+BSkyStdSol <-standardizedSolution(BSkyRes, type ="std.lv")
+BSkyFormat(as.data.frame(BSkyStdSol), singleTableOutputHeader = "Standardized estimates based on variances of (continuous) latent variables only")
+{{/if}}
+
+{{if (options.selected.stdnox =="TRUE")}}
+#Standardized solution (type ="std.nox")
+BSkyStdSol <-standardizedSolution(BSkyRes, type ="std.nox")
+BSkyFormat(as.data.frame(BSkyStdSol), singleTableOutputHeader = "Standardized estimates based on observed and latent but not exogenous covariates")
+{{/if}}
+semPaths(BSkyRes, {{if (options.selected.residuals =="TRUE")}} residuals = TRUE,{{/if}} {{if (options.selected.intercepts =="TRUE")}} intercepts = TRUE,{{/if}} {{if (options.selected.includeThresholds =="TRUE")}} thresholds = TRUE,{{/if}}
+    whatLabels = "{{if (options.selected.edgeLabels =="names")}}name{{/if}}{{if (options.selected.edgeLabels =="parameter estimates")}}est{{/if}}{{if (options.selected.edgeLabels =="standardized parameter estimates")}}std{{/if}}{{if (options.selected.edgeLabels =="parameter number")}}eq{{/if}}{{if (options.selected.edgeLabels =="hide")}}hide{{/if}}",
+    layout = "{{selected.layout | safe}}",
+    rotation = {{if (options.selected.rotate =="Exog. top")}}1{{/if}}{{if (options.selected.rotate =="Exog. left")}}2{{/if}}{{if (options.selected.rotate =="Exog. bottom")}}3{{/if}}{{if (options.selected.rotate =="Exog. right")}}4{{/if}},
+    shapeMan = "{{selected.manifestShapes | safe}}",
+    shapeLat    = "{{selected.latentShapes | safe}}",
+    )
+
 `
         }
         var objects = {
@@ -164,6 +310,475 @@ semPaths(BSkyRes)
                     no:"coVarTerms1", label: localization.en.coVarTerms1}) },
             coVarDst: { el: new semModelTermsDest(config, {action: "move",
                     no:"coVarDst", label: localization.en.coVarDst,  filter: "String|Numeric|Logical|Ordinal|Nominal|Scale",  extraction: "coVariances",firstModelTermCtrl: "coVarTerms", secondModelTermCtrl: "coVarTerms1"}) },
+            family: {
+                el: new comboBoxWithChilderen(config, {
+                    no: 'family',
+                    nochild: 'combokid',
+                    label: localization.en.method,
+                    multiple: false,
+                    extraction: "NoPrefix|UseComma",
+                    options: [
+                        { "name": "Automatic", "value": [] },
+                        { "name": "Maximum likelihood (ML)", "value": ["normal", "Wishart"] },
+                        { "name": "Robust maximum likelihood (MLM)", "value": [] },
+                        { "name": "Robust maximum likelihood (MLMV)", "value": [] },
+                        { "name": "Robust maximum likelihood (MLMVS)", "value": [ ] },
+                        { "name": "Pairwise maximum likelihood (PML)", "value": ["normal", "Wishart"] },
+                        { "name": "Generalized least squares (GLS)", "value": [ ] },
+                        { "name": "Weighted least squares (WLS)", "value": [  ] },
+                        { "name": "Diagonally weighted least squares (DWLS)", "value": [] },
+                        { "name": "Robust weighted least squares (WLSM)", "value": [] },
+                        { "name": "Robust weighted least squares (WLSMV)", "value": [] },
+                        { "name": "Robust weighted least squares (WLSMVS)", "value": [] },
+                        { "name": "Unweighted least squares", "value": [] },
+                    ]
+                })
+            }, 
+            missing: {
+                el: new selectVar(config, {
+                    no: 'missing',
+                    label: localization.en.missing,
+                    multiple: false,
+                    extraction: "NoPrefix|UseComma",
+                    options: ["Delete listwise", "FIML", "FIML (including fixed x)", "Two stages (robust)", "pairwise"],
+                    default: "Delete listwise"
+                })
+            },  
+            label3: {
+                el: new labelVar(config, {
+                  label: localization.en.label3,
+                })
+              },
+            label4: {
+                el: new labelVar(config, {
+                  label: localization.en.label4,
+                  h:4
+                })
+              },
+            addFitMeasures: {
+                el: new checkbox(config, {
+                  label: localization.en.addFitMeasures,
+                  no: "addFitMeasures",
+                  style: "mb-2",
+                  extraction: "Boolean"         
+                  })
+              },    
+            mardiaSkew: {
+                el: new checkbox(config, {
+                  label: localization.en.mardiaSkew,
+                  no: "mardiaSkew",
+                  style: "mb-2",
+                  extraction: "Boolean",
+                  })
+              },
+              mardiaKurt: {
+                el: new checkbox(config, {
+                  label: localization.en.mardiaKurt,
+                  no: "mardiaKurt",
+                  style: "mb-2",
+                  extraction: "Boolean",
+                  })
+              },
+              label5: {
+                el: new labelVar(config, {
+                  label: localization.en.label5,
+                  h:4
+                })
+              },
+              observed: {
+                el: new checkbox(config, {
+                  label: localization.en.observed,
+                  no: "observed",
+                  style: "mb-2",
+                  extraction: "Boolean",
+                  })
+              },
+              modelImplied: {
+                el: new checkbox(config, {
+                  label: localization.en.modelImplied,
+                  no: "modelImplied",
+                  style: "mb-2",
+                  extraction: "Boolean",
+                  })
+              },
+              residual: {
+                el: new checkbox(config, {
+                  label: localization.en.residual,
+                  no: "residual",
+                  style: "mb-2",
+                  extraction: "Boolean",
+                  })
+              },
+              label8: {
+                el: new labelVar(config, {
+                  label: localization.en.label8,
+                  h:4
+                })
+              },
+             modIndices: {
+                el: new checkbox(config, {
+                  label: localization.en.modIndices,
+                  no: "modIndices",
+                  style: "mb-2",
+                  extraction: "Boolean",
+                  })
+              },
+            highLowIndices: {
+                el: new checkbox(config, {
+                label: localization.en.highLowIndices,
+                no: "highLowIndices",
+                style: "ml-2",
+                newline: true,
+                extraction: "Boolean",
+                })
+            },
+            threshold: {
+                el: new inputSpinner(config, {
+                no: 'threshold',
+                label: localization.en. threshold,
+                min: 0,
+                max: 99999999,
+                style: "ml-4",
+                step: 0.01,
+                value: 10,
+                extraction: "NoPrefix|UseComma"
+                })
+            },
+              label6: {
+                el: new labelVar(config, {
+                  label: localization.en.label6,
+                  style: "mt-3",
+                  h:4
+                })
+              },
+              r2squareNone: {
+                el: new radioButton(config, {
+                  label: localization.en.r2squareNone,
+                  no: "gpbox1",
+                  increment: "r2squareNone",
+                  style: "mb-2",
+                  value: "endo",
+                  extraction: "ValueAsIs",
+                  state: "checked",
+                  })
+              },
+              r2squareEndo: {
+                el: new radioButton(config, {
+                  label: localization.en.r2squareEndo,
+                  no: "gpbox1",
+                  increment: "r2squareEndo",
+                  value: "endo",
+                  state: "",
+                  extraction: "ValueAsIs"
+                })
+              },
+              label7: {
+                el: new labelVar(config, {
+                  label: localization.en.label7,
+                  style: "mt-3",
+                  h:4
+                })
+              },
+              factorScores: {
+                el: new checkbox(config, {
+                  label: localization.en.factorScores,
+                  no: "factorScores",
+                  style: "mb-2",
+                  extraction: "Boolean",
+                  })
+              },
+              indicators: {
+                el: new checkbox(config, {
+                  label: localization.en.indicators,
+                  no: "indicators",
+                  style: "mb-2",
+                  extraction: "Boolean",
+                  })
+              },
+              dependentVars: {
+                el: new checkbox(config, {
+                  label: localization.en.dependentVars,
+                  no: "dependentVars",
+                  style: "mb-2",
+                  extraction: "Boolean",
+                  })
+              },
+              residuals: {
+                el: new checkbox(config, {
+                  label: localization.en.residuals,
+                  no: "residuals",
+                  //style: "mb-2",
+                  newline: true,
+                  extraction: "Boolean"         
+                  })
+              },    
+            intercepts: {
+                el: new checkbox(config, {
+                  label: localization.en.intercepts,
+                  no: "intercepts",
+                  newline: true,
+                  //style: "mb-2",
+                  extraction: "Boolean",
+                  })
+              },
+              includeThresholds: {
+                el: new checkbox(config, {
+                  label: localization.en.includeThresholds,
+                  no: "includeThresholds",
+                  //style: "mb-2",
+                  newline: true,
+                  extraction: "Boolean",
+                  })
+              },
+              label101: {
+                el: new labelVar(config, {
+                  label: localization.en.label101,
+                  style: "mt-3",
+                  h:4
+                })
+              },
+              edgeLabels: {
+                el: new comboBox(config, {
+                  no: "edgeLabels",
+                  label: localization.en.edgeLabels,
+                  multiple: false,
+                  extraction: "NoPrefix|UseComma",
+                  options: ["label", "parameter estimates", "standardized parameter estimate", "parameter number", "hide"],
+                  default: "parameter estimates"
+                })
+              },
+              
+              label102: {
+                el: new labelVar(config, {
+                  label: localization.en.label102,
+                  style: "mt-3",
+                  h:4
+                })
+              },
+
+              layout: {
+                el: new comboBox(config, {
+                  no: "layout",
+                  label: localization.en.layout,
+                  multiple: false,
+                  extraction: "NoPrefix|UseComma",
+                  options: ["tree", "circle", "spring", "tree2", "circle"],
+                  default: "tree"
+                })
+              },
+
+              rotate: {
+                el: new comboBox(config, {
+                  no: "rotate",
+                  label: localization.en.rotate,
+                  multiple: false,
+                  extraction: "NoPrefix|UseComma",
+                  options: ["Exog. top", "Exog. left", "Exog. bottom", "Exog. right"],
+                  default: "Exog. left"
+                })
+              },
+              label103: {
+                el: new labelVar(config, {
+                  label: localization.en.label101,
+                  style: "mt-3",
+                  h:4
+                })
+              },
+
+              manifestShapes: {
+                el: new comboBox(config, {
+                  no: "manifestShapes",
+                  label: localization.en.manifestShapes,
+                  multiple: false,
+                  extraction: "NoPrefix|UseComma",
+                  options: ["circle","rectangle", "square", "ellipse", "diamond"],
+                  default: "circle"
+                })
+              },
+              latentShapes: {
+                el: new comboBox(config, {
+                  no: "latentShapes",
+                  label: localization.en.latentShapes,
+                  multiple: false,
+                  extraction: "NoPrefix|UseComma",
+                  options: ["rectangle", "square", "ellipse", "diamond"],
+                  default: "rectangle"
+                })
+              },
+              abbNodeLabels: {
+                el: new inputSpinner(config, {
+                no: 'abbNodeLabels',
+                label: localization.en.abbNodeLabels,
+                min: 0,
+                max: 99999999,
+                step: 1,
+                value: 5,
+                extraction: "NoPrefix|UseComma"
+                })
+            },
+            abbEdgeLabels: {
+                el: new inputSpinner(config, {
+                no: 'abbEdgeLabels',
+                label: localization.en.abbEdgeLabels,
+                min: 0,
+                max: 99999999,
+                step: 0.01,
+                value: 5,
+                extraction: "NoPrefix|UseComma"
+                })
+            },
+            label104: {
+                el: new labelVar(config, {
+                  label: localization.en.label104,
+                })
+              },
+
+
+
+
+stdall: {
+            el: new checkbox(config, {
+              label: localization.en.stdall,
+              no: "stdall",
+              //style: "mb-2",
+              newline: true,
+              extraction: "Boolean",
+              })
+          },
+          
+stdlv: {
+            el: new checkbox(config, {
+              label: localization.en.stdlv,
+              no: "stdlv",
+              //style: "mb-2",
+              newline: true,
+              extraction: "Boolean",
+              })
+          },
+
+stnox: {
+            el: new checkbox(config, {
+              label: localization.en.stdnox,
+              no: "stdnox",
+              //style: "mb-2",
+              newline: true,
+              extraction: "Boolean",
+              })
+          },
+          
+automatic: {
+  el: new radioButton(config, {
+    label: localization.en.automatic,
+    no: "gpbox2",
+    increment: "automatic",
+    style: "mb-2",
+    value: "endo",
+    extraction: "ValueAsIs",
+    state: "checked",
+    })
+},
+standard: {
+  el: new radioButton(config, {
+    label: localization.en.standard,
+    no: "gpbox2",
+    increment: "standard",
+    value: "standard",
+    state: "",
+    extraction: "ValueAsIs"
+  })
+},
+robust: {
+  el: new radioButton(config, {
+    label: localization.en.robust,
+    no: "gpbox2",
+    increment: "robust",
+    style: "mb-2",
+    value: "robust",
+    extraction: "ValueAsIs",
+    state: "checked",
+    })
+},
+pseudoML: {
+  el: new radioButton(config, {
+    label: localization.en.pseudoML,
+    no: "gpbox2",
+    increment: "pseudoML",
+    value: "robust.huber.white",
+    state: "",
+    extraction: "ValueAsIs"
+  })
+},
+bootstrap: {
+  el: new radioButton(config, {
+    label: localization.en.bootstrap,
+    no: "gpbox2",
+    increment: "bootstrap",
+    value: "boot",
+    state: "",
+    extraction: "ValueAsIs",
+
+  })
+},
+
+percentiles: {
+  el: new radioButton(config, {
+    label: localization.en.percentiles,
+    no: "gpbox3",
+    increment: "percentiles",
+    style: "mb-2",
+    value: "perc",
+    extraction: "ValueAsIs",
+    state: "checked",
+    })
+},
+normal: {
+  el: new radioButton(config, {
+    label: localization.en.normal,
+    no: "gpbox3",
+    increment: "normal",
+    style: "mb-2",
+    value: "norm",
+    extraction: "ValueAsIs",
+    state: "checked",
+    })
+},
+adjustedBiasCorrected: {
+  el: new radioButton(config, {
+    label: localization.en.adjustedBiasCorrected,
+    no: "gpbox3",
+    increment: "adjustedBiasCorrected",
+    style: "mb-2",
+    value: "bca.simple",
+    extraction: "ValueAsIs",
+    state: "checked",
+    })
+},
+basic: {
+  el: new radioButton(config, {
+    label: localization.en.basic,
+    no: "gpbox3",
+    increment: "basic",
+    style: "mb-2",
+    value: "basic",
+    extraction: "ValueAsIs",
+    state: "checked",
+    })
+},
+
+bootstratRep: {
+el: new input(config, {
+no: 'bootstratRep',
+label: localization.en.bootstratRep,
+placeholder: "",
+extraction: "TextAsIs",
+type: "character",
+value: "",
+ml: 4,
+width:"w-25",
+})
+},
+
+
         }
         var secOrderFactors = {
             el: new optionsVar(config, {
@@ -199,7 +814,7 @@ semPaths(BSkyRes)
             el: new optionsVar(config, {
                 no: "optionsCoVarTerms",
                 name: localization.en.optionsCoVarTerms,
-                layout: "three",
+                layout: "four",
                 top: [objects.label2.el,],
                 left: [ 
                     objects.coVarTerms.el,
@@ -212,11 +827,121 @@ semPaths(BSkyRes)
                 ],
             })
         };  
+        var modelOptions = {
+            el: new optionsVar(config, {
+                no: "modelOptions",
+                name: localization.en.modelOptions,
+                content: [
+                    objects.family.el,
+                    objects.missing.el,
+                    objects.label104.el,
+                    objects.stdall.el,
+                    objects.stdlv.el,
+                    objects.stnox.el,
+                ]
+            })
+        };
+
+        var parameterOptions = {
+          el: new optionsVar(config, {
+              no: "parameterOptions",
+              name: localization.en.parameterOptions,
+              layout: "four",
+              top: [],
+              left: [ 
+                  objects.automatic.el,               
+                  objects.standard.el,
+                  objects.robust.el,
+                  objects.pseudoML.el,
+                  objects.bootstrap.el,
+              ],
+              center: [
+                  objects.percentiles.el,
+                  objects.normal.el,
+                  objects.adjustedBiasCorrected.el,
+                  objects.basic.el,
+                  objects.bootstratRep.el,
+              ],
+              right: [
+                      
+              ],
+          })
+      };
+
+
+
+
+
+        var outputOptions = {
+            el: new optionsVar(config, {
+                no: "outputOptions",
+                name: localization.en.outputOptions,
+                layout: "three",
+                top: [objects.label5.el],
+                left: [ 
+                    objects.label4.el,
+                    objects.addFitMeasures.el,
+                    objects.mardiaSkew.el,
+                    objects.mardiaKurt.el,
+                    objects.label6.el,
+                    objects.r2squareNone.el,
+                    objects.r2squareEndo.el
+                   
+                ],
+                center: [
+                    objects.label5.el,
+                    objects.observed.el,
+                    objects.modelImplied.el,
+                    objects.residual.el,
+                    objects.label7.el,
+                    objects.factorScores.el,
+                    objects.indicators.el,
+                    objects.dependentVars.el
+                ],
+                right: [
+                        objects.label8.el,
+                        objects.modIndices.el,
+                        objects.highLowIndices.el,
+                        objects.threshold.el     
+                ],
+            })
+        };
+        var semPlotOptions = {
+            el: new optionsVar(config, {
+                no: "semPlotOptions",
+                name: localization.en.semPlotOptions,
+                layout: "four",
+                top: [objects.residuals.el,
+                    objects.intercepts.el,
+                    objects.includeThresholds.el,],
+                left: [ 
+                    objects.label101.el,
+                   
+                    objects.edgeLabels.el,
+             
+                   
+                ],
+                center: [
+                    objects.label102.el,
+                    objects.layout.el,
+                    objects.rotate.el,
+                ],
+                right: [
+                        objects.label103.el,
+                        objects.manifestShapes.el,
+                        objects.latentShapes.el,
+                        objects.abbNodeLabels.el,
+                        objects.abbEdgeLabels.el     
+
+                ],
+            })
+        };
+
         const content = {
             head:[objects.modelname.el.content],
             left: [objects.content_var.el.content],
             right: [objects.parameterizeFormula.el.content, objects.sem.el.content ],
-            bottom: [ secOrderFactors.el.content, optionsModelTerms.el.content, optionsCoVarTerms.el.content],
+            bottom: [ secOrderFactors.el.content, optionsModelTerms.el.content, optionsCoVarTerms.el.content, modelOptions.el.content, outputOptions.el.content, semPlotOptions.el.content, parameterOptions.el.content],
             nav: {
                 name: localization.en.navigation,
                 icon: "icon-b",
@@ -228,13 +953,38 @@ semPaths(BSkyRes)
     }
     prepareExecution(instance)
     {
-        var res = [];
+        let res = [];
+        let tempRes =[];
+        let endoExo = {};
+        //let endoExoString ="";
+        let separator  = ','; 
+       // let arrayIndex = 0;
+        let value = `"{{item | safe}}"`;
+        let tempretval ="";
+        let finalRetString ="";
         var code_vars = {
             dataset: {
                 name: $(`#${instance.config.id}`).attr('dataset') ? $(`#${instance.config.id}`).attr('dataset') : getActiveDataset()
             },
             selected: instance.dialog.extractData()
         }
+        let item = '{{item | safe}}';
+        endoExo = instance.objects.sem.el.getVal()
+        Object.keys(endoExo).forEach(function (key, index) {
+            endoExo[key].forEach(function(element, index) {
+                tempRes[index] = "'" +element+ "'";
+            })
+            tempretval = tempRes.join(separator);
+            if (finalRetString =="")
+            {
+                finalRetString =  tempretval           
+            }
+            else
+            {
+                finalRetString = finalRetString + ","+ tempretval
+            }
+        })
+        code_vars.selected.endoExoString = finalRetString
         code_vars.selected.useSemFunction = true
         if ( code_vars.selected.modelTermsDst.length ==0 && code_vars.selected.sem.length ==0 )
         {  
