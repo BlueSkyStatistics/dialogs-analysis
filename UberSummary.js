@@ -19,8 +19,8 @@ var localization = {
         sd: "Standard deviation",
         stderror: "Std error of mean",
         iqr: "Inter quartile range",
-        quantiles: "Quartiles",
-        probs: "Specify quartiles (if quartile is selected)",
+        quantiles: "Quantiles",
+        probs: "Specify quantiles (if quartile is selected)",
         addIsstatnames: "Additonal statistical function names comma separated, for e.g. var)",
         label1: "Options for numeric variables",
         label3: "Options for factor variables",
@@ -30,7 +30,7 @@ var localization = {
             body: `
 <b>Description</b></br>
 Outputs the  following descriptive statistics:</br>
-min, max, mean, median, sum, sd, stderror, iqr,  quartiles. If quartiles is selected, you can specify the comma separated quartiles needed.</br>
+min, max, mean, median, sum, sd, stderror, iqr,  Quantiles. If Quantiles is selected, you can specify the comma separated quantiles needed.</br>
 In addition to these, the user can pass, a list of comma separated statistical function names for example var.
 <br/>
 <b>Usage</b>

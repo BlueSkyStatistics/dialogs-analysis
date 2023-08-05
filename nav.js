@@ -17,7 +17,15 @@ const nav = {
                 "./displayRules",
                 "./plotRules"                                                                
             ]
-        },         
+        }, 
+        {
+            "name": "Cluster",
+            "icon": "icon-cluster",
+            "children": [
+                "./hierarchicalCluster",
+                "./KMeansCluster"
+            ]
+        },        
         {
             "name": "Correlations",
             "icon": "icon-link",
@@ -36,15 +44,21 @@ const nav = {
             "children": [
                 "./crossTabMultiWay"
             ]
-        },        
+        },    
         {
-            "name": "Cluster",
-            "icon": "icon-cluster",
+            "name": "Distribution Analysis",
+            "icon": "icon-gaussian-function",
             "children": [
-                "./hierarchicalCluster",
-                "./KMeansCluster"
+                "./andersonDarling",
+                "./kstest",
+                "./shapiroWilkNormalityTest",
+                "./shapiroWilkNormalityTestLegacy",
+                "./distributionFits",
+                "./distributionGamlssAutoFitTests",
+                "./distributionDescriptives"
             ]
-        },
+        },    
+      
         {
             "name": "Factor Analysis",
             "icon": "icon-teamwork",
@@ -104,20 +118,6 @@ const nav = {
                 "./pairedWilcoxon"
             ]
         },
-        {
-            "name": "Distribution Analysis",
-            "icon": "icon-gaussian-function",
-            "children": [
-                "./andersonDarling",
-                "./kstest",
-                "./shapiroWilkNormalityTest",
-                "./shapiroWilkNormalityTestLegacy",
-                "./distributionFits",
-                "./distributionGamlssAutoFitTests",
-                "./distributionDescriptives"
-            ]
-        },
-       
         {
             "name": "Proportions",
             "icon": "icon-percent",

@@ -15,6 +15,7 @@ var localization ={
             tvarbox2: "Fixed Effect",
             blockVar: "Blocking Variable(s)",
             Post_hoc: "Post-hoc analysis",
+            chk1: "Histogram of residuals",
             help: {
                 title: "ANOVA, one-way with random blocks",
                 r_help: "help(lmer, package ='lme4')",            
@@ -96,6 +97,7 @@ require(lme4)
 require(lmerTest)
 require(rcompanion)
 require(ggplot2)
+require(ggthemes)
 require(stringr)
 library(multcomp)
 local({
@@ -143,7 +145,6 @@ BSkyFormat(fitResults$Number.of.observations,singleTableOutputHeader="Number of 
 BSkyFormat(fitResults$Likelihood.ratio.test,singleTableOutputHeader="Likelihood ratio test with p value")
 
 BSkyFormat( fitResults$Pseudo.R.squared.for.model.vs.null,\n\tdecimalDigitsRounding =6,\n\tsingleTableOutputHeader="Nagelkerke pseudo R-squared measures")
-
 if ({{selected.chk2 | safe}})
 {
 #pairwise comparisons
@@ -162,6 +163,16 @@ cat("\\n\\n")
 plot <- ggplot(cldComparisons,aes(x = {{selected.tvarbox2 | safe}},y = lsmean,label = .group)) +\n\tgeom_point(shape  = 15,size   = 4) +\n\t geom_errorbar(aes(ymin  =  lower.CL,ymax  =  upper.CL),width =  0.2,size  =  0.7) +\n\ttheme(axis.title   = element_text(face = "bold"),axis.text = element_text(face = "bold"),plot.caption = element_text(hjust = 0)) +\n\tgeom_text(nudge_x = c(0,0,0),nudge_y = c(120,120,120),color = "black") +\n\tggtitle("Least square means of the fixed effect (adjusted for means of other factors in model)")+ {{selected.BSkyThemes | safe}}
 \n\tprint(plot)
 }
+if ({{selected.chk1 | safe}})
+{
+    #Histogram and plot of residuals
+    dataframeResiduals =data.frame(residuals=stats::residuals(model))
+    print(ggplot2::ggplot(dataframeResiduals, aes(x=stats::residuals(model)))+ geom_histogram( colour="black", aes(y=..density..), bins=9)+ stat_function(fun=dnorm,color="red",args=list(mean=mean(stats::residuals(model)), sd=sd(stats::residuals(model))))  + labs(x = "Residuals", title="Histogram plot of model residuals") + {{selected.BSkyThemes | safe}})
+    #Plot residuals vs. fitted
+    plot(fitted(model), residuals(model),main ="Residuals vs. Fitted")
+}
+
+
 }
 )
                 `
@@ -191,12 +202,13 @@ plot <- ggplot(cldComparisons,aes(x = {{selected.tvarbox2 | safe}},y = lsmean,la
                     extraction: "NoPrefix|UsePlus",
                     required: true,
                 })},
-             Post_hoc: {el: new checkbox(config, {label: localization.en.Post_hoc, no: "chk2", extraction: "Boolean"})}
+                chk1: { el: new checkbox(config, { label: localization.en.chk1, no: "chk1", extraction: "Boolean" }) },
+             Post_hoc: {el: new checkbox(config, {label: localization.en.Post_hoc, no: "chk2", newline:true,extraction: "Boolean"})}
         }
         
         const content = {
             left: [ objects.content_var.el.content ],
-            right: [ objects.response.el.content, objects.Fixed.el.content, objects.Block.el.content, objects.Post_hoc.el.content ],
+            right: [ objects.response.el.content, objects.Fixed.el.content, objects.Block.el.content, objects.chk1.el.content, objects.Post_hoc.el.content ],
             nav: {
                 name: "ANOVA, 1 way (random blocks)",
                 icon: "icon-anova_random_blocks",

@@ -6,7 +6,7 @@ var localization = {
         tvarbox1: "Response variable (one)",
         tvarbox2: "Fixed effect",
         blockVar: "Blocking variable(s)",
-        chk1: "Histogram and plot of residuals",
+        chk1: "Histogram of residuals",
         chk2: "Post-hoc analysis",
         help: {
             title: "ANOVA, one way with blocks",
@@ -75,6 +75,7 @@ require(FSA)
 require(car)
 require(emmeans)
 require(ggplot2)
+require(ggthemes)
 require(multcomp)
 #local({
 #Use Summarize to check if cell sizes are balanced
