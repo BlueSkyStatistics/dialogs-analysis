@@ -72,6 +72,7 @@ var localization = {
     adjustedBiasCorrected: "Adjusted bias-corrected",
     basic: "basic",
     bootstratRep: "Bootstrap repetitions",
+    autoComputeCovar: "Automatically compute covariances",
     help: {
       title: "SEM",
       r_help: "help(sem, package=lavaan)",
@@ -146,7 +147,7 @@ class sem extends baseModal {
 require(lavaan)
 require(semPlot)  
 require(semTools)      
-{{selected.modelname | safe}}_def <- '{{selected.sem | safe}} {{selected.modelTermsDst | safe}} {{selected.coVarDst | safe}}'
+{{selected.modelname | safe}}_def <- '{{selected.sem | safe}}{{selected.sem2 | safe}}{{selected.modelTermsDst | safe}} {{selected.coVarDst | safe}}'
 \n{{selected.modelname | safe}} <- {{if (options.selected.useSemFunction)}}sem{{#else}}cfa{{/if}}({{selected.modelname | safe}}_def,    
     {{if (options.selected.family =="Maximum likelihood (ML)")}}estimator = "ML",
     {{/if}}{{if (options.selected.family =="Robust maximum likelihood (MLM)")}}estimator = "MLM",
@@ -305,6 +306,19 @@ if (has_nas) {
         })
       },
       content_var: { el: new srcVariableList(config, { action: "move", semMain: true }) },
+
+      autoComputeCovar: {
+        el: new checkbox(config, {
+          label: localization.en.autoComputeCovar,
+          no: "autoComputeCovar",
+          style: "mb-2",
+          extraction: "Boolean",
+          state: "checked",
+          newline: "true",
+          autoComputeCovar: true
+        })
+      },
+
       parameterizeFormula: {
         el: new checkbox(config, {
           label: localization.en.parameterizeFormula,
@@ -322,13 +336,13 @@ if (has_nas) {
           filter: "Numeric|Date|Logical|Scale|semFactor",
           extraction: "NoPrefix|UsePlus",
           required: false,
-          suppCtrlIds: ["semSuppCtrl", "modelTerms", "modelTerms1", "coVarTerms", "coVarTerms1"]
+          suppCtrlIds: ["semSuppCtrl1", "modelTerms", "modelTerms1", "coVarTerms", "coVarTerms1"]
         }), r: ['{{ var | safe}}']
       },
-      semSuppCtrl: {
+      semSuppCtrl1: {
         el: new semSuppCtrl(config, {
           action: "move",
-          no: "semSuppCtrl", label: localization.en.semSuppCtrl
+          no: "semSuppCtrl1", label: localization.en.semSuppCtrl
         })
       },
       sem2: {
@@ -338,6 +352,7 @@ if (has_nas) {
           filter: "Numeric|Date|Logical|Scale|semFactor",
           extraction: "NoPrefix|UsePlus",
           required: false,
+          suppCtrlIds: ["modelTerms", "modelTerms1", "coVarTerms", "coVarTerms1"]
         }), r: ['{{ var | safe}}']
       },
       label1: {
@@ -846,7 +861,7 @@ if (has_nas) {
         name: "Second order factors",
         layout: "two",
         left: [
-          objects.semSuppCtrl.el,
+          objects.semSuppCtrl1.el,
         ],
         right: [
           objects.sem2.el
@@ -989,7 +1004,7 @@ if (has_nas) {
     const content = {
       head: [objects.modelname.el.content],
       left: [objects.content_var.el.content],
-      right: [objects.parameterizeFormula.el.content, objects.sem.el.content],
+      right: [objects.parameterizeFormula.el.content, objects.autoComputeCovar.el.content, objects.sem.el.content],
       bottom: [secOrderFactors.el.content, optionsModelTerms.el.content, optionsCoVarTerms.el.content, modelOptions.el.content, outputOptions.el.content, semPlotOptions.el.content, parameterOptions.el.content],
       nav: {
         name: localization.en.navigation,
@@ -1005,9 +1020,7 @@ if (has_nas) {
     let tempRes = [];
     let endoExo = {};
     let allVarsArray = []
-    //let endoExoString ="";
     let separator = ',';
-    // let arrayIndex = 0;
     let value = `"{{item | safe}}"`;
     let tempretval = "";
     let finalRetString = "";
