@@ -236,8 +236,8 @@ semPaths({{selected.modelname | safe}}, {{if (options.selected.residuals =="TRUE
     whatLabels = "{{if (options.selected.edgeLabels =="names")}}name{{/if}}{{if (options.selected.edgeLabels =="parameter estimates")}}est{{/if}}{{if (options.selected.edgeLabels =="standardized parameter estimates")}}std{{/if}}{{if (options.selected.edgeLabels =="parameter number")}}eq{{/if}}{{if (options.selected.edgeLabels =="hide")}}hide{{/if}}",
     layout = "{{selected.layout | safe}}",
     rotation = {{if (options.selected.rotate =="Exog. top")}}1{{/if}}{{if (options.selected.rotate =="Exog. left")}}2{{/if}}{{if (options.selected.rotate =="Exog. bottom")}}3{{/if}}{{if (options.selected.rotate =="Exog. right")}}4{{/if}},
-    shapeMan = "{{selected.manifestShapes | safe}}",
-    shapeLat    = "{{selected.latentShapes | safe}}",
+    {{if (options.selected.manifestShapes != "default")}}shapeMan = "{{selected.manifestShapes | safe}}",{{/if}}
+    {{if (options.selected.latentShapes != "default")}}shapeLat = "{{selected.latentShapes | safe}}"{{/if}}
     )
 {{if (options.selected.factorScores == "TRUE")}}
 has_nas <- any(is.na({{dataset.name}}[, c({{selected.allvars | safe}})]))
@@ -247,8 +247,6 @@ if (has_nas) {
   cat("Displaying a large number of predicted values in the output window can cause performance problems.\n")
   BSkyFormat(lavPredict({{selected.modelname | safe}}, 
     type = "lv"), singleTableOutputHeader = "Predicted factor scores")
-
-  
 } else {
   BSkyFS <-lavPredict({{selected.modelname | safe}}, 
     type = "lv")
@@ -652,7 +650,7 @@ if (has_nas) {
           label: localization.en.layout,
           multiple: false,
           extraction: "NoPrefix|UseComma",
-          options: ["tree", "circle", "spring", "tree2", "circle"],
+          options: ["tree", "circle", "spring", "tree2"],
           default: "tree"
         })
       },
@@ -663,7 +661,7 @@ if (has_nas) {
           multiple: false,
           extraction: "NoPrefix|UseComma",
           options: ["Exog. top", "Exog. left", "Exog. bottom", "Exog. right"],
-          default: "Exog. left"
+          default: "Exog. top"
         })
       },
       label103: {
@@ -679,8 +677,8 @@ if (has_nas) {
           label: localization.en.manifestShapes,
           multiple: false,
           extraction: "NoPrefix|UseComma",
-          options: ["circle", "rectangle", "square", "ellipse", "diamond"],
-          default: "circle"
+          options: ["default","circle", "rectangle", "square", "ellipse", "diamond"],
+          default: "default"
         })
       },
       latentShapes: {
@@ -689,8 +687,8 @@ if (has_nas) {
           label: localization.en.latentShapes,
           multiple: false,
           extraction: "NoPrefix|UseComma",
-          options: ["rectangle", "square", "ellipse", "diamond"],
-          default: "rectangle"
+          options: ["default","circle","rectangle", "square", "ellipse", "diamond"],
+          default: "default"
         })
       },
       abbNodeLabels: {
