@@ -57,7 +57,7 @@ var localization = {
     latentShapes: "Latent shapes",
     outputOptions: "Output options",
     label104: "Standardized solutions",
-    stdall: "The standardized estimates are based on both the variances of both (continuous) observed and latent variables",
+    stdall: "The standardized estimates are based on the variances of both (continuous) observed and latent variables",
     stdlv: "The standardized estimates are on the variances of the (continuous) latent variables only",
     stdnox: "The standardized estimates are based on both the variances of both (continuous) observed and latent variables, but not the variances of exogenous covariates",
     label105: "Standard errors",
@@ -73,6 +73,7 @@ var localization = {
     basic: "basic",
     bootstratRep: "Bootstrap repetitions",
     autoComputeCovar: "Automatically compute covariances",
+    equalityConstraints1: "Relationship",
     help: {
       title: "SEM",
       r_help: "help(sem, package=lavaan)",
@@ -118,7 +119,7 @@ na.action: a function which indicates what should happen when the data contain N
 If x is a list, its elements are taken as the samples or fitted linear models to be compared for homogeneity of variances. In this case, the elements must either all be numeric data vectors or fitted linear model objects, g is ignored, and one can simply use bartlett.test(x) to perform the test. If the samples are not yet contained in a list, use bartlett.test(list(x, ...)).</br>
 Otherwise, x must be a numeric data vector, and g must be a vector or factor object of the same length as x giving the group for the corresponding elements of x.</br>
 <b>Value</b><br/>
-A list of class "htest" containing the following components:<br/>
+A list of class "htest" containing the following components:<br/>allvarsparameterEstimates(Sem1, level = 0.95, boot.ci.type = "perc")
 statistic: Bartlett's K-squared test statistic.<br/>
 parameter: the degrees of freedom of the approximate chi-squared distribution of the test statistic.<br/>
 p.value: the p-value of the test.<br/>
@@ -167,9 +168,10 @@ require(semTools)
 BSkySummaryRes <- summary({{selected.modelname | safe}}, fit.measures = TRUE{{if(options.selected.gpbox1 =="endo")}}, rsq = TRUE{{/if}} {{if (options.selected.gpbox2 == "bootstrap" )}},ci = TRUE{{/if}})
 print.lavaan.summary_bsky(BSkySummaryRes)
 {{if (options.selected.gpbox2 == "bootstrap" )}}
-parameterEstimates({{selected.modelname | safe}}, 
+BSkyParameterEst <- lavaan::parameterEstimates({{selected.modelname | safe}}, 
   level = 0.95, 
   boot.ci.type="{{selected.gpbox3 | safe}}")
+BSkyFormat(as.data.frame(BSkyParameterEst), singleTableOutputHeader="Parameter estimates")
 {{/if}}
 {{if (options.selected.addFitMeasures == "TRUE")}}
 #Additional fit measures
@@ -178,17 +180,12 @@ BSkyFormat(as.data.frame(BSkyfitMeasures), singleTableOutputHeader="Additional f
 {{/if}}
 {{if (options.selected.mardiaSkew =="TRUE")}}
 #Mardia's skew
-psych::skew({{dataset.name}}[, c({{selected.endoExoString | safe}})])
-psych::kurtosi({{dataset.name}}[, c({{selected.endoExoString | safe}})])
-psych::mardia({{dataset.name}}[, c({{selected.endoExoString | safe}})],na.rm = TRUE,plot=TRUE)
-semTools::mardiaSkew({{dataset.name}}[, c({{selected.endoExoString | safe}})])
-semTools::mardiaKurtosis({{dataset.name}}[, c({{selected.endoExoString | safe}})])
-BSkyMardiasSkew <-mardiaSkew({{dataset.name}}[, c({{selected.endoExoString | safe}})])
+BSkyMardiasSkew <- semTools::mardiaSkew({{dataset.name}}[, c({{selected.allvars | safe}})])
 BSkyFormat(BSkyMardiasSkew, singleTableOutputHeader="Mardia's skew")
 {{/if}}
 {{if (options.selected.mardiaKurt =="TRUE")}}
 #Mardia's kurtosis
-BSkyMardiasKurt <-mardiaKurtosis({{dataset.name}}[, c({{selected.endoExoString | safe}})])
+BSkyMardiasKurt <- semTools::mardiaKurtosis({{dataset.name}}[, c({{selected.allvars | safe}})])
 BSkyFormat(BSkyMardiasKurt, singleTableOutputHeader="Mardia's kurtosis")
 {{/if}}
 {{if (options.selected.observed =="TRUE")}}
@@ -245,10 +242,10 @@ has_nas <- any(is.na({{dataset.name}}[, c({{selected.allvars | safe}})]))
 if (has_nas) {
   cat("The dataset contains missing values (NAs), we cannot save predicted values to the dataset, we will display predicted values in the output window.\n")
   cat("Displaying a large number of predicted values in the output window can cause performance problems.\n")
-  BSkyFormat(lavPredict({{selected.modelname | safe}}, 
-    type = "lv"), singleTableOutputHeader = "Predicted factor scores")
+  BSkyFormat(as.data.frame(lavaan::lavPredict({{selected.modelname | safe}}, 
+    type = "lv")), singleTableOutputHeader = "Predicted factor scores")
 } else {
-  BSkyFS <-lavPredict({{selected.modelname | safe}}, 
+  BSkyFS <- lavaan::lavPredict({{selected.modelname | safe}}, 
     type = "lv")
     base::colnames(BSkyFS) <- base::paste("FS", base::colnames(BSkyFS), sep="_") 
   .GlobalEnv\${{dataset.name}} <- tibble::add_column ({{dataset.name}}, data.frame(BSkyFS))
@@ -261,8 +258,8 @@ has_nas <- base::any(base::is.na({{dataset.name}}[, c({{selected.allvars | safe}
 if (has_nas) {
   cat("The dataset contains missing values (NAs), we cannot save predicted values to the dataset, we will display predicted values in the output window.\n")
   cat("NOTE::Displaying a large number of predicted values in the output window can cause performance problems.\n")
-  BSkyFormat(lavPredict({{selected.modelname | safe}}, 
-    type = "ov"), singleTableOutputHeader = "Predicted indicators")
+  BSkyFormat(as.data.frame(lavaan::lavPredict({{selected.modelname | safe}}, 
+    type = "ov")), singleTableOutputHeader = "Predicted indicators")
 } else {
   BSkyI <- lavaan::lavPredict({{selected.modelname | safe}}, 
     type = "ov")
@@ -281,7 +278,7 @@ if (has_nas) {
     type = "yhat"), singleTableOutputHeader = "Predicted dependent variables") 
 } else {
   BSkyDV <- lavaan::lavPredict({{selected.modelname | safe}}, 
-    type = "ov")
+    type = "yhat")
     base::colnames(BSkyDV) <- base::paste("DV", colnames(BSkyDV),sep="_") 
   .GlobalEnv\${{dataset.name}} <- tibble::add_column({{dataset.name}}, data.frame(BSkyDV))
   BSkyLoadRefresh("{{dataset.name}}")
@@ -399,6 +396,22 @@ if (has_nas) {
           no: "coVarDst", label: localization.en.coVarDst, filter: "String|Numeric|Logical|Ordinal|Nominal|Scale", extraction: "coVariances", firstModelTermCtrl: "coVarTerms", secondModelTermCtrl: "coVarTerms1"
         })
       },
+      equalityConstraints1: {
+        el: new equalityConstraints(config, {
+          action: "move",
+          no: "equalityConstraints1", label: localization.en.equalityConstraints
+        })
+      },
+      sem3: {
+        el: new semControl(config, {
+          label: localization.en.sem3,
+          no: "sem3",
+          filter: "Numeric|Date|Logical|Scale|semFactor",
+          extraction: "NoPrefix|UsePlus",
+          required: false,
+        }), r: ['{{ var | safe}}']
+      },
+
       family: {
         el: new comboBoxWithChilderen(config, {
           no: 'family',
@@ -866,6 +879,19 @@ if (has_nas) {
         ],
       })
     };
+    var equalConst = {
+      el: new optionsVar(config, {
+        no: "equalConst",
+        name: "Equality constraints",
+        layout: "two",
+        left: [
+          objects.equalityConstraints1.el,
+        ],
+        right: [
+          objects.sem3.el
+        ],
+      })
+    };
     var optionsModelTerms = {
       el: new optionsVar(config, {
         no: "sem_model_terms",
@@ -1003,7 +1029,7 @@ if (has_nas) {
       head: [objects.modelname.el.content],
       left: [objects.content_var.el.content],
       right: [objects.parameterizeFormula.el.content, objects.autoComputeCovar.el.content, objects.sem.el.content],
-      bottom: [secOrderFactors.el.content, optionsModelTerms.el.content, optionsCoVarTerms.el.content, modelOptions.el.content, outputOptions.el.content, semPlotOptions.el.content, parameterOptions.el.content],
+      bottom: [secOrderFactors.el.content, optionsModelTerms.el.content, optionsCoVarTerms.el.content, equalConst.el.content,modelOptions.el.content, outputOptions.el.content, semPlotOptions.el.content, parameterOptions.el.content],
       nav: {
         name: localization.en.navigation,
         icon: "icon-b",
@@ -1022,6 +1048,7 @@ if (has_nas) {
     let value = `"{{item | safe}}"`;
     let tempretval = "";
     let finalRetString = "";
+    let allColumnProps = fetchAllColumnAttributes()
     var code_vars = {
       dataset: {
         name: $(`#${instance.config.id}`).attr('dataset') ? $(`#${instance.config.id}`).attr('dataset') : getActiveDataset()
@@ -1066,7 +1093,7 @@ if (has_nas) {
       modTerms.forEach(function (value) {
         myArray = value.split("->");
         myArray.forEach(function (val, index) {
-          if (!allVarsArray.includes(val)) {
+          if (!allVarsArray.includes(val) && allColumnProps[val] != undefined ) {
             allVarsArray.push(val)
           }
         })
@@ -1078,7 +1105,7 @@ if (has_nas) {
       modTerms.forEach(function (value) {
         myArray = value.split("<->");
         myArray.forEach(function (val, index) {
-          if (!allVarsArray.includes(val)) {
+          if (!allVarsArray.includes(val) && allColumnProps[val] != undefined) {
             allVarsArray.push(val)
           }
         })
