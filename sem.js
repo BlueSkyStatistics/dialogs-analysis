@@ -331,7 +331,9 @@ if (has_nas) {
           filter: "Numeric|Date|Logical|Scale|semFactor",
           extraction: "NoPrefix|UsePlus",
           required: false,
-          suppCtrlIds: ["semSuppCtrl1", "modelTerms", "modelTerms1", "coVarTerms", "coVarTerms1"]
+          suppCtrlIds: ["semSuppCtrl1", "modelTerms", "modelTerms1", "coVarTerms", "coVarTerms1"],
+          //When deleting higher order factor variables, we need to remove higher order factor names from these controls
+          ctrlsToDeleteFrom: ["sem2", "sem3"],
         }), r: ['{{ var | safe}}']
       },
       semSuppCtrl1: {
@@ -347,7 +349,9 @@ if (has_nas) {
           filter: "Numeric|Date|Logical|Scale|semFactor",
           extraction: "NoPrefix|UsePlus",
           required: false,
-          suppCtrlIds: ["modelTerms", "modelTerms1", "coVarTerms", "coVarTerms1"]
+          suppCtrlIds: ["modelTerms", "modelTerms1", "coVarTerms", "coVarTerms1"],
+          //When deleting higher order factor variables, we need to remove higher order factor names from these controls
+          ctrlsToDeleteFrom: ["sem3" ],
         }), r: ['{{ var | safe}}']
       },
       label1: {
@@ -406,7 +410,8 @@ if (has_nas) {
         el: new semControl(config, {
           label: localization.en.sem3,
           no: "sem3",
-          filter: "Numeric|Date|Logical|Scale|semFactor",
+          equalityConstraints: true,
+          filter: "Numeric|Date|Logical|Scale|semFactor|relation|covariance",
           extraction: "NoPrefix|UsePlus",
           required: false,
         }), r: ['{{ var | safe}}']
