@@ -73,7 +73,8 @@ var localization = {
     basic: "basic",
     bootstratRep: "Bootstrap repetitions",
     autoComputeCovar: "Automatically compute covariances",
-    equalityConstraints1: "Relationship",
+    equalityConstraints1: "Relationships",
+    sem3: "Equality constraints",
     help: {
       title: "SEM",
       r_help: "help(sem, package=lavaan)",
@@ -148,7 +149,7 @@ class sem extends baseModal {
 require(lavaan)
 require(semPlot)  
 require(semTools)      
-{{selected.modelname | safe}}_def <- '{{selected.sem | safe}}{{selected.sem2 | safe}}{{selected.modelTermsDst | safe}} {{selected.coVarDst | safe}}'
+{{selected.modelname | safe}}_def <- '{{selected.sem | safe}}{{selected.sem2 | safe}}{{selected.sem3 | safe}}{{selected.modelTermsDst | safe}} {{selected.coVarDst | safe}}'
 \n{{selected.modelname | safe}} <- {{if (options.selected.useSemFunction)}}sem{{#else}}cfa{{/if}}({{selected.modelname | safe}}_def,    
     {{if (options.selected.family =="Maximum likelihood (ML)")}}estimator = "ML",
     {{/if}}{{if (options.selected.family =="Robust maximum likelihood (MLM)")}}estimator = "MLM",
@@ -301,7 +302,6 @@ if (has_nas) {
         })
       },
       content_var: { el: new srcVariableList(config, { action: "move", semMain: true }) },
-
       autoComputeCovar: {
         el: new checkbox(config, {
           label: localization.en.autoComputeCovar,
@@ -313,7 +313,6 @@ if (has_nas) {
           autoComputeCovar: true
         })
       },
-
       parameterizeFormula: {
         el: new checkbox(config, {
           label: localization.en.parameterizeFormula,
@@ -324,6 +323,7 @@ if (has_nas) {
           parameterizeFormula: true
         })
       },
+      //Note: Extraction has to be passed manually to semExtractData()
       sem: {
         el: new semControl(config, {
           no: "sem",
@@ -342,6 +342,7 @@ if (has_nas) {
           no: "semSuppCtrl1", label: localization.en.semSuppCtrl
         })
       },
+      //Note: Extraction has to be passed manually to semExtractData()
       sem2: {
         el: new semControl(config, {
           label: localization.en.sem2,
@@ -376,6 +377,7 @@ if (has_nas) {
           no: "modelTerms1", label: localization.en.modelTerms1
         })
       },
+      //Note: Extraction has to be passed manually to semExtractData()
       modelTermsDst: {
         el: new semModelTermsDest(config, {
           action: "move",
@@ -394,6 +396,7 @@ if (has_nas) {
           no: "coVarTerms1", label: localization.en.coVarTerms1
         })
       },
+      //Note: Extraction has to be passed manually to semExtractData()
       coVarDst: {
         el: new semModelTermsDest(config, {
           action: "move",
@@ -403,16 +406,17 @@ if (has_nas) {
       equalityConstraints1: {
         el: new equalityConstraints(config, {
           action: "move",
-          no: "equalityConstraints1", label: localization.en.equalityConstraints
+          no: "equalityConstraints1", label: localization.en.equalityConstraints1
         })
       },
+      //Note: Extraction has to be passed manually to semExtractData()
       sem3: {
         el: new semControl(config, {
           label: localization.en.sem3,
           no: "sem3",
           equalityConstraints: true,
-          filter: "Numeric|Date|Logical|Scale|semFactor|relation|covariance",
-          extraction: "NoPrefix|UsePlus",
+          filter: "Numeric|Date|Logical|Scale|semFactor|relation|covariance|structuralParameter",
+          extraction: "equalityConstraints",
           required: false,
         }), r: ['{{ var | safe}}']
       },
@@ -1053,15 +1057,92 @@ if (has_nas) {
     let value = `"{{item | safe}}"`;
     let tempretval = "";
     let finalRetString = "";
+    let firstTerm =""
+    let secondTerm =""
     let allColumnProps = fetchAllColumnAttributes()
     var code_vars = {
       dataset: {
         name: $(`#${instance.config.id}`).attr('dataset') ? $(`#${instance.config.id}`).attr('dataset') : getActiveDataset()
       },
-      selected: instance.dialog.extractData()
+      selected: instance.dialog.extractSemData()
     }
+    //Getting pre-transformed equality constraints, latentVars, higherOrderFactors and
+    //modelTermsDst and coVarsDst
+    //We do this as items in the  latentVars, higherOrderFactors and
+    //modelTermsDst and coVarsDst needs to be adjusted based on equality constraints entered
+    let equalConstraints = code_vars.selected["sem3"]
+    let latentVars = code_vars.selected["sem"]
+    let higherOrderFactors = code_vars.selected["sem2"]
+    let preTransModelTermsDst = code_vars.selected["modelTermsDst"]
+    let preTranscoVarDst = code_vars.selected["coVarDst"]
+    Object.keys(equalConstraints).forEach(function (key, index) {
+          equalConstraints[key].forEach(function (element, index) {
+          
+          if (element.includes ("->"))
+          {
+              firstTerm = element.split("->")[0]
+              secondTerm =element.split("->")[1]
+          } else if (element.includes ("<->"))
+          {
+            firstTerm = element.split("<->")[0]
+            secondTerm =element.split("<->")[1]
+          }
+          if (Object.keys(latentVars).length  != 0)
+          {
+            if (latentVars[firstTerm] != undefined)
+            {
+              if (latentVars[firstTerm].includes(secondTerm))
+              {
+                if (latentVars[firstTerm].filter(item => item !== secondTerm).length ==0)
+                {
+                  delete latentVars[firstTerm]
+                } else {
+                  latentVars[firstTerm] = latentVars[firstTerm].filter(item => item !== secondTerm);
+                }
+              }
+            }
+          }			
+          if (Object.keys(higherOrderFactors).length != 0)
+          {
+            if (higherOrderFactors[firstTerm] != undefined)
+            {
+              if (higherOrderFactors[firstTerm].includes(secondTerm))
+              {
+                if (higherOrderFactors[firstTerm].filter(item => item !== secondTerm).length ==0)
+                {
+                  delete higherOrderFactors[firstTerm]
+                } else {
+                  higherOrderFactors[firstTerm] = higherOrderFactors[firstTerm].filter(item => item !== secondTerm);	
+                }     
+              }
+            } 
+          }
+          if (preTransModelTermsDst.length != 0)	
+          {
+            if (preTransModelTermsDst.includes(element))
+            {
+              preTransModelTermsDst = preTransModelTermsDst.filter(item => item !== element);	
+            }
+          }	
+          if (preTranscoVarDst.length  != 0)	
+          {
+            if (preTranscoVarDst.includes(element))
+            {
+              preTranscoVarDst = preTranscoVarDst.filter(item => item !== element);	
+            }
+          }	
+          })
+    })
+	//Performing the transformations after adjustments, extraction has to be passed
+	code_vars.selected["sem"] = common.transform(latentVars, "NoPrefix|UsePlus","sem_sem" )
+	code_vars.selected["sem2"] = common.transform(higherOrderFactors, "NoPrefix|UsePlus","sem_sem2" )
+	code_vars.selected["sem3"] = common.transform(equalConstraints, "equalityConstraints","sem_sem3" )
+	code_vars.selected["modelTermsDst"] = common.transform(preTransModelTermsDst, "modelTerms","sem_modelTermsDst" )
+  code_vars.selected["coVarDst"] = common.transform(preTranscoVarDst, "coVariances","sem_coVarDst" )
+	
     let item = '{{item | safe}}';
-    endoExo = instance.objects.sem.el.getVal()
+   // endoExo = instance.objects.sem.el.getVal()
+   endoExo =latentVars
     Object.keys(endoExo).forEach(function (key, index) {
       endoExo[key].forEach(function (element, index) {
         if (!allVarsArray.includes(element)) {
@@ -1122,6 +1203,8 @@ if (has_nas) {
     code_vars.selected.allvars = allVarsArray.join(separator)
     const cmd = instance.dialog.renderR(code_vars);
     res.push({ cmd: cmd, cgid: newCommandGroup() })
+    $(`#${instance.config.id}`).attr('parameterCount', 0)
+
     return res;
   }
 }
