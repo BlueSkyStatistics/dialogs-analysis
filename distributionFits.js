@@ -84,7 +84,8 @@ var localization = {
 				<br/>
 				<br/>
 				<br/>
-				-x-
+				<a href="https://stats.stackexchange.com/questions/132652/how-to-determine-which-distribution-fits-my-data-best">For a good overview of distribution fit, see https://stats.stackexchange.com/questions/132652/how-to-determine-which-distribution-fits-my-data-best</a>
+				<br/>
 			`
 		},
 	}
@@ -113,19 +114,20 @@ gofstat_format <- function(dist_test_list = list(), fitname_list = c())
 		row.names(gofstat_comp_criterion) = c("Akaike's Information Criterion (AIC)", "Bayesian Information Criterion (BIC)")
 		BSkyFormat(gofstat_comp_criterion, outputTableRenames="Goodness-of-fit criteria")
 		
-		BSkyFormat(gofstat_comp, outputTableRenames=c("Goodness-of-fit: Details"))	
+		#BSkyFormat(gofstat_comp, outputTableRenames=c("Goodness-of-fit: Details"))	
 	}
 }
 
 	
 dist_test_comp_list = list()
 dist_test_comp_legendtext = c()
+boost_niter = 600
 
 {{if(options.selected.normDistChk === 'TRUE')}} 
 	fitg_norm = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_norm <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_norm <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "norm",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -134,7 +136,7 @@ dist_test_comp_legendtext = c()
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_norm <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_norm <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "norm",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -148,10 +150,26 @@ dist_test_comp_legendtext = c()
 		
 		filter_empty_rows = BSkyFormat2(fitg_norm)$tables[[1]]
 		filter_empty_rows = filter_empty_rows[filter_empty_rows[,2]!="",]
+		
+		tmp_row = filter_empty_rows[2,]
+		filter_empty_rows[2,] = filter_empty_rows[3,]
+		filter_empty_rows[3,] = tmp_row
+		filter_empty_rows[2,1] = "Std. Error"
+		
+		
 		BSkyFormat(filter_empty_rows, 
 						outputTableRenames = paste("Summary: normal distribution fit test for {{selected.variableSelcted | safe}}"))
 	
 		gofstat_format(dist_test_list = fitg_norm, fitname_list = c("normal"))
+	}
+	
+	if(!is.null(fitg_norm)) {
+		b1 = NULL
+		b1 = suppressWarnings(bootdist(fitg_norm, niter= boost_niter))
+		CIcdfplot(b1, CI.level= 95/100, CI.output = "probability", main = "Probability plot (Empirical and Theoretical CDF with 95% CI) for {{selected.variableSelcted | safe}}", xlab="{{selected.variableSelcted | safe}}")
+	}
+	
+	if(!is.null(fitg_norm)) {
 		plot(fitg_norm, demp = TRUE)
 		cdfcomp(fitg_norm, addlegend=TRUE)
 		denscomp(fitg_norm, addlegend=TRUE)
@@ -164,7 +182,7 @@ dist_test_comp_legendtext = c()
 	fitg_weibull = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_weibull <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_weibull <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "weibull",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -173,7 +191,7 @@ dist_test_comp_legendtext = c()
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_weibull <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_weibull <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "weibull",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -187,10 +205,25 @@ dist_test_comp_legendtext = c()
 		
 		filter_empty_rows = BSkyFormat2(fitg_weibull)$tables[[1]]
 		filter_empty_rows = filter_empty_rows[filter_empty_rows[,2]!="",]
+		
+		tmp_row = filter_empty_rows[2,]
+		filter_empty_rows[2,] = filter_empty_rows[3,]
+		filter_empty_rows[3,] = tmp_row
+		filter_empty_rows[2,1] = "Std. Error"
+		
 		BSkyFormat(filter_empty_rows, 
 						outputTableRenames = paste("Summary: Weibull distribution fit test for {{selected.variableSelcted | safe}}"))
 		
 		gofstat_format(dist_test_list = fitg_weibull, fitname_list = c("Weibull"))
+	}
+		
+	if(!is.null(fitg_weibull)) {
+		b1 = NULL
+		b1 = suppressWarnings(bootdist(fitg_weibull, niter= boost_niter))
+		CIcdfplot(b1, CI.level= 95/100, CI.output = "probability", main = "Probability plot (Empirical and Theoretical CDF with 95% CI) for {{selected.variableSelcted | safe}}", xlab="{{selected.variableSelcted | safe}}")
+	}
+		
+	if(!is.null(fitg_weibull)) {
 		plot(fitg_weibull, demp = TRUE)
 		cdfcomp(fitg_weibull, addlegend=TRUE)
 		denscomp(fitg_weibull, addlegend=TRUE)
@@ -203,7 +236,7 @@ dist_test_comp_legendtext = c()
 	fitg_lnorm = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_lnorm <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_lnorm <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "lnorm",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -212,7 +245,7 @@ dist_test_comp_legendtext = c()
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_lnorm <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_lnorm <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "lnorm",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -226,10 +259,25 @@ dist_test_comp_legendtext = c()
 		
 		filter_empty_rows = BSkyFormat2(fitg_lnorm)$tables[[1]]
 		filter_empty_rows = filter_empty_rows[filter_empty_rows[,2]!="",]
+		
+		tmp_row = filter_empty_rows[2,]
+		filter_empty_rows[2,] = filter_empty_rows[3,]
+		filter_empty_rows[3,] = tmp_row
+		filter_empty_rows[2,1] = "Std. Error"
+		
 		BSkyFormat(filter_empty_rows, 
 						outputTableRenames = paste("Summary: log normal distribution fit test for {{selected.variableSelcted | safe}}"))
 		
 		gofstat_format(dist_test_list = fitg_lnorm, fitname_list = c("lnorm"))
+	}
+		
+	if(!is.null(fitg_lnorm)) {
+		b1 = NULL
+		b1 = suppressWarnings(bootdist(fitg_lnorm, niter= boost_niter))
+		CIcdfplot(b1, CI.level= 95/100, CI.output = "probability", main = "Probability plot (Empirical and Theoretical CDF with 95% CI) for {{selected.variableSelcted | safe}}", xlab="{{selected.variableSelcted | safe}}")
+	}
+	
+	if(!is.null(fitg_lnorm)) {
 		plot(fitg_lnorm, demp = TRUE)
 		cdfcomp(fitg_lnorm, addlegend=TRUE)
 		denscomp(fitg_lnorm, addlegend=TRUE)
@@ -242,7 +290,7 @@ dist_test_comp_legendtext = c()
 	fitg_poisson = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_poisson <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_poisson <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "pois",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -251,7 +299,7 @@ dist_test_comp_legendtext = c()
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_poisson <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_poisson <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "pois",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -265,10 +313,25 @@ dist_test_comp_legendtext = c()
 		
 		filter_empty_rows = BSkyFormat2(fitg_poisson)$tables[[1]]
 		filter_empty_rows = filter_empty_rows[filter_empty_rows[,2]!="",]
+		
+		tmp_row = filter_empty_rows[2,]
+		filter_empty_rows[2,] = filter_empty_rows[3,]
+		filter_empty_rows[3,] = tmp_row
+		filter_empty_rows[2,1] = "Std. Error"
+		
 		BSkyFormat(filter_empty_rows, 
 						outputTableRenames = paste("Summary: poisson distribution fit test for {{selected.variableSelcted | safe}}"))
 		
 		gofstat_format(dist_test_list = fitg_poisson, fitname_list = c("poisson"))
+	}
+		
+	if(!is.null(fitg_poisson)) {
+		b1 = NULL
+		b1 = suppressWarnings(bootdist(fitg_poisson, niter= boost_niter))
+		CIcdfplot(b1, CI.level= 95/100, CI.output = "probability", main = "Probability plot (Empirical and Theoretical CDF with 95% CI) for {{selected.variableSelcted | safe}}", xlab="{{selected.variableSelcted | safe}}")
+	}
+		
+	if(!is.null(fitg_poisson)) {
 		plot(fitg_poisson, demp = TRUE)
 		cdfcomp(fitg_poisson, addlegend=TRUE)
 		denscomp(fitg_poisson, addlegend=TRUE)
@@ -281,7 +344,7 @@ dist_test_comp_legendtext = c()
 	fitg_exp = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_exp <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_exp <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "exp",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -290,7 +353,7 @@ dist_test_comp_legendtext = c()
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_exp <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_exp <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "exp",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -304,10 +367,25 @@ dist_test_comp_legendtext = c()
 		
 		filter_empty_rows = BSkyFormat2(fitg_exp)$tables[[1]]
 		filter_empty_rows = filter_empty_rows[filter_empty_rows[,2]!="",]
+		
+		tmp_row = filter_empty_rows[2,]
+		filter_empty_rows[2,] = filter_empty_rows[3,]
+		filter_empty_rows[3,] = tmp_row
+		filter_empty_rows[2,1] = "Std. Error"
+		
 		BSkyFormat(filter_empty_rows, 
 						outputTableRenames = paste("Summary: exponential distribution fit test for {{selected.variableSelcted | safe}}"))
 		
 		gofstat_format(dist_test_list = fitg_exp, fitname_list = c("exponential"))
+	}
+		
+	if(!is.null(fitg_exp)) {
+		b1 = NULL
+		b1 = suppressWarnings(bootdist(fitg_exp, niter= boost_niter))
+		CIcdfplot(b1, CI.level= 95/100, CI.output = "probability", main = "Probability plot (Empirical and Theoretical CDF with 95% CI) for {{selected.variableSelcted | safe}}", xlab="{{selected.variableSelcted | safe}}")
+	}
+		
+	if(!is.null(fitg_exp)) {
 		plot(fitg_exp, demp = TRUE)
 		cdfcomp(fitg_exp, addlegend=TRUE)
 		denscomp(fitg_exp, addlegend=TRUE)
@@ -320,7 +398,7 @@ dist_test_comp_legendtext = c()
 	fitg_gamma = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_gamma <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_gamma <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "gamma",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -329,7 +407,7 @@ dist_test_comp_legendtext = c()
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_gamma <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_gamma <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "gamma",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -343,10 +421,25 @@ dist_test_comp_legendtext = c()
 		
 		filter_empty_rows = BSkyFormat2(fitg_gamma)$tables[[1]]
 		filter_empty_rows = filter_empty_rows[filter_empty_rows[,2]!="",]
+		
+		tmp_row = filter_empty_rows[2,]
+		filter_empty_rows[2,] = filter_empty_rows[3,]
+		filter_empty_rows[3,] = tmp_row
+		filter_empty_rows[2,1] = "Std. Error"
+		
 		BSkyFormat(filter_empty_rows, 
 						outputTableRenames = paste("Summary: gamma distribution fit test for {{selected.variableSelcted | safe}}"))
 		
 		gofstat_format(dist_test_list = fitg_gamma, fitname_list = c("gamma"))
+	}
+	
+	if(!is.null(fitg_gamma)) {
+		b1 = NULL
+		b1 = suppressWarnings(bootdist(fitg_gamma, niter= boost_niter))
+		CIcdfplot(b1, CI.level= 95/100, CI.output = "probability", main = "Probability plot (Empirical and Theoretical CDF with 95% CI) for {{selected.variableSelcted | safe}}", xlab="{{selected.variableSelcted | safe}}")
+	}
+		
+	if(!is.null(fitg_gamma)) {
 		plot(fitg_gamma, demp = TRUE)
 		cdfcomp(fitg_gamma, addlegend=TRUE)
 		denscomp(fitg_gamma, addlegend=TRUE)
@@ -359,7 +452,7 @@ dist_test_comp_legendtext = c()
 	fitg_nbinom = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_nbinom <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_nbinom <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "nbinom",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -368,7 +461,7 @@ dist_test_comp_legendtext = c()
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_nbinom <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_nbinom <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "nbinom",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -382,10 +475,25 @@ dist_test_comp_legendtext = c()
 		
 		filter_empty_rows = BSkyFormat2(fitg_nbinom)$tables[[1]]
 		filter_empty_rows = filter_empty_rows[filter_empty_rows[,2]!="",]
+		
+		tmp_row = filter_empty_rows[2,]
+		filter_empty_rows[2,] = filter_empty_rows[3,]
+		filter_empty_rows[3,] = tmp_row
+		filter_empty_rows[2,1] = "Std. Error"
+		
 		BSkyFormat(filter_empty_rows, 
 						outputTableRenames = paste("Summary: negative binomial distribution fit test for {{selected.variableSelcted | safe}}"))
 		
 		gofstat_format(dist_test_list = fitg_nbinom, fitname_list = c("nbinom"))
+	}
+		
+	if(!is.null(fitg_nbinom)) {
+		b1 = NULL
+		b1 = suppressWarnings(bootdist(fitg_nbinom, niter= boost_niter))
+		CIcdfplot(b1, CI.level= 95/100, CI.output = "probability", main = "Probability plot (Empirical and Theoretical CDF with 95% CI) for {{selected.variableSelcted | safe}}", xlab="{{selected.variableSelcted | safe}}")
+	}
+		
+	if(!is.null(fitg_nbinom)) {
 		plot(fitg_nbinom, demp = TRUE)
 		cdfcomp(fitg_nbinom, addlegend=TRUE)
 		denscomp(fitg_nbinom, addlegend=TRUE)
@@ -398,7 +506,7 @@ dist_test_comp_legendtext = c()
 	fitg_geom = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_geom <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_geom <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "geom",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -407,7 +515,7 @@ dist_test_comp_legendtext = c()
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_geom <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_geom <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "geom",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -421,10 +529,25 @@ dist_test_comp_legendtext = c()
 		
 		filter_empty_rows = BSkyFormat2(fitg_geom)$tables[[1]]
 		filter_empty_rows = filter_empty_rows[filter_empty_rows[,2]!="",]
+		
+		tmp_row = filter_empty_rows[2,]
+		filter_empty_rows[2,] = filter_empty_rows[3,]
+		filter_empty_rows[3,] = tmp_row
+		filter_empty_rows[2,1] = "Std. Error"
+		
 		BSkyFormat(filter_empty_rows, 
 						outputTableRenames = paste("Summary: geometric distribution fit test for {{selected.variableSelcted | safe}}"))
 		
 		gofstat_format(dist_test_list = fitg_geom, fitname_list = c("geometric"))
+	}
+		
+	if(!is.null(fitg_geom)) {
+		b1 = NULL
+		b1 = suppressWarnings(bootdist(fitg_geom, niter= boost_niter))
+		CIcdfplot(b1, CI.level= 95/100, CI.output = "probability", main = "Probability plot (Empirical and Theoretical CDF with 95% CI) for {{selected.variableSelcted | safe}}", xlab="{{selected.variableSelcted | safe}}")
+	}
+		
+	if(!is.null(fitg_geom)) {
 		plot(fitg_geom, demp = TRUE)
 		cdfcomp(fitg_geom, addlegend=TRUE)
 		denscomp(fitg_geom, addlegend=TRUE)
@@ -437,7 +560,7 @@ dist_test_comp_legendtext = c()
 	fitg_beta = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_beta <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_beta <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "beta",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -446,7 +569,7 @@ dist_test_comp_legendtext = c()
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_beta <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_beta <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "beta",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -460,10 +583,25 @@ dist_test_comp_legendtext = c()
 		
 		filter_empty_rows = BSkyFormat2(fitg_beta)$tables[[1]]
 		filter_empty_rows = filter_empty_rows[filter_empty_rows[,2]!="",]
+		
+		tmp_row = filter_empty_rows[2,]
+		filter_empty_rows[2,] = filter_empty_rows[3,]
+		filter_empty_rows[3,] = tmp_row
+		filter_empty_rows[2,1] = "Std. Error"
+		
 		BSkyFormat(filter_empty_rows, 
 						outputTableRenames = paste("Summary: beta distribution fit test for {{selected.variableSelcted | safe}}"))
 		
 		gofstat_format(dist_test_list = fitg_beta, fitname_list = c("beta"))
+	}
+		
+	if(!is.null(fitg_beta)) {
+		b1 = NULL
+		b1 = suppressWarnings(bootdist(fitg_beta, niter= boost_niter))
+		CIcdfplot(b1, CI.level= 95/100, CI.output = "probability", main = "Probability plot (Empirical and Theoretical CDF with 95% CI) for {{selected.variableSelcted | safe}}", xlab="{{selected.variableSelcted | safe}}")
+	}
+		
+	if(!is.null(fitg_beta)) {
 		plot(fitg_beta, demp = TRUE)
 		cdfcomp(fitg_beta, addlegend=TRUE)
 		denscomp(fitg_beta, addlegend=TRUE)
@@ -476,7 +614,7 @@ dist_test_comp_legendtext = c()
 	fitg_unif = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_unif <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_unif <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "unif",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -485,7 +623,7 @@ dist_test_comp_legendtext = c()
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_unif <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_unif <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "unif",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -499,10 +637,25 @@ dist_test_comp_legendtext = c()
 		
 		filter_empty_rows = BSkyFormat2(fitg_unif)$tables[[1]]
 		filter_empty_rows = filter_empty_rows[filter_empty_rows[,2]!="",]
+		
+		tmp_row = filter_empty_rows[2,]
+		filter_empty_rows[2,] = filter_empty_rows[3,]
+		filter_empty_rows[3,] = tmp_row
+		filter_empty_rows[2,1] = "Std. Error"
+		
 		BSkyFormat(filter_empty_rows, 
 						outputTableRenames = paste("Summary: uniform distribution fit test for {{selected.variableSelcted | safe}}"))
 		
 		gofstat_format(dist_test_list = fitg_unif, fitname_list = c("uniform"))
+	}
+		
+	if(!is.null(fitg_unif)) {
+		b1 = NULL
+		b1 = suppressWarnings(bootdist(fitg_unif, niter= boost_niter))
+		CIcdfplot(b1, CI.level= 95/100, CI.output = "probability", main = "Probability plot (Empirical and Theoretical CDF with 95% CI) for {{selected.variableSelcted | safe}}", xlab="{{selected.variableSelcted | safe}}")
+	}
+		
+	if(!is.null(fitg_unif)) {
 		plot(fitg_unif, demp = TRUE)
 		cdfcomp(fitg_unif, addlegend=TRUE)
 		denscomp(fitg_unif, addlegend=TRUE)
@@ -515,7 +668,7 @@ dist_test_comp_legendtext = c()
 	fitg_logis = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_logis <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_logis <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "logis",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -524,7 +677,7 @@ dist_test_comp_legendtext = c()
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_logis <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_logis <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "logis",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -538,10 +691,25 @@ dist_test_comp_legendtext = c()
 		
 		filter_empty_rows = BSkyFormat2(fitg_logis)$tables[[1]]
 		filter_empty_rows = filter_empty_rows[filter_empty_rows[,2]!="",]
+		
+		tmp_row = filter_empty_rows[2,]
+		filter_empty_rows[2,] = filter_empty_rows[3,]
+		filter_empty_rows[3,] = tmp_row
+		filter_empty_rows[2,1] = "Std. Error"
+		
 		BSkyFormat(filter_empty_rows, 
 						outputTableRenames = paste("Summary: logistic distribution fit test for {{selected.variableSelcted | safe}}"))
 		
 		gofstat_format(dist_test_list = fitg_logis, fitname_list = c("logistic"))
+	}
+		
+	if(!is.null(fitg_logis)) {
+		b1 = NULL
+		b1 = suppressWarnings(bootdist(fitg_logis, niter= boost_niter))
+		CIcdfplot(b1, CI.level= 95/100, CI.output = "probability", main = "Probability plot (Empirical and Theoretical CDF with 95% CI) for {{selected.variableSelcted | safe}}", xlab="{{selected.variableSelcted | safe}}")
+	}
+		
+	if(!is.null(fitg_logis)) {
 		plot(fitg_logis, demp = TRUE)
 		cdfcomp(fitg_logis, addlegend=TRUE)
 		denscomp(fitg_logis, addlegend=TRUE)
@@ -554,7 +722,7 @@ dist_test_comp_legendtext = c()
 	fitg_cauchy = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_cauchy <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_cauchy <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "cauchy",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -563,7 +731,7 @@ dist_test_comp_legendtext = c()
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_cauchy <- fitdistrplus::fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_cauchy <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
 							distr = "cauchy",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -577,10 +745,25 @@ dist_test_comp_legendtext = c()
 		
 		filter_empty_rows = BSkyFormat2(fitg_cauchy)$tables[[1]]
 		filter_empty_rows = filter_empty_rows[filter_empty_rows[,2]!="",]
+		
+		tmp_row = filter_empty_rows[2,]
+		filter_empty_rows[2,] = filter_empty_rows[3,]
+		filter_empty_rows[3,] = tmp_row
+		filter_empty_rows[2,1] = "Std. Error"
+		
 		BSkyFormat(filter_empty_rows, 
 						outputTableRenames = paste("Summary: Cauchy distribution fit test for {{selected.variableSelcted | safe}}"))
 		
 		gofstat_format(dist_test_list = fitg_cauchy, fitname_list = c("Cauchy"))
+	}
+		
+	if(!is.null(fitg_cauchy)) {
+		b1 = NULL
+		b1 = suppressWarnings(bootdist(fitg_cauchy, niter= boost_niter))
+		CIcdfplot(b1, CI.level= 95/100, CI.output = "probability", main = "Probability plot (Empirical and Theoretical CDF with 95% CI) for {{selected.variableSelcted | safe}}", xlab="{{selected.variableSelcted | safe}}")
+	}
+		
+	if(!is.null(fitg_cauchy)) {
 		plot(fitg_cauchy, demp = TRUE)
 		cdfcomp(fitg_cauchy, addlegend=TRUE)
 		denscomp(fitg_cauchy, addlegend=TRUE)
@@ -845,7 +1028,7 @@ if(length(dist_test_comp_list) > 1){
 					],
             nav: {
                 name: localization.en.navigation,
-                icon: "icon-gaussian-function",
+                icon: "icon-sixsigma",
                 modal: config.id
             }
         };
