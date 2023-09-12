@@ -21,7 +21,7 @@ var localization = {
     coVarTerms1: "2nd variable/factor",
     coVarDst: "Selected covariances",
     optionsCoVarTerms: "Covariances",
-    parameterizeFormula: "Parameterize formula",
+    parameterizeFormula: "Show parameter labels",
     modelOptions: "Model options",
     method: "Select a method and approach (if applicable)",
     approach: "ML likelihood approach",
@@ -165,6 +165,7 @@ require(semTools)
     {{/if}}{{if (options.selected.combokid !="")}}\nlikelihood = "{{selected.combokid | safe}}",
     {{/if}}{{if (options.selected.gpbox2 != "" )}}se ="{{selected.gpbox2 | safe}}", 
     {{/if}}{{if (options.selected.gpbox2 == "bootstrap" )}}bootstrap = {{selected.bootstratRep   | safe}},
+    {{/if}}{{ if(options.selected.allLatentLoadingRemoved)}},std.lv=TRUE,
     {{/if}}missing = "{{selected.missing | safe}}", data = {{dataset.name}})
 BSkySummaryRes <- summary({{selected.modelname | safe}}, fit.measures = TRUE{{if(options.selected.gpbox1 =="endo")}}, rsq = TRUE{{/if}} {{if (options.selected.gpbox2 == "bootstrap" )}},ci = TRUE{{/if}})
 print.lavaan.summary_bsky(BSkySummaryRes)
@@ -330,10 +331,12 @@ if (has_nas) {
           label: localization.en.sem,
           filter: "Numeric|Date|Logical|Scale|semFactor",
           extraction: "NoPrefix|UsePlus",
+          placeHolderText: "Enter latent trait name",
+          type: "normal",
           required: false,
           suppCtrlIds: ["semSuppCtrl1", "modelTerms", "modelTerms1", "coVarTerms", "coVarTerms1"],
           //When deleting higher order factor variables, we need to remove higher order factor names from these controls
-          ctrlsToDeleteFrom: ["sem2", "sem3"],
+          ctrlsToDeleteFrom: ["sem2", "sem3", "mediationDestCtrl"],
         }), r: ['{{ var | safe}}']
       },
       semSuppCtrl1: {
@@ -348,11 +351,13 @@ if (has_nas) {
           label: localization.en.sem2,
           no: "sem2",
           filter: "Numeric|Date|Logical|Scale|semFactor",
+          placeHolderText: "Enter higher order factor name",
+          type: "normal",
           extraction: "NoPrefix|UsePlus",
           required: false,
           suppCtrlIds: ["modelTerms", "modelTerms1", "coVarTerms", "coVarTerms1"],
           //When deleting higher order factor variables, we need to remove higher order factor names from these controls
-          ctrlsToDeleteFrom: ["sem3" ],
+          ctrlsToDeleteFrom: ["sem3", "mediationDestCtrl" ],
         }), r: ['{{ var | safe}}']
       },
       label1: {
@@ -381,7 +386,14 @@ if (has_nas) {
       modelTermsDst: {
         el: new semModelTermsDest(config, {
           action: "move",
-          no: "modelTermsDst", label: localization.en.modelTermsDst, filter: "String|Numeric|Logical|Ordinal|Nominal|Scale", extraction: "modelTerms", firstModelTermCtrl: "modelTerms", secondModelTermCtrl: "modelTerms1"
+          no: "modelTermsDst", label: localization.en.modelTermsDst, 
+          filter: "String|Numeric|Logical|Ordinal|Nominal|Scale", 
+          extraction: "modelTerms", 
+          firstModelTermCtrl: "modelTerms", 
+          secondModelTermCtrl: "modelTerms1",
+          //suppCtrlIds: ["modelTerms", "modelTerms1", "coVarTerms", "coVarTerms1"],
+          suppCtrlAddIds: ["mediationSrcCtrl"],
+          suppCtrlDeleteIds: ["mediationSrcCtrl", "mediationDestCtrl" ]
         })
       },
       coVarTerms: {
@@ -400,7 +412,10 @@ if (has_nas) {
       coVarDst: {
         el: new semModelTermsDest(config, {
           action: "move",
-          no: "coVarDst", label: localization.en.coVarDst, filter: "String|Numeric|Logical|Ordinal|Nominal|Scale", extraction: "coVariances", firstModelTermCtrl: "coVarTerms", secondModelTermCtrl: "coVarTerms1"
+          no: "coVarDst", label: localization.en.coVarDst, filter: "String|Numeric|Logical|Ordinal|Nominal|Scale", 
+          extraction: "coVariances", 
+          firstModelTermCtrl: "coVarTerms", 
+          secondModelTermCtrl: "coVarTerms1"
         })
       },
       equalityConstraints1: {
@@ -413,6 +428,8 @@ if (has_nas) {
       sem3: {
         el: new semControl(config, {
           label: localization.en.sem3,
+          placeHolderText: "",
+          type: "equalityConstraint",
           no: "sem3",
           equalityConstraints: true,
           filter: "Numeric|Date|Logical|Scale|semFactor|relation|covariance|structuralParameter",
@@ -874,6 +891,25 @@ if (has_nas) {
           width: "w-25",
         })
       },
+      mediationSrcCtrl: {
+        el: new semSuppCtrl(config, {
+          action: "move",
+          no: "mediationSrcCtrl", 
+          label: localization.en.mediationCtrl
+        })
+      },
+      mediationDestCtrl: {
+        el: new semControl(config, {
+          label: localization.en.mediationDestCtrl,
+          no: "mediationDestCtrl",
+          //filter: "Numeric|Date|Logical|Scale|semFactor",
+          filter: "Numeric|Date|Logical|Scale|semFactor|relation|covariance|structuralParameter",
+          placeHolderText: "Enter higher order factor name",
+          type: "normal",
+          extraction: "NoPrefix|UsePlus",
+          required: false,  
+        }), r: ['{{ var | safe}}']
+      },
     }
     var secOrderFactors = {
       el: new optionsVar(config, {
@@ -1008,6 +1044,19 @@ if (has_nas) {
         ],
       })
     };
+    var mediation = {
+      el: new optionsVar(config, {
+        no: "mediation_options",
+        name: "Mediation",
+        layout: "two",
+        left: [
+          objects.mediationSrcCtrl.el,
+        ],
+        right: [
+          objects.mediationDestCtrl.el
+        ],
+      })
+    };
     var semPlotOptions = {
       el: new optionsVar(config, {
         no: "semPlotOptions",
@@ -1038,7 +1087,7 @@ if (has_nas) {
       head: [objects.modelname.el.content],
       left: [objects.content_var.el.content],
       right: [objects.parameterizeFormula.el.content, objects.autoComputeCovar.el.content, objects.sem.el.content],
-      bottom: [secOrderFactors.el.content, optionsModelTerms.el.content, optionsCoVarTerms.el.content, equalConst.el.content,modelOptions.el.content, outputOptions.el.content, semPlotOptions.el.content, parameterOptions.el.content],
+      bottom: [secOrderFactors.el.content, optionsModelTerms.el.content, mediation.el.content, optionsCoVarTerms.el.content, equalConst.el.content,modelOptions.el.content, outputOptions.el.content, semPlotOptions.el.content, parameterOptions.el.content],
       nav: {
         name: localization.en.navigation,
         icon: "icon-b",
@@ -1075,9 +1124,17 @@ if (has_nas) {
     let higherOrderFactors = code_vars.selected["sem2"]
     let preTransModelTermsDst = code_vars.selected["modelTermsDst"]
     let preTranscoVarDst = code_vars.selected["coVarDst"]
+    //Storing original latent variables in oriLatentvars so we can compare length correctly when the latent variables are removed due toequality constraints
+    let oriLatentvars = common.transform(latentVars, "NoPrefix|UsePlus","sem_sem" )
+    //Resetting the parameter constraints we need to recompute the parameter constraints bececause we may have equality constraints
+    $(`#${instance.config.id}`).attr('parameterCount', 0)
     Object.keys(equalConstraints).forEach(function (key, index) {
           equalConstraints[key].forEach(function (element, index) {
-          
+            //We return an object as we need to track when structural parameters are defined
+            if (typeof(element) == "object")
+            {
+                element = element ["item"]
+            }   
           if (element.includes ("->"))
           {
               firstTerm = element.split("->")[0]
@@ -1085,7 +1142,7 @@ if (has_nas) {
           } else if (element.includes ("<->"))
           {
             firstTerm = element.split("<->")[0]
-            secondTerm =element.split("<->")[1]
+            secondTerm = element.split("<->")[1]
           }
           if (Object.keys(latentVars).length  != 0)
           {
@@ -1133,16 +1190,23 @@ if (has_nas) {
           }	
           })
     })
-	//Performing the transformations after adjustments, extraction has to be passed
+	//We needed to determine whether all latent loadings were removed due to the definition of equality constraints
+  //This was why we needed to get the syntax with all the latent loadings to determine the original state
+  //If all the latent loadings were removed, we need to pass std.lv=TRUE in fit4 <- sem(model4, data = HolzingerSwineford1939,std.lv=TRUE)
+  //resetting the parameter count as we have to regenerate latent variables after the adjustment of equality constraints are made
+  $(`#${instance.config.id}`).attr('parameterCount', 0)
+  //Performing the transformations after adjustments, extraction has to be passed
 	code_vars.selected["sem"] = common.transform(latentVars, "NoPrefix|UsePlus","sem_sem" )
+  if (oriLatentvars.length != 0 && code_vars.selected["sem"].length ==0)
+  {
+    code_vars.selected["allLatentLoadingRemoved"] = true
+  }
 	code_vars.selected["sem2"] = common.transform(higherOrderFactors, "NoPrefix|UsePlus","sem_sem2" )
 	code_vars.selected["sem3"] = common.transform(equalConstraints, "equalityConstraints","sem_sem3" )
 	code_vars.selected["modelTermsDst"] = common.transform(preTransModelTermsDst, "modelTerms","sem_modelTermsDst" )
   code_vars.selected["coVarDst"] = common.transform(preTranscoVarDst, "coVariances","sem_coVarDst" )
-	
     let item = '{{item | safe}}';
-   // endoExo = instance.objects.sem.el.getVal()
-   endoExo =latentVars
+      endoExo =latentVars
     Object.keys(endoExo).forEach(function (key, index) {
       endoExo[key].forEach(function (element, index) {
         if (!allVarsArray.includes(element)) {
@@ -1158,10 +1222,11 @@ if (has_nas) {
         finalRetString = finalRetString + "," + tempretval
       }
     })
-    if (code_vars.selected.combokid == null || code_vars.selected.combokid == 'null') code_vars.selected.combokid = ""
+    if (code_vars.selected.combokid == null || code_vars.selected.combokid == 'null') 
+      code_vars.selected.combokid = ""
     code_vars.selected.endoExoString = finalRetString
     code_vars.selected.useSemFunction = true
-    if (code_vars.selected.modelTermsDst.length == 0 && code_vars.selected.sem.length == 0) {
+    if (code_vars.selected.modelTermsDst.length == 0 && oriLatentvars.length == 0) {
       dialog.showMessageBoxSync({ type: "error", buttons: ["OK"], title: "Required controls not populated", message: `You need to specify latent traits or a relationship.` })
       return res
     } else if (code_vars.selected.modelTermsDst.length == 0) {
@@ -1203,9 +1268,7 @@ if (has_nas) {
     code_vars.selected.allvars = allVarsArray.join(separator)
     const cmd = instance.dialog.renderR(code_vars);
     res.push({ cmd: cmd, cgid: newCommandGroup() })
-    $(`#${instance.config.id}`).attr('parameterCount', 0)
-
-    return res;
+       return res;
   }
 }
 module.exports.item = new sem().render()
