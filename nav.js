@@ -126,8 +126,7 @@ const nav = {
                 "./binomialTestSingleSample",
                 "./proportionTestSingleSample"
             ]
-        },
-        "./sem",           
+        },       
         {
             "name": "Summary",
             "icon": "icon-sigma",
