@@ -4,6 +4,7 @@ var localization = {
         title: "Frequency Table",
         navigation: "Frequencies",
         subsetvars: "Select variables",
+        order: "Sort in decending order",
         help: {
             title: "Frequency Table",
             r_help: "help(ftable, package=stats)",
@@ -38,7 +39,7 @@ class frequencyTable extends baseModal {
 #Run the the frequency command            
 {{dataset.name}} %>%
     dplyr::select({{selected.subsetvars | safe}}) %>%
-      BSkyFrequency() %>%
+      BSkyFrequency(decreasing = {{selected.order | safe}}) %>%
         BSkyFormat()
 `
         }
@@ -53,10 +54,19 @@ class frequencyTable extends baseModal {
                     required: true
                 }), r: ['{{ var | safe}}']
             },
+            order: {
+                el: new checkbox(config, {
+                  label: localization.en.order,
+                  no: "order",
+                  newline: true,
+                  extraction: "Boolean",
+                  state: "checked"
+                })
+              },
         }
         const content = {
             left: [objects.content_var.el.content],
-            right: [objects.subsetvars.el.content],
+            right: [objects.subsetvars.el.content,objects.order.el.content ],
             nav: {
                 name: localization.en.navigation,
                 icon: "icon-f",
