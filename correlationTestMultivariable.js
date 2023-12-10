@@ -61,7 +61,7 @@ require(dplyr);
 {{if(options.selected.displayErrorMessage)}}cat("WARNING: More than 2 variables need to be selected for the webplot to display")\n{{/if}}
 {{dataset.name}} %>%
 dplyr::select({{selected.tvarbox1 | safe}}) %T>%
-    BSkyPlotCorrelationMatrix(
+    BSkyPlotCorrelationMatrix( correlationType = "{{selected.gpbox2 | safe}}",
         visualizeCorrelation = {{selected.visualizeCorrelation | safe}}, 
         plotWeb = {{selected.plotweb | safe}}) %>%
     BSkyCorrelationMatrix(
