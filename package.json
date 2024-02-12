@@ -4,6 +4,7 @@
     "description": "BlueSky Statistics Analysis dialogs",
     "main": "nav.js",
     "version": "1.2.0",
+	"minBSkyVersion":"8.93",	
     "group": "dialogs",
     "subscriptions": ["BASE (Free Forever)"],
     "moduleMeta": {
