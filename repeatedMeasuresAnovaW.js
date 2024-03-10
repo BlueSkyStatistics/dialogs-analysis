@@ -253,7 +253,7 @@ if (exists('BSkyLevenesFactor')) rm(BSkyLevenesFactor)
                 el: new dstVariable(config, {
                     label: localization.en.subjectID,
                     no: "subjectID",
-                    filter: "Numeric|Scale",
+                    filter: "String|Numeric|Ordinal|Nominal|Scale",
                     extraction: "NoPrefix|UseComma",
                 }), r: ['{{ subjectID | safe}}']
             },
