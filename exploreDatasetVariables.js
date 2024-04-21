@@ -16,7 +16,7 @@ var localization = {
 			body: `
 				<b>Description</b></br>
 				Outputs the following descriptive statistics and plots:
-				min, max, mean, median, modes, sum, sd, cv (coefficient of variance), var, stderror, skew, kurtosi, mad, iqr, and quartiles. In addition, 95% confidence interval for mean and sd are computed. Histogram and QQ plots are displyed. 
+				min, max, mean, median, modes, sum, sd, cv (coefficient of variance), var, stderror, skew, kurtosi, mad, iqr, and quartiles. In addition, 95% confidence interval for mean and sd are computed. Histogram and QQ plots are displayed. 
 				<br/>
 				<br/>
 				For the detail help - use R help(summary, package = base)
