@@ -94,7 +94,7 @@ var localization = {
 class distributionFit extends baseModal {
     constructor() {
         var config = {
-            id: "distributionFit",
+            id: "distributionFit1",
             label: localization.en.title,
             modalType: "two",
             RCode:`
@@ -123,11 +123,14 @@ dist_test_comp_list = list()
 dist_test_comp_legendtext = c()
 boost_niter = 600
 
+bSkyVarData = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}})
+bSkyVarData = bSkyVarData[!is.na(bSkyVarData)]
+
 {{if(options.selected.normDistChk === 'TRUE')}} 
 	fitg_norm = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_norm <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_norm <- fitdist(data = bSkyVarData, 
 							distr = "norm",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -136,7 +139,7 @@ boost_niter = 600
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_norm <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_norm <- fitdist(data = bSkyVarData, 
 							distr = "norm",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -182,7 +185,7 @@ boost_niter = 600
 	fitg_weibull = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_weibull <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_weibull <- fitdist(data = bSkyVarData, 
 							distr = "weibull",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -191,7 +194,7 @@ boost_niter = 600
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_weibull <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_weibull <- fitdist(data = bSkyVarData, 
 							distr = "weibull",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -236,7 +239,7 @@ boost_niter = 600
 	fitg_lnorm = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_lnorm <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_lnorm <- fitdist(data = bSkyVarData, 
 							distr = "lnorm",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -245,7 +248,7 @@ boost_niter = 600
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_lnorm <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_lnorm <- fitdist(data = bSkyVarData, 
 							distr = "lnorm",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -290,7 +293,7 @@ boost_niter = 600
 	fitg_poisson = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_poisson <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_poisson <- fitdist(data = bSkyVarData, 
 							distr = "pois",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -299,7 +302,7 @@ boost_niter = 600
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_poisson <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_poisson <- fitdist(data = bSkyVarData, 
 							distr = "pois",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -344,7 +347,7 @@ boost_niter = 600
 	fitg_exp = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_exp <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_exp <- fitdist(data = bSkyVarData, 
 							distr = "exp",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -353,7 +356,7 @@ boost_niter = 600
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_exp <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_exp <- fitdist(data = bSkyVarData, 
 							distr = "exp",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -398,7 +401,7 @@ boost_niter = 600
 	fitg_gamma = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_gamma <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_gamma <- fitdist(data = bSkyVarData, 
 							distr = "gamma",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -407,7 +410,7 @@ boost_niter = 600
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_gamma <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_gamma <- fitdist(data = bSkyVarData, 
 							distr = "gamma",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -452,7 +455,7 @@ boost_niter = 600
 	fitg_nbinom = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_nbinom <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_nbinom <- fitdist(data = bSkyVarData, 
 							distr = "nbinom",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -461,7 +464,7 @@ boost_niter = 600
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_nbinom <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_nbinom <- fitdist(data = bSkyVarData, 
 							distr = "nbinom",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -506,7 +509,7 @@ boost_niter = 600
 	fitg_geom = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_geom <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_geom <- fitdist(data = bSkyVarData, 
 							distr = "geom",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -515,7 +518,7 @@ boost_niter = 600
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_geom <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_geom <- fitdist(data = bSkyVarData, 
 							distr = "geom",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -560,7 +563,7 @@ boost_niter = 600
 	fitg_beta = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_beta <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_beta <- fitdist(data = bSkyVarData, 
 							distr = "beta",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -569,7 +572,7 @@ boost_niter = 600
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_beta <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_beta <- fitdist(data = bSkyVarData, 
 							distr = "beta",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -614,7 +617,7 @@ boost_niter = 600
 	fitg_unif = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_unif <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_unif <- fitdist(data = bSkyVarData, 
 							distr = "unif",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -623,7 +626,7 @@ boost_niter = 600
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_unif <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_unif <- fitdist(data = bSkyVarData, 
 							distr = "unif",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -668,7 +671,7 @@ boost_niter = 600
 	fitg_logis = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_logis <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_logis <- fitdist(data = bSkyVarData, 
 							distr = "logis",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -677,7 +680,7 @@ boost_niter = 600
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_logis <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_logis <- fitdist(data = bSkyVarData, 
 							distr = "logis",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
@@ -722,7 +725,7 @@ boost_niter = 600
 	fitg_cauchy = NULL
 	{{if(options.selected.method === "mge")}}
 		suppressWarnings(
-			fitg_cauchy <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_cauchy <- fitdist(data = bSkyVarData, 
 							distr = "cauchy",
 							method = '{{selected.method | safe}}',
 							gof = '{{selected.gof | safe}}',
@@ -731,7 +734,7 @@ boost_niter = 600
 		)
 	{{#else}}
 		suppressWarnings(
-			fitg_cauchy <- fitdist(data = as.numeric({{dataset.name}}\${{selected.variableSelcted | safe}}), 
+			fitg_cauchy <- fitdist(data = bSkyVarData, 
 							distr = "cauchy",
 							method = '{{selected.method | safe}}',
 							keepdata = TRUE
