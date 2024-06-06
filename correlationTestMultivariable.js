@@ -134,7 +134,7 @@ dplyr::select({{selected.tvarbox1 | safe}}) %T>%
         }
         temp = temp + instance.dialog.renderR(code_vars);
         const cmd = temp
-        res.push({ cmd: cmd, cgid: newCommandGroup() })
+        res.push({ cmd: cmd, cgid: newCommandGroup(`${instance.config.id}`,`${instance.config.label}`), oriR :instance.config.RCode, code_vars : code_vars })
         return res;
     }
 }
