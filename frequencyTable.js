@@ -44,8 +44,8 @@ class frequencyTable extends baseModal {
             label: localization.en.title,
             modalType: "two",
             RCode:`
-
-#Run the the frequency command            
+library(kableExtra) 
+#Run the the frequency command   
 {{dataset.name}} %>%
     dplyr::select({{selected.subsetvars | safe}}) %>%
       BSkyFrequency(order_by = c('{{selected.gpbox1 | safe}}'), decreasing = {{selected.selectSortOrderChk | safe}}) %>%
