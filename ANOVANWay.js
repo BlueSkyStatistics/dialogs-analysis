@@ -1,6 +1,7 @@
 var localization = {
     en: {
         title: "ANOVA, N way",
+        modelname:"Enter a name for the model",
         label3: "Effect size",
         confInterval: "Confidence interval for effect sizes",
         effectsizes: "Select effect size measure",
@@ -24,6 +25,11 @@ var localization = {
         horizontalAxis: "Separate lines",
         separateLines: "Horizontal axis",
         separatePlots: "Separate plots",
+        labelSaveResiduals: "Save model statistics to the dataset",
+        residuals: "Residuals are saved with a variable name residuals with an optional prefix",
+        stuResiduals: "Studentized residuals are saved with a variable name resStudentized with an optional prefix",
+        fittedVals: "Fitted values are saved with a variable name fitted with an optional prefix", 
+        prefixForSavedStatistics: "Optionally enter a prefix for saved values above, the prefix is appended to the variables name(s) above",
         help: {
             title: "ANOVA, N way",
             r_help: "help(aov, package='stats')",
@@ -73,6 +79,18 @@ class ANOVANWay extends baseModal {
         }
         var objects = {
             content_var: { el: new srcVariableList(config, { action: "copy", scroll:true }) },
+            modelname: {
+                el: new input(config, {
+                    no: 'modelname',
+                    label: localization.en.modelname,
+                    placeholder: "",
+                    required: true,
+                    type: "character",
+                    extraction: "TextAsIs",
+                    value: "NWayAnova",
+                    overwrite: "dataset"
+                })
+            },
             target: {
                 el: new dstVariable(config, {
                     label: localization.en.target,
@@ -226,6 +244,46 @@ class ANOVANWay extends baseModal {
                     default: "partial_eta_squared"
                 })
             },
+            labelSaveResiduals: { el: new labelVar(config, { no: 'labelSaveResiduals', style: "mt-3",label: localization.en.labelSaveResiduals, h: 5 }) },
+
+            residuals: {
+                el: new checkbox(config, {
+                label: localization.en.residuals,
+                no: "residuals",
+                extraction: "Boolean"
+                })
+            },
+            
+            
+            stuResiduals: {
+                el: new checkbox(config, {
+                label: localization.en.stuResiduals,
+                no: "stuResiduals",
+                extraction: "Boolean"
+                })
+            },
+            
+            fittedVals: {
+                el: new checkbox(config, {
+                label: localization.en.fittedVals,
+                no: "fittedVals",
+                extraction: "Boolean"
+                })
+            },
+
+            prefixForSavedStatistics: {
+                            el: new input(config, {
+                                no: 'prefixForSavedStatistics',
+                                label: localization.en.prefixForSavedStatistics,
+                                placeholder: "",
+                                type: "character",
+                                enforceRobjectRules:false,
+                                extraction: "TextAsIs",
+                                value: "",
+                                allowSpacesNew: false,
+                                })
+                        },   
+
         };
         var opts = {
             el: new optionsVar(config, {
@@ -244,12 +302,17 @@ class ANOVANWay extends baseModal {
                     objects.label3.el,
                     objects.confInterval.el,
                     objects.effectsizes.el,
+                    objects.labelSaveResiduals.el,
+                    objects.residuals.el,
+                    objects.stuResiduals.el,
+                    objects.fittedVals.el,
+					objects.prefixForSavedStatistics.el
                 ]
             })
         };
         const content = {
             left: [objects.content_var.el.content],
-            right: [objects.target.el.content, objects.formulaBuilder.el.content, objects.label4.el.content, objects.horizontalAxis.el.content, objects.separateLines.el.content, objects.separatePlots.el.content],
+            right: [objects.modelname.el.content,objects.target.el.content, objects.formulaBuilder.el.content, objects.label4.el.content, objects.horizontalAxis.el.content, objects.separateLines.el.content, objects.separatePlots.el.content],
             bottom: [opts.el.content],
             nav: {
                 name: localization.en.navigation,
@@ -281,10 +344,11 @@ require(effectsize);
 #Setting contrasts
 contrasts({{dataset.name }}\${{selected.dest | safe}}) <- contr.sum
 #Creating the model
-BSkyMultiAnova =as.data.frame(summary(MultiAnova <-aov({{selected.target | safe}}~{{selected.formula | safe}},data ={{dataset.name }}))[[1]])
-{{if (options.selected.diag =="TRUE") }}#Displaying diagnostic plots\nplot(MultiAnova, main = "Diagnostic Plots")\n{{/if}}
+BSkyFormula = {{selected.target | safe}}~{{selected.formula | safe}}
+BSky{{select.modelname | safe}} =as.data.frame(summary({{selected.modelname | safe}} <-aov({{selected.target | safe}}~{{selected.formula | safe}},data ={{dataset.name }}))[[1]])
+{{if (options.selected.diag =="TRUE") }}#Displaying diagnostic plots\nplot({{selected.modelname | safe}}, main = "Diagnostic Plots")\n{{/if}}
 #Creating the ANOVA table with type I/II/III sum of squares
-anovaTable =as.data.frame(car::Anova(MultiAnova,type ="{{selected.type | safe}}"))
+anovaTable =as.data.frame(car::Anova({{selected.modelname | safe}},type ="{{selected.type | safe}}"))
 BSkyFormat(BSkyMultiAnova,singleTableOutputHeader = "ANOVA table with type III sum of squares for {{selected.target | safe}} by {{selected.dest | safe}}")
 `};
         let snippet2 = {
@@ -296,21 +360,22 @@ require(ggplot2);
 require(multcomp);
 require(effectsize);
 #Generating summaries
-temp <-{{dataset.name }} %>%\n\t group_by({{selected.dest | safe}}) %>%\n\t
+BSkyTemp <-{{dataset.name }} %>%\n\t group_by({{selected.dest | safe}}) %>%\n\t
     summarise(n = n(),mean = mean({{selected.target | safe}},na.rm = TRUE),median = median({{selected.target | safe}},na.rm = TRUE),min = min({{selected.target | safe}},na.rm = TRUE),max = max({{selected.target | safe}},na.rm = TRUE),sd = sd({{selected.target | safe}},na.rm = TRUE),variance = var({{selected.target | safe}},na.rm = TRUE))
-names(temp)[1] ="{{selected.dest | safe}}"
-BSkyFormat( as.data.frame(temp),singleTableOutputHeader = "Summaries for {{selected.target | safe}} by factor variable {{selected.dest | safe}} ")
+names(BSkyTemp)[1] ="{{selected.dest | safe}}"
+BSkyFormat( as.data.frame(BSkyTemp),singleTableOutputHeader = "Summaries for {{selected.target | safe}} by factor variable {{selected.dest | safe}} ")
 #Setting contrasts
 contrasts({{dataset.name }}\${{selected.dest | safe}}) <- contr.sum
 #Creating the model
-BSkyMultiAnova =as.data.frame(summary(MultiAnova <-aov({{selected.target | safe}}~{{selected.dest | safe}},data ={{dataset.name }}))[[1]])
-{{if (options.selected.diag =="TRUE") }}#Displaying diagnostic plots\nplot(MultiAnova, main ="Diagnostic Plots"){{/if}}
+
+BSkyMultiAnova =as.data.frame(summary({{selected.modelname | safe}} <-aov({{selected.target | safe}}~{{selected.dest | safe}},data ={{dataset.name }}))[[1]])
+{{if (options.selected.diag =="TRUE") }}#Displaying diagnostic plots\nplot({{selected.modelname | safe}}, main ="Diagnostic Plots"){{/if}}
 #Creating the ANOVA table with type I/II/III sum of squares
-anovaTable =as.data.frame(car::Anova(MultiAnova,type ="{{selected.type | safe}}"))
+anovaTable =as.data.frame(car::Anova({{selected.modelname | safe}},type ="{{selected.type | safe}}"))
 BSkyFormat(BSkyMultiAnova,singleTableOutputHeader = "ANOVA table with type {{selected.type | safe}} sum of squares for {{selected.target | safe}} by {{selected.dest | safe}}")
 #Displaying estimated marginal means
 resultsEmmeans = list()
-resultsEmmeans<-emmeans::emmeans(MultiAnova,~{{selected.dest | safe}})
+resultsEmmeans<-emmeans::emmeans({{selected.modelname | safe}},~{{selected.dest | safe}})
 BSkyFormat( data.frame(resultsEmmeans),singleTableOutputHeader ="Estimated Marginal Means for {{selected.target | safe}} by {{selected.dest | safe}}, CI=0.95")
 {{if (options.selected.levene == "TRUE") }}
 #Levene's Test
@@ -334,31 +399,56 @@ print(plot( contrast(resultsEmmeans,method = "{{selected.combon | safe}}", adjus
         let snippet3 = "require(emmeans);\nrequire(car);\nrequire(dplyr);\nrequire(ggplot2);\nrequire(multcomp);\nrequire(effectsize);";
         let snippet4 = {
             RCode: `
-temp <-{{dataset.name }} %>%\n\tgroup_by({{selected.dest | safe}}) %>%\n\t
+BSkyTemp <-{{dataset.name }} %>%\n\tgroup_by({{selected.dest | safe}}) %>%\n\t
     summarise(n = n(),mean = mean({{selected.target | safe}},na.rm = TRUE),median = median({{selected.target | safe}},na.rm = TRUE),min = min({{selected.target | safe}},na.rm = TRUE),max = max({{selected.target | safe}},na.rm = TRUE),sd = sd({{selected.target | safe}},na.rm = TRUE),variance = var({{selected.target | safe}},na.rm = TRUE))
-names(temp)[1] ="{{selected.dest | safe}}"
-BSkyFormat( as.data.frame(temp),singleTableOutputHeader = "Summaries for {{selected.target | safe}} by factor variable {{selected.dest | safe}} ")
+names(BSkyTemp)[1] ="{{selected.dest | safe}}"
+BSkyFormat( as.data.frame(BSkyTemp),singleTableOutputHeader = "Summaries for {{selected.target | safe}} by factor variable {{selected.dest | safe}} ")
 `};
         let snippet5 = {
             RCode: `
-temp <-{{dataset.name }} %>%\n\t group_by({{selected.commaSepDest | safe}}) %>%\n\t
+BSkyTemp <-{{dataset.name }} %>%\n\t group_by({{selected.commaSepDest | safe}}) %>%\n\t
     summarise(n = n(),mean = mean({{selected.target | safe}},na.rm = TRUE),median = median({{selected.target | safe}},na.rm = TRUE),min = min({{selected.target | safe}},na.rm = TRUE),max = max({{selected.target | safe}},na.rm = TRUE),sd = sd({{selected.target | safe}},na.rm = TRUE),variance = var({{selected.target | safe}},na.rm = TRUE))
-names(temp)[1] ="{{selected.dest | safe}}"
-BSkyFormat( as.data.frame(temp),singleTableOutputHeader = "Summaries for {{selected.target | safe}} by factor variables {{selected.commaSepDest | safe}}")
+names(BSkyTemp)[1] ="{{selected.dest | safe}}"
+BSkyFormat( as.data.frame(BSkyTemp),singleTableOutputHeader = "Summaries for {{selected.target | safe}} by factor variables {{selected.commaSepDest | safe}}")
 `};
         let snippet6 = {
             RCode: `
 contrasts({{dataset.name }}\${{selected.dest | safe}}) <- contr.sum`};
         let snippet7 = {
             RCode: `
-BSkyMultiAnova =as.data.frame(summary(MultiAnova <- aov({{selected.target | safe}} ~ {{selected.dependentVars | safe}}, data ={{dataset.name }}))[[1]])
+BSkyFormula ={{selected.target | safe}} ~ {{selected.dependentVars | safe}}
+\nBSkyMultiAnova =as.data.frame(summary({{selected.modelname | safe}} <- aov({{selected.target | safe}} ~ {{selected.dependentVars | safe}}, data ={{dataset.name }}))[[1]])
 #Creating the Anova table with type I/II/III sum of squares
-anovaTable =as.data.frame(car::Anova(MultiAnova,type ="{{selected.type | safe}}"))
-BSkyFormat(BSkyMultiAnova,singleTableOutputHeader = "ANOVA table with type {{selected.type | safe}} sum of squares for {{selected.target | safe}} by {{selected.dependentVars | safe}}")`};
+anovaTable =as.data.frame(car::Anova({{selected.modelname | safe}},type ="{{selected.type | safe}}"))
+BSkyFormat(BSkyMultiAnova,singleTableOutputHeader = "ANOVA table with type {{selected.type | safe}} sum of squares for {{selected.target | safe}} by {{selected.dependentVars | safe}}")
+
+{{if (options.selected.residuals)}}
+#Saving residuals to the dataset
+varsToCheckForNAs =base::all.vars(BSkyFormula[-2])
+varsToCheckForNAs =c("{{selected.target | safe}}",varsToCheckForNAs )
+{{dataset.name}}\${{selected.prefixForSavedStatistics | safe}}residuals[stats::complete.cases({{dataset.name}} %>% dplyr::select(tidyselect::one_of(varsToCheckForNAs)))] <- base::round(stats::residuals({{selected.modelname | safe}}), digits =BSkyGetDecimalDigitSetting())
+{{/if}}
+{{if (options.selected.stuResiduals)}}
+#Saving standardized residuals to the dataset
+varsToCheckForNAs =base::all.vars(BSkyFormula[-2])
+varsToCheckForNAs =c("{{selected.target | safe}}",varsToCheckForNAs )
+{{dataset.name}}\${{selected.prefixForSavedStatistics | safe}}resStudentized[stats::complete.cases({{dataset.name}} %>% dplyr::select(tidyselect::one_of(varsToCheckForNAs)))] <- base::round(stats::rstudent({{selected.modelname | safe}}), digits =BSkyGetDecimalDigitSetting())
+{{/if}}
+{{if (options.selected.fittedVals)}}
+#Saving fitted values to the dataset
+{{dataset.name}}\${{selected.prefixForSavedStatistics | safe}}fitted[stats::complete.cases({{dataset.name}} %>%  dplyr::select(tidyselect::one_of(varsToCheckForNAs)))] <- base::round(stats::fitted({{selected.modelname | safe}}), digits =BSkyGetDecimalDigitSetting())
+{{/if}}
+{{if (options.selected.residuals || options.selected.stuResiduals || options.selected.fittedVals)}}
+#Refreshing the dataset to display saved values in the data grid
+BSkyLoadRefresh("{{dataset.name}}")
+{{/if}}
+
+`};
+
         //Generating estimated marginal means
         let snippet8 = {
             RCode: `
-resEmmeans[[{{selected.counter |safe}}]]<-emmeans::emmeans(MultiAnova,~{{selected.dest | safe}})
+resEmmeans[[{{selected.counter |safe}}]]<-emmeans::emmeans({{selected.modelname | safe}},~{{selected.dest | safe}})
 BSkyFormat( data.frame(resEmmeans[[{{selected.counter | safe}}]]), singleTableOutputHeader = "Estimated Marginal Means for {{selected.target | safe}} by {{selected.dest | safe}}")`};
         let snippet9 = {
             RCode: `
@@ -388,34 +478,49 @@ print(plot( contrast(resEmmeans[[{{selected.counter |safe}}]],method = "{{select
             RCode: `
 {{if (options.selected.plot2 == "TRUE") }}
 BSkyFormat("Interaction plot with Confidence Intervals")
-print(emmeans::emmmip(MultiAnova, {{selected.stringInteractionPlots | safe}}  ,CIs=TRUE)){{/if}}`};
+print(emmeans::emmmip({{selected.modelname | safe}}, {{selected.stringInteractionPlots | safe}}  ,CIs=TRUE)){{/if}}`};
         let snippet14 = {
             RCode: `
-{{if (options.selected.diag =="TRUE") }}#Displaying diagnostic plots\nplot(MultiAnova, main = "Diagnostic Plots")\n{{/if}}
-{{if (options.selected.effectsizes == "eta_squared") }}BSkyEffectSizeResults <- eta_squared(MultiAnova, partial = FALSE, ci={{selected.confInterval | safe}}){{/if}}
-{{if (options.selected.effectsizes == "partial_eta_squared") }}BSkyEffectSizeResults <- eta_squared(MultiAnova, partial = TRUE, ci={{selected.confInterval | safe}}){{/if}}
-{{if (options.selected.effectsizes == "omega_squared") }}BSkyEffectSizeResults <- omega_squared(MultiAnova, ci={{selected.confInterval | safe}} ){{/if}}
-{{if (options.selected.effectsizes == "epsilon_squared") }}BSkyEffectSizeResults <- epsilon_squared(MultiAnova, ci={{selected.confInterval | safe}}){{/if}}
-{{if (options.selected.effectsizes == "cohens_f") }}BSkyEffectSizeResults <- cohens_f(MultiAnova, ci={{selected.confInterval | safe}}){{/if}}
+{{if (options.selected.diag =="TRUE") }}#Displaying diagnostic plots\nplot({{selected.modelname | safe}}, main = "Diagnostic Plots")\n{{/if}}
+{{if (options.selected.effectsizes == "eta_squared") }}BSkyEffectSizeResults <- eta_squared({{selected.modelname | safe}}, partial = FALSE, ci={{selected.confInterval | safe}}){{/if}}
+{{if (options.selected.effectsizes == "partial_eta_squared") }}BSkyEffectSizeResults <- eta_squared({{selected.modelname | safe}}, partial = TRUE, ci={{selected.confInterval | safe}}){{/if}}
+{{if (options.selected.effectsizes == "omega_squared") }}BSkyEffectSizeResults <- omega_squared({{selected.modelname | safe}}, ci={{selected.confInterval | safe}} ){{/if}}
+{{if (options.selected.effectsizes == "epsilon_squared") }}BSkyEffectSizeResults <- epsilon_squared({{selected.modelname | safe}}, ci={{selected.confInterval | safe}}){{/if}}
+{{if (options.selected.effectsizes == "cohens_f") }}BSkyEffectSizeResults <- cohens_f({{selected.modelname | safe}}, ci={{selected.confInterval | safe}}){{/if}}
 \nBSkyFormat( as.data.frame(BSkyEffectSizeResults), singleTableOutputHeader= "Effect Size for ANOVA (Type {{selected.type | safe}}): {{selected.effectsizes | safe}}, CI={{selected.confInterval | safe}}")
+#Removing temporary objects
+if (exists("BSkyFormula")) rm (BSkyFormula)
+if (exists("BSkyMultiAnova")) rm (BSkyMultiAnova)
+if (exists("anovaTable")) rm (anovaTable)
+if (exists("resultsEmmeans")) rm (resultsEmmeans)
+if (exists("BSky_Levene_Test")) rm (BSky_Levene_Test)
+if (exists("resContrasts")) rm (resContrasts)
+if (exists("resSummary")) rm (resSummary)
+if (exists("resultsContrasts")) rm (resultsContrasts)
+if (exists("BSkyTemp")) rm (BSkyTemp)
+if (exists("BSkyEffectSizeResults")) rm (BSkyEffectSizeResults)
+if (exists("resEmmeans")) rm (resEmmeans)
+if (exists("BSkyEffectSizeResults")) rm (BSkyEffectSizeResults)
+
+
 `
         };
         let snippet15 = {
             RCode: `
-    #emmip(MultiAnova, {{selected.horizontalAxis | safe}} ~ {{selected.separateLines | safe}} | {{selected.separatePlots | safe}})
-    emmeans::lsmip(MultiAnova, {{selected.horizontalAxis | safe}} ~ {{selected.separateLines | safe}} | {{selected.separatePlots | safe}},\n\tCIs = TRUE, ylab = "{{selected.target | safe}}")
+    #emmip({{selected.modelname | safe}}, {{selected.horizontalAxis | safe}} ~ {{selected.separateLines | safe}} | {{selected.separatePlots | safe}})
+    emmeans::lsmip({{selected.modelname | safe}}, {{selected.horizontalAxis | safe}} ~ {{selected.separateLines | safe}} | {{selected.separatePlots | safe}},\n\tCIs = TRUE, ylab = "{{selected.target | safe}}")
 `
         };
         let snippet16 = {
             RCode: `
-    #emmip(MultiAnova, {{selected.horizontalAxis | safe}} ~ {{selected.separateLines | safe}} )
-    emmeans::lsmip(MultiAnova, {{selected.horizontalAxis | safe}} ~ {{selected.separateLines | safe}}, \n\tCIs = TRUE, ylab = "{{selected.target | safe}}")
+    #emmip({{selected.modelname | safe}}, {{selected.horizontalAxis | safe}} ~ {{selected.separateLines | safe}} )
+    emmeans::lsmip({{selected.modelname | safe}}, {{selected.horizontalAxis | safe}} ~ {{selected.separateLines | safe}}, \n\tCIs = TRUE, ylab = "{{selected.target | safe}}")
 `
         };
         let snippet17 = {
             RCode: `
-    #emmip(MultiAnova, ~ {{selected.horizontalAxis | safe}} ! {{selected.separatePlots | safe}} )
-    emmeans::lsmip(MultiAnova, ~ {{selected.horizontalAxis | safe}} | {{selected.separatePlots | safe}}, \n\tCIs = TRUE, ylab = "{{selected.target | safe}}")
+    #emmip({{selected.modelname | safe}}, ~ {{selected.horizontalAxis | safe}} ! {{selected.separatePlots | safe}} )
+    emmeans::lsmip({{selected.modelname | safe}}, ~ {{selected.horizontalAxis | safe}} | {{selected.separatePlots | safe}}, \n\tCIs = TRUE, ylab = "{{selected.target | safe}}")
 `
         };
         // Simple effects tests
@@ -423,7 +528,7 @@ print(emmeans::emmmip(MultiAnova, {{selected.stringInteractionPlots | safe}}  ,C
             RCode: `
     #Simple effects test and descriptives
     #Holding the 2nd and 3rd factor variables constant
-    simpleEffectsRes <- emmeans(aov(MultiAnova), pairwise ~ {{selected.firstFactor}} | {{selected.secondFactor}} * {{selected.thirdFactor}} )
+    simpleEffectsRes <- emmeans(aov({{selected.modelname | safe}}), pairwise ~ {{selected.firstFactor}} | {{selected.secondFactor}} * {{selected.thirdFactor}} )
     simpleEffectsDes <- data.frame(simpleEffectsRes$emmeans)
     base::row.names(simpleEffectsDes) <- NULL
     BSkyFormat(simpleEffectsDes, singleTableOutputHeader = 'Descriptive Statistics for Simple Effects Tests -{{selected.firstFactor}}:{{selected.secondFactor}}:{{selected.thirdFactor}}')
@@ -431,7 +536,7 @@ print(emmeans::emmmip(MultiAnova, {{selected.stringInteractionPlots | safe}}  ,C
     base::row.names(simpleEffectsComp) <- NULL
     BSkyFormat(simpleEffectsComp, singleTableOutputHeader = 'Comparisons for {{selected.firstFactor}} holding {{selected.secondFactor}} and {{selected.thirdFactor}} constant')
     #Simple effects test holding the 2nd and 3rd factor variables constant
-    simpleEffectsRes <- emmeans(aov(MultiAnova), pairwise ~ {{selected.secondFactor}} | {{selected.firstFactor}} * {{selected.thirdFactor}} )
+    simpleEffectsRes <- emmeans(aov({{selected.modelname | safe}}), pairwise ~ {{selected.secondFactor}} | {{selected.firstFactor}} * {{selected.thirdFactor}} )
     #simpleEffectsDes <- as.data.frame(simpleEffectsRes$emmeans)
     #base::row.names(simpleEffectsDes) <- NULL
     #BSkyFormat(simpleEffectsDes, singleTableOutputHeader = 'Descriptive Statistics for Simple Effects Tests')
@@ -439,7 +544,7 @@ print(emmeans::emmmip(MultiAnova, {{selected.stringInteractionPlots | safe}}  ,C
     base::row.names(simpleEffectsComp) <- NULL
     BSkyFormat(simpleEffectsComp, singleTableOutputHeader = 'Comparisons for {{selected.secondFactor}} holding {{selected.firstFactor}} and {{selected.thirdFactor}} constant')
     #Simple effects test holding the 2nd and 3rd factor variables constant
-    simpleEffectsRes <- emmeans(aov(MultiAnova), pairwise ~ {{selected.thirdFactor}} | {{selected.firstFactor}} * {{selected.secondFactor}} )
+    simpleEffectsRes <- emmeans(aov({{selected.modelname | safe}}), pairwise ~ {{selected.thirdFactor}} | {{selected.firstFactor}} * {{selected.secondFactor}} )
     #simpleEffectsDes <- data.frame(simpleEffectsRes$emmeans)
     #base::row.names(simpleEffectsDes) <- NULL
     #BSkyFormat(simpleEffectsDes, singleTableOutputHeader = 'Descriptive Statistics for Simple Effects Tests')
@@ -452,7 +557,7 @@ print(emmeans::emmmip(MultiAnova, {{selected.stringInteractionPlots | safe}}  ,C
             RCode: `
     #Simple effects test and descriptives
     #Holding the 2st factor variable constant
-    simpleEffectsRes <- emmeans(aov(MultiAnova), pairwise ~ {{selected.firstFactor}} | {{selected.secondFactor}} )
+    simpleEffectsRes <- emmeans(aov({{selected.modelname | safe}}), pairwise ~ {{selected.firstFactor}} | {{selected.secondFactor}} )
     simpleEffectsDes <- data.frame(simpleEffectsRes$emmeans)
     base::row.names(simpleEffectsDes) <- NULL
     BSkyFormat(simpleEffectsDes, singleTableOutputHeader = 'Descriptive Statistics for Simple Effects Tests -{{selected.firstFactor}}:{{selected.secondFactor}}')
@@ -460,7 +565,7 @@ print(emmeans::emmmip(MultiAnova, {{selected.stringInteractionPlots | safe}}  ,C
     base::row.names(simpleEffectsComp) <- NULL
     BSkyFormat(simpleEffectsComp, singleTableOutputHeader = 'Comparisons for {{selected.firstFactor}} holding {{selected.secondFactor}} constant')
     #Holding the 1st factor variable constant
-    simpleEffectsRes <- emmeans(aov(MultiAnova), pairwise ~ {{selected.secondFactor}} | {{selected.firstFactor}} )
+    simpleEffectsRes <- emmeans(aov({{selected.modelname | safe}}), pairwise ~ {{selected.secondFactor}} | {{selected.firstFactor}} )
     simpleEffectsComp <- data.frame(simpleEffectsRes$contrasts)
     base::row.names(simpleEffectsComp) <- NULL
     BSkyFormat(simpleEffectsComp, singleTableOutputHeader = 'Comparisons for {{selected.secondFactor}} holding {{selected.firstFactor}} constant')
@@ -484,6 +589,13 @@ print(emmeans::emmmip(MultiAnova, {{selected.stringInteractionPlots | safe}}  ,C
                 compactly: instance.objects.compactly.el.getVal(),
                 diag: instance.objects.diag.el.getVal(),
                 plot1: instance.objects.plot1.el.getVal(),
+                modelname: instance.objects.modelname.el.getVal(),
+                residuals: instance.objects.residuals.el.getVal(),
+                stuResiduals: instance.objects.stuResiduals.el.getVal(),
+                fittedVals: instance.objects.fittedVals.el.getVal(),
+                prefixForSavedStatistics: instance.objects.prefixForSavedStatistics.el.getVal(),
+
+
             }
         }
         let NWayInteractions = {}
