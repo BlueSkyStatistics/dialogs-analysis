@@ -83,7 +83,8 @@ const nav = {
                 "./ttestIndependentSamplesLegacy",
                 "./ttestOneSample",
                 "./ttestOneSampleLegacy",
-                "./tTestIndependentSamplesTwoNumericVars"
+                "./tTestIndependentSamplesTwoNumericVars",
+                "./IntervalPlot"
             ]
         },
         {
@@ -124,7 +125,8 @@ const nav = {
             "children": [
                 "./proportionIndependentSamples",
                 "./binomialTestSingleSample",
-                "./proportionTestSingleSample"
+                "./proportionTestSingleSample",
+                "./proportionTestOneSampleBinomialMini"
             ]
         },       
         {
