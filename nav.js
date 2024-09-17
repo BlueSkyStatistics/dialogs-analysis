@@ -126,7 +126,8 @@ const nav = {
                 "./proportionIndependentSamples",
                 "./binomialTestSingleSample",
                 "./proportionTestSingleSample",
-                "./proportionTestOneSampleBinomialMini"
+                "./proportionTestOneSampleBinomialMini",
+                "./proportionTestTwoSampleBinomialMini"
             ]
         },       
         {
