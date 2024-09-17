@@ -83,8 +83,7 @@ const nav = {
                 "./ttestIndependentSamplesLegacy",
                 "./ttestOneSample",
                 "./ttestOneSampleLegacy",
-                "./tTestIndependentSamplesTwoNumericVars",
-                "./IntervalPlot"
+                "./tTestIndependentSamplesTwoNumericVars"
             ]
         },
         {
