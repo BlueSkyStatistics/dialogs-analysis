@@ -95,9 +95,17 @@ class proportionTestTwoSampleBinomialMini extends baseModal {
             label: localization.en.title,
             modalType: "two",
             RCode: `
+{{if (options.selected.gpbox1 =="dataInCols")}}
+twoPropTestBothSamplesSingleColMini( dataset ="{{dataset.name}}", col1_name ="{{ selected.tvarbox1 | safe}}", col2_name= "{{ selected.tvarbox2 | safe}}",
+    p={{selected.txtbox2 | safe}}, alternate="{{selected.gpbox2 | safe}}", conf.level={{selected.txtbox1 | safe}}, testMethod ="{{selected.method | safe}}")
+{{/if}}
+{{if (options.selected.gpbox1 =="summarized")}}
 BSky2SampleProportionMT( x1={{selected.noOfEvents | safe}}, x2={{selected.noOfEvents2 | safe}},
     n1={{selected. noOfTrials | safe}}, n2={{selected. noOfTrials2 | safe}}, p={{selected.txtbox2 | safe}}, 
     alternate="{{selected.gpbox2 | safe}}", conf.level={{selected.txtbox1 | safe}}, testMethod ="{{selected.method | safe}}")
+{{/if}}
+
+
 `
         }
         var objects = {
