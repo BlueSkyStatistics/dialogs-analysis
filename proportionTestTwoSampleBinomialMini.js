@@ -268,7 +268,7 @@ BSky2SampleProportionMT( x1={{selected.noOfEvents | safe}}, x2={{selected.noOfEv
                     min: 0,
                     max: 1,
                     step: 0.01,
-                    value: 0.5,
+                    value: 0,
                     extraction: "NoPrefix|UseComma"
                 })
             },
