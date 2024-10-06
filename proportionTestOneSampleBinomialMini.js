@@ -97,12 +97,23 @@ cat("Error: You need to select one or more variables to compute the proportion t
 {{each(options.selected.tvarbox1)}}
 BSky_Factor_Variable_Count_Table = xtabs( ~{{@this}} , data= {{dataset.name}})
 BSkyFormat(BSky_Factor_Variable_Count_Table,singleTableOutputHeader="Counts for variable: {{@this}}")
-#BSky_Single_Sample_Proportion_Test = prop.test( rbind(BSky_Factor_Variable_Count_Table), alternative='{{selected.gpbox2 | safe}}', p={{selected.txtbox2 | safe}}, conf.level={{selected.txtbox1 | safe}}, correct={{selected.chkbox1 | safe}})
-BSky_Single_Sample_Proportion_Test = prop.test( rbind(BSky_Factor_Variable_Count_Table), alternative='{{selected.gpbox2 | safe}}', p={{selected.txtbox2 | safe}}, conf.level={{selected.txtbox1 | safe}})
-#BSkyFormat(BSky_Single_Sample_Proportion_Test,  outputTableRenames = c("1-sample proportional test for variable: {{@this}}", ".", "."), repeatAllTableFooter ="hypothesized proportion={{selected.txtbox2 | safe}}, CI={{selected.txtbox1 | safe}}, continuity correction={{selected.chkbox1 | safe}}")
+{{if(options.selected.method == "Exact")}}
+BSky_Single_Sample_Proportion_Test = stats::binom.test( x =max(BSky_Factor_Variable_Count_Table), n =base::sum(BSky_Factor_Variable_Count_Table) , alternative='{{selected.gpbox2 | safe}}', p={{selected.txtbox2 | safe}}, conf.level={{selected.txtbox1 | safe}})
 BSkyFormat(BSky_Single_Sample_Proportion_Test,  outputTableRenames = c("1-sample proportional test for variable: {{@this}}", ".", "."), repeatAllTableFooter ="hypothesized proportion={{selected.txtbox2 | safe}}, CI={{selected.txtbox1 | safe}}")
 if (exists('BSky_Factor_Variable_Count_Table')){rm(BSky_Factor_Variable_Count_Table)}
 if (exists('BSky_Single_Sample_Proportion_Test')){rm(BSky_Single_Sample_Proportion_Test)}
+
+{{#else}}
+
+BSky_Single_Sample_Proportion_Test = BSkyNormalApprox( x =max(BSky_Factor_Variable_Count_Table), n =base::sum(BSky_Factor_Variable_Count_Table) , alternative='{{selected.gpbox2 | safe}}', p={{selected.txtbox2 | safe}}, conf.level={{selected.txtbox1 | safe}})
+BSkyFormat(BSky_Single_Sample_Proportion_Test[[1]],  outputTableRenames = c("1-sample proportional test: x={{selected.noOfEvents | safe}}, n={{selected.noOfTrials | safe}}", ".", "."), repeatAllTableFooter ="hypothesized proportion={{selected.txtbox2 | safe}}, CI={{selected.txtbox1 | safe}}")
+BSkyFormat(BSky_Single_Sample_Proportion_Test[[2]])
+if (exists('BSky_Factor_Variable_Count_Table')){rm(BSky_Factor_Variable_Count_Table)}
+if (exists('BSky_Single_Sample_Proportion_Test')){rm(BSky_Single_Sample_Proportion_Test)}
+
+
+
+{{/if}}
 {{/each}} 
 {{/if}}
 {{#else}}
@@ -267,7 +278,8 @@ if (exists('BSky_Single_Sample_Proportion_Test')){rm(BSky_Single_Sample_Proporti
             nav: {
                 name: localization.en.navigation,
                 icon: "icon-p1",
-                modal: config.id
+                modal: config.id,
+                datasetRequired:false
             }
         }
         super(config, objects, content);

@@ -293,7 +293,8 @@ BSky2SampleProportionMT( x1={{selected.noOfEvents | safe}}, x2={{selected.noOfEv
             nav: {
                 name: localization.en.navigation,
                 icon: "icon-p1",
-                modal: config.id
+                modal: config.id,
+                datasetRequired:false
             }
         }
         super(config, objects, content);
