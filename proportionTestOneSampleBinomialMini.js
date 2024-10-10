@@ -96,7 +96,7 @@ cat("Error: You need to select one or more variables to compute the proportion t
 {{#else}}
 {{each(options.selected.tvarbox1)}}
 BSky_Factor_Variable_Count_Table = xtabs( ~{{@this}} , data= {{dataset.name}})
-BSkyFormat(BSky_Factor_Variable_Count_Table,singleTableOutputHeader="Counts for variable: {{@this}}")
+BSkyFormat(BSky_Factor_Variable_Count_Table, singleTableOutputHeader="Counts for variable: {{@this}}")
 {{if(options.selected.method == "Exact")}}
 
 BSky_most_frequent_value <- names(BSky_Factor_Variable_Count_Table)[which.max(BSky_Factor_Variable_Count_Table)]
@@ -108,7 +108,8 @@ base::colnames(BSky_testMethodMatrix) ="Test details"
 BSkyFormat(BSky_testMethodMatrix)
 
 BSky_Single_Sample_Proportion_Test = stats::binom.test( x =max(BSky_Factor_Variable_Count_Table), n =base::sum(BSky_Factor_Variable_Count_Table) , alternative='{{selected.gpbox2 | safe}}', p={{selected.txtbox2 | safe}}, conf.level={{selected.txtbox1 | safe}})
-BSkyFormat(BSky_Single_Sample_Proportion_Test,  outputTableRenames = c("1-sample proportional test for variable: {{@this}}", ".", "."), repeatAllTableFooter ="hypothesized proportion={{selected.txtbox2 | safe}}, CI={{selected.txtbox1 | safe}}")
+attr(BSky_Single_Sample_Proportion_Test$estimate, "names") <-"Sample p"
+BSkyFormat(BSky_Single_Sample_Proportion_Test,  outputTableRenames = c("1-sample proportional test for variable: {{@this}}", ".", "."), outputColumnRenames = c(tableone = c(".",".",".","Sample p",".",".")),repeatAllTableFooter ="hypothesized proportion={{selected.txtbox2 | safe}}, CI={{selected.txtbox1 | safe}}")
 if (exists('BSky_Factor_Variable_Count_Table')){rm(BSky_Factor_Variable_Count_Table)}
 if (exists('BSky_Single_Sample_Proportion_Test')){rm(BSky_Single_Sample_Proportion_Test)}
 
@@ -121,8 +122,7 @@ BSky_testMethodMatrix = base::matrix(c(BSky_eventString, BSky_proportionString, 
 base::colnames(BSky_testMethodMatrix) ="Test details"
 BSkyFormat(BSky_testMethodMatrix)
 BSky_Single_Sample_Proportion_Test = BSkyNormalApprox( x =max(BSky_Factor_Variable_Count_Table), n =base::sum(BSky_Factor_Variable_Count_Table) , alternative='{{selected.gpbox2 | safe}}', p={{selected.txtbox2 | safe}}, conf.level={{selected.txtbox1 | safe}})
-#BSkyFormat(BSky_Single_Sample_Proportion_Test[[1]],  outputTableRenames = c("1-sample proportional test: x={{selected.noOfEvents | safe}}, n={{selected.noOfTrials | safe}}", ".", "."), repeatAllTableFooter ="hypothesized proportion={{selected.txtbox2 | safe}}, CI={{selected.txtbox1 | safe}}")
-BSkyFormat(BSky_Single_Sample_Proportion_Test,  outputTableRenames = c("1-sample proportional test for variable: {{@this}}", "1-sample proportional test for variable: {{@this}}", "."), repeatAllTableFooter ="hypothesized proportion={{selected.txtbox2 | safe}}, CI={{selected.txtbox1 | safe}}")
+BSkyFormat(BSky_Single_Sample_Proportion_Test[[1]],  outputTableRenames = c("1-sample proportional test for variable: {{@this}}", "1-sample proportional test for variable: {{@this}}", "."), repeatAllTableFooter ="hypothesized proportion={{selected.txtbox2 | safe}}, CI={{selected.txtbox1 | safe}}")
 BSkyFormat(BSky_Single_Sample_Proportion_Test[[2]])
 if (exists('BSky_Factor_Variable_Count_Table')){rm(BSky_Factor_Variable_Count_Table)}
 if (exists('BSky_Single_Sample_Proportion_Test')){rm(BSky_Single_Sample_Proportion_Test)}
@@ -136,7 +136,7 @@ if (exists('BSky_Single_Sample_Proportion_Test')){rm(BSky_Single_Sample_Proporti
 {{if(options.selected.method == "Exact")}}
 #BSky_Single_Sample_Proportion_Test = stats::binom.test( x ={{selected.noOfEvents | safe}}, n ={{selected.noOfTrials | safe}} , alternative='{{selected.gpbox2 | safe}}', p={{selected.txtbox2 | safe}}, conf.level={{selected.txtbox1 | safe}}, correct={{selected.chkbox1 | safe}})
 BSky_Single_Sample_Proportion_Test = stats::binom.test( x ={{selected.noOfEvents | safe}}, n ={{selected.noOfTrials | safe}} , alternative='{{selected.gpbox2 | safe}}', p={{selected.txtbox2 | safe}}, conf.level={{selected.txtbox1 | safe}})
-#BSkyFormat(BSky_Single_Sample_Proportion_Test,  outputTableRenames = c("1-sample proportional test: x={{selected.noOfEvents | safe}}, n={{selected.noOfTrials | safe}}", ".", "."), repeatAllTableFooter ="hypothesized proportion={{selected.txtbox2 | safe}}, CI={{selected.txtbox1 | safe}}, continuity correction={{selected.chkbox1 | safe}}")
+attr(BSky_Single_Sample_Proportion_Test$estimate, "names") <-"Sample p"
 BSkyFormat(BSky_Single_Sample_Proportion_Test,  outputTableRenames = c("1-sample proportional test: x={{selected.noOfEvents | safe}}, n={{selected.noOfTrials | safe}}", ".", "."), repeatAllTableFooter ="hypothesized proportion={{selected.txtbox2 | safe}}, CI={{selected.txtbox1 | safe}}")
 if (exists('BSky_Factor_Variable_Count_Table')){rm(BSky_Factor_Variable_Count_Table)}
 if (exists('BSky_Single_Sample_Proportion_Test')){rm(BSky_Single_Sample_Proportion_Test)}
