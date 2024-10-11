@@ -1,78 +1,12 @@
-var localization = {
-    en: {
-        title: "ANOVA, N way",
-        modelname:"Enter a name for the model",
-        label3: "Effect size",
-        confInterval: "Confidence interval for effect sizes",
-        effectsizes: "Select effect size measure",
-        navigation: "ANOVA, N way",
-        target: "Target variable (numeric/scale)",
-        dest: "Specify  a maximum of 2 factor variables",
-        options: "Options",
-        type: "Select type I/II/III Sums of squares",
-        levene: "Levene's test for homogeneity of variances",
-        label1: "Post-hoc",
-        combon: "Compare means using:",
-        adjust: "Method for adjusting p-values",
-        compactly: "Comparing means compactly",
-        alpha: "Enter a value of alpha:",
-        label2: "Plots",
-        label4: "Plots",
-        diag: "Diagnostic plots",
-        plot1: "Plot all comparisons",
-        //We may reintroduce this based on feedback
-        // showEffectSizes: "Display effect sizes",
-        horizontalAxis: "Separate lines",
-        separateLines: "Horizontal axis",
-        separatePlots: "Separate plots",
-        labelSaveResiduals: "Save model statistics to the dataset",
-        residuals: "Residuals are saved with a variable name residuals with an optional prefix",
-        stuResiduals: "Studentized residuals are saved with a variable name resStudentized with an optional prefix",
-        fittedVals: "Fitted values are saved with a variable name fitted with an optional prefix", 
-        prefixForSavedStatistics: "Optionally enter a prefix for saved values above, the prefix is appended to the variables name(s) above",
-        help: {
-            title: "ANOVA, N way",
-            r_help: "help(aov, package='stats')",
-            body: `
-NOTE:</br>
-1. To get all marginal means and post-hocs you need to construct a formula with the main effects and all the interaction terms in the model.</br> 
-So if you are attempting to analyze a 3 way interaction, you need to specify</br>
-A + B + C + A:B + B:C + A:C + A:B:C</br>
-If instead you specify A*B*C, you will get the complete ANOVA table, you will NOT get the estimated marginal means and post-hocs for all the interactions.</br>
-2. Estimated marginal means AND POST-HOCS are computed for all main effects and the SPECIFIED INTERACTIONS</br>
-<b>Description</b></br>
-Fits an analysis of variance model, displays type I,II,III sum of squares, displays marginal means and contrasts (using marginal means).</br> 
-Optionally performs Levene's test for homogeneity of variance across groups and plots graphs.</br>
-Levene's test is run for all the main effects</br></br>
-Builds and summarizes an anova model using the formula specified using the aov function</br>
-<b>Package</b></br>
-stats</br>
-<b>Help</b></br>
-help(aov, package='stats')</br></br>
-Displays Anova table with Type I/II/III sum of squares</br>
-Uses function Anova in package car for Type II, III sum of squares, function anova in package stats for Type I. When computing type III sum of squares appropriate contrasts (contr.sum) are set for factor variables.</br>
-<b>Package</b></br>
-car</br>
-<b>Help</b></br>
-help(Anova, package='car')</br></br>
-Displays estimated marginal means</br>
-<b>Package</b></br>
-emmeans</br>
-<b>Help</b></br>
-help(emmeans, package='car')</br></br>
-Computes Levene's test for homogeneity of variance across groups. 
-<b>Package</b></br>
-car</br>
-<b>Help</b></br>
-help(leveneTest, package='car')
-`}
-    }
-}
+
 class ANOVANWay extends baseModal {
+    static dialogId = 'ANOVANWay'
+    static t = baseModal.makeT(ANOVANWay.dialogId)
+
     constructor() {
         var config = {
-            id: "ANOVANWay",
-            label: localization.en.title,
+            id: ANOVANWay.dialogId,
+            label: ANOVANWay.t('title'),
             modalType: "two",
             RCode: `
         `
@@ -82,7 +16,7 @@ class ANOVANWay extends baseModal {
             modelname: {
                 el: new input(config, {
                     no: 'modelname',
-                    label: localization.en.modelname,
+                    label: ANOVANWay.t('modelname'),
                     placeholder: "",
                     required: true,
                     type: "character",
@@ -93,7 +27,7 @@ class ANOVANWay extends baseModal {
             },
             target: {
                 el: new dstVariable(config, {
-                    label: localization.en.target,
+                    label: ANOVANWay.t('target'),
                     no: "target",
                     filter: "Numeric|Scale",
                     extraction: "NoPrefix|UseComma",
@@ -107,10 +41,10 @@ class ANOVANWay extends baseModal {
                     required:true
                 })
             },
-            label4: { el: new labelVar(config, { label: localization.en.label4, h: 5 , style: "mt-2"}) },
+            label4: { el: new labelVar(config, { label: ANOVANWay.t('label4'), h: 5 , style: "mt-2"}) },
             horizontalAxis: {
                 el: new dstVariable(config, {
-                    label: localization.en.horizontalAxis,
+                    label: ANOVANWay.t('horizontalAxis'),
                     no: "horizontalAxis",
                     filter: "Numeric|Scale|Logical|Ordinal|Nominal",
                     extraction: "NoPrefix|UseComma",
@@ -118,7 +52,7 @@ class ANOVANWay extends baseModal {
             },
             separateLines: {
                 el: new dstVariable(config, {
-                    label: localization.en.separateLines,
+                    label: ANOVANWay.t('separateLines'),
                     no: "separateLines",
                     filter: "Numeric|Scale|Logical|Ordinal|Nominal",
                     extraction: "NoPrefix|UseComma",
@@ -126,7 +60,7 @@ class ANOVANWay extends baseModal {
             },
             separatePlots: {
                 el: new dstVariable(config, {
-                    label: localization.en.separatePlots,
+                    label: ANOVANWay.t('separatePlots'),
                     no: "separatePlots",
                     filter: "Numeric|Scale|Logical|Ordinal|Nominal",
                     extraction: "NoPrefix|UseComma",
@@ -135,7 +69,7 @@ class ANOVANWay extends baseModal {
             type: {
                 el: new comboBox(config, {
                     no: 'type',
-                    label: localization.en.type,
+                    label: ANOVANWay.t('type'),
                     multiple: false,
                     extraction: "NoPrefix|UseComma",
                     options: ["III", "II", "I"],
@@ -144,7 +78,7 @@ class ANOVANWay extends baseModal {
             },
             levene: {
                 el: new checkbox(config, {
-                    label: localization.en.levene,
+                    label: ANOVANWay.t('levene'),
                     no: "levene",
                     bs_type: "valuebox",
                     newline: true,
@@ -154,11 +88,11 @@ class ANOVANWay extends baseModal {
                     false_value: "FALSE",
                 })
             },
-            label1: { el: new labelVar(config, { label: localization.en.label1, h: 5 }) },
+            label1: { el: new labelVar(config, { label: ANOVANWay.t('label1'), h: 5 }) },
             combon: {
                 el: new comboBox(config, {
                     no: 'combon',
-                    label: localization.en.combon,
+                    label: ANOVANWay.t('combon'),
                     multiple: false,
                     extraction: "NoPrefix|UseComma",
                     options: ["pairwise", "revpairwise", "poly", "trt.vs.ctrl1", "trt.vs.ctrlk", "eff", "def", "consec", "mean_chg"],
@@ -168,7 +102,7 @@ class ANOVANWay extends baseModal {
             adjust: {
                 el: new comboBox(config, {
                     no: 'adjust',
-                    label: localization.en.adjust,
+                    label: ANOVANWay.t('adjust'),
                     multiple: false,
                     extraction: "NoPrefix|UseComma",
                     options: ["holm", "BY", "bonferroni", "fdr", "hochberg", "BH", "hommel", "none", "mvt", "scheffe", "sidak", "tukey"],
@@ -177,7 +111,7 @@ class ANOVANWay extends baseModal {
             },
             compactly: {
                 el: new checkbox(config, {
-                    label: localization.en.compactly,
+                    label: ANOVANWay.t('compactly'),
                     no: "compactly",
                     bs_type: "valuebox",
                     newline: true,
@@ -189,7 +123,7 @@ class ANOVANWay extends baseModal {
             alpha: {
                 el: new advancedSlider(config, {
                     no: "alpha",
-                    label: localization.en.alpha,
+                    label: ANOVANWay.t('alpha'),
                     min: 0,
                     max: 1,
                     step: 0.05,
@@ -198,10 +132,10 @@ class ANOVANWay extends baseModal {
                     extraction: "NoPrefix|UseComma"
                 })
             },
-            label2: { el: new labelVar(config, { label: localization.en.label2, h: 6 }) },
+            label2: { el: new labelVar(config, { label: ANOVANWay.t('label2'), h: 6 }) },
             diag: {
                 el: new checkbox(config, {
-                    label: localization.en.diag,
+                    label: ANOVANWay.t('diag'),
                     no: "diag",
                     newline: true,
                     bs_type: "valuebox",
@@ -212,7 +146,7 @@ class ANOVANWay extends baseModal {
             },
             plot1: {
                 el: new checkbox(config, {
-                    label: localization.en.plot1,
+                    label: ANOVANWay.t('plot1'),
                     no: "plot1",
                     bs_type: "valuebox",
                     newline: true,
@@ -221,11 +155,11 @@ class ANOVANWay extends baseModal {
                     false_value: "FALSE",
                 })
             },
-            label3: { el: new labelVar(config, { no: 'label3', label: localization.en.label3, style: "mt-0", h: 5 }) },
+            label3: { el: new labelVar(config, { no: 'label3', label: ANOVANWay.t('label3'), style: "mt-0", h: 5 }) },
             confInterval: {
                 el: new advancedSlider(config, {
                     no: "confInterval",
-                    label: localization.en.confInterval,
+                    label: ANOVANWay.t('confInterval'),
                     min: 0,
                     max: 1,
                     step: 0.05,
@@ -237,18 +171,18 @@ class ANOVANWay extends baseModal {
             effectsizes: {
                 el: new comboBox(config, {
                     no: 'effectsizes',
-                    label: localization.en.effectsizes,
+                    label: ANOVANWay.t('effectsizes'),
                     multiple: false,
                     extraction: "NoPrefix|UseComma",
                     options: ["eta_squared", "partial_eta_squared", "omega_squared", "epsilon_squared", "cohens_f"],
                     default: "partial_eta_squared"
                 })
             },
-            labelSaveResiduals: { el: new labelVar(config, { no: 'labelSaveResiduals', style: "mt-3",label: localization.en.labelSaveResiduals, h: 5 }) },
+            labelSaveResiduals: { el: new labelVar(config, { no: 'labelSaveResiduals', style: "mt-3",label: ANOVANWay.t('labelSaveResiduals'), h: 5 }) },
 
             residuals: {
                 el: new checkbox(config, {
-                label: localization.en.residuals,
+                label: ANOVANWay.t('residuals'),
                 no: "residuals",
                 extraction: "Boolean"
                 })
@@ -257,7 +191,7 @@ class ANOVANWay extends baseModal {
             
             stuResiduals: {
                 el: new checkbox(config, {
-                label: localization.en.stuResiduals,
+                label: ANOVANWay.t('stuResiduals'),
                 no: "stuResiduals",
                 extraction: "Boolean"
                 })
@@ -265,7 +199,7 @@ class ANOVANWay extends baseModal {
             
             fittedVals: {
                 el: new checkbox(config, {
-                label: localization.en.fittedVals,
+                label: ANOVANWay.t('fittedVals'),
                 no: "fittedVals",
                 extraction: "Boolean"
                 })
@@ -274,7 +208,7 @@ class ANOVANWay extends baseModal {
             prefixForSavedStatistics: {
                             el: new input(config, {
                                 no: 'prefixForSavedStatistics',
-                                label: localization.en.prefixForSavedStatistics,
+                                label: ANOVANWay.t('prefixForSavedStatistics'),
                                 placeholder: "",
                                 type: "character",
                                 enforceRobjectRules:false,
@@ -288,7 +222,7 @@ class ANOVANWay extends baseModal {
         var opts = {
             el: new optionsVar(config, {
                 no: "Heatmap_options",
-                name: localization.en.options,
+                name: ANOVANWay.t('options'),
                 content: [
                     objects.type.el,
                     objects.levene.el,
@@ -315,13 +249,19 @@ class ANOVANWay extends baseModal {
             right: [objects.modelname.el.content,objects.target.el.content, objects.formulaBuilder.el.content, objects.label4.el.content, objects.horizontalAxis.el.content, objects.separateLines.el.content, objects.separatePlots.el.content],
             bottom: [opts.el.content],
             nav: {
-                name: localization.en.navigation,
+                name: ANOVANWay.t('navigation'),
                 icon: "icon-variance",
                 modal: config.id
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: ANOVANWay.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: ANOVANWay.t('help.body')
+        }
+;
         this.opts = opts;
     }
     prepareExecution(instance) {
@@ -809,4 +749,7 @@ if (exists("BSkyEffectSizeResults")) rm (BSkyEffectSizeResults)
         return res;
     }
 }
-module.exports.item = new ANOVANWay().render()
+
+module.exports = {
+    render: () => new ANOVANWay().render()
+}

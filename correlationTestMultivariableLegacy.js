@@ -5,51 +5,14 @@
 
 
 
-var localization = {
-    en: {
-        help: {
-            title: "Correlation Analysis",
-            r_help: "help(rcorr.adjust, package=RcmdrMisc)",
-            body:
-                `
-<b>Description</b>
-This function uses the rcorr function in the Hmisc package to compute matrices of Pearson or Spearman correlations along with the pair wise p-values among the correlations. The p-values are corrected for multiple inference using Holm's method (see p.adjust). Observations are filtered for missing data, and only complete observations are used.
-<br/>
-<b>Usage</b>
-<br/>
-        <code> 
-rcorr.adjust(x, type = c("pearson", "spearman"), use=c("complete.obs", "pairwise.complete.obs"))
-        </code> <br/>
-## S3 method for class 'rcorr.adjust'
-<br/>
- <code> 
-print(x, ...)
- </code> 
-  <br />
- <b>Arguments</b>
-   <ul>
-   <li>
-x: a numeric matrix or data frame, or an object of class "rcorr.adjust" to be printed.
-</li>
-<li>
-type: "pearson" or "spearman", depending upon the type of correlations desired; the default is "pearson".
-</li>
-<li>
-use: how to handle missing data: "complete.obs", the default, use only complete cases; "pairwise.complete.obs", use all cases with valid data for each pair.
-</li>
-<li>
-...: not used.
-</li>
-</ul>
-<b>Value</b>
-Returns an object of class "rcorr.adjust", which is normally just printed.
-`}
-    }
-}
+
 class correlationTestMultivariableLegacy extends baseModal {
+    static dialogId = 'correlationTestMultivariableLegacy'
+    static t = baseModal.makeT(correlationTestMultivariableLegacy.dialogId)
+
     constructor() {
         var config = {
-            id: "correlationTestMultivariableLegacy",
+            id: correlationTestMultivariableLegacy.dialogId,
             label: "Correlation Test",
             modalType: "two",
             RCode: `require(stats);
@@ -102,7 +65,16 @@ if (exists('BSkyResults')){rm(BSkyResults)}
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: correlationTestMultivariableLegacy.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: correlationTestMultivariableLegacy.t('help.body')
+        }
+;
     }
 }
-module.exports.item = new correlationTestMultivariableLegacy().render()
+
+module.exports = {
+    render: () => new correlationTestMultivariableLegacy().render()
+}

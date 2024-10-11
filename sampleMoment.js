@@ -1,68 +1,12 @@
-var localization = {
-    en: {
-		navigation: "Sample Moment",
-		title: "Sample Moment",
-        label2: "Specific test settings",
-		label3: "Additional settings",
-        showLengthNAs: "Show length and NAs",
-		order: "Order",
-		centralMoments : "Compute central moments",
-		absoluteMoments :"Compute absolute moments",
-		missingValues: "Remove missing values",
-        Target: "Select one or more variables",
-        help: {
-            title: "Sample Moment",
-            r_help: "help(moment, package ='moments')",
-            body: `
-<b>Description</b></br>
-This function computes the sample moment of specified order.
-<br/>
-<b>Usage</b>
-<br/>
-<code> 
-moment(x, order = 1, central = FALSE, absolute = FALSE, na.rm = FALSE)
-</code> <br/>
-<b>Arguments</b><br/>
-<ul>
-<li>
-x: a numeric vector of data values.
-</li>
-<li>
-order: order of the moment to be computed
-</li>
-<li>
-central: a logical value - if central moments are to be computed.</br>
-</li>
-<li>
-</li>
-<li>
-absolute: a logical value - if absolute moments are to be computed.</br>
-</li>
-<li>
-na.rm: a logical value - remove NA values?.</br>
-</li>
-</ul>
-<b>Example</b></br>
-<code> 
-set.seed(1234)</br>
-x = rnorm(1000)</br>
-moment(x))</br>
-moment(x,order=3,absolute=TRUE)</br>
-</code> <br/>
-<b>Package</b></br>
-moments</br>
-<b>Help</b></br>
-For detailed help click on the R icon on the top right hand side of this dialog overlay or run the following command help(moment, package ='moments') in the BlueSky Statistics R editor.           
-<br/>
-<br/>	
-			`}
-    }
-}
+
 class sampleMoment extends baseModal {
+    static dialogId = 'sampleMoment'
+    static t = baseModal.makeT(sampleMoment.dialogId)
+
     constructor() {
         var config = {
-            id: "sampleMoment",
-            label: localization.en.title,
+            id: sampleMoment.dialogId,
+            label: sampleMoment.t('title'),
             splitProcessing: false,
             modalType: "two",
             RCode: `
@@ -96,7 +40,7 @@ BSkyFormat(results,singleTableOutputHeader ="Statistical Moment" )
             content_var: { el: new srcVariableList(config, { action: "move" }) },
             Target: {
                 el: new dstVariableList(config, {
-                    label: localization.en.Target,
+                    label: sampleMoment.t('Target'),
                     no: "Target",
                     required: true,
                     filter: "Numeric|Scale",
@@ -109,7 +53,7 @@ BSkyFormat(results,singleTableOutputHeader ="Statistical Moment" )
 			 order: {
 				el: new inputSpinner(config, {
 			  no: 'order',
-			  label: localization.en.order,
+			  label: sampleMoment.t('order'),
 			  min: 1,
 			  max: 999,
 			  step: 1,
@@ -118,11 +62,11 @@ BSkyFormat(results,singleTableOutputHeader ="Statistical Moment" )
 				})
 			},
 			
-			label2: { el: new labelVar(config, { label: localization.en.label2, style: "mt-2", h: 6 }) },	
+			label2: { el: new labelVar(config, { label: sampleMoment.t('label2'), style: "mt-2", h: 6 }) },	
 			
 			centralMoments: {
                 el: new checkbox(config, {
-                    label: localization.en.centralMoments,
+                    label: sampleMoment.t('centralMoments'),
                     no: "centralMoments",
                     newline: true,
 					style: "mt-2",
@@ -135,7 +79,7 @@ BSkyFormat(results,singleTableOutputHeader ="Statistical Moment" )
 			
 			absoluteMoments: {
                 el: new checkbox(config, {
-                    label: localization.en.absoluteMoments,
+                    label: sampleMoment.t('absoluteMoments'),
                     no: "absoluteMoments",
                     newline: true,
 					style: "mt-2",
@@ -148,7 +92,7 @@ BSkyFormat(results,singleTableOutputHeader ="Statistical Moment" )
 			
 			missingValues: {
                 el: new checkbox(config, {
-                    label: localization.en.missingValues,
+                    label: sampleMoment.t('missingValues'),
                     no: "missingValues",
                     newline: true,
 					style: "mt-2",
@@ -161,10 +105,10 @@ BSkyFormat(results,singleTableOutputHeader ="Statistical Moment" )
 			
 			
             
-            label3: { el: new labelVar(config, { label: localization.en.label3, style: "mt-2", h: 6 }) },
+            label3: { el: new labelVar(config, { label: sampleMoment.t('label3'), style: "mt-2", h: 6 }) },
 			showLengthNAs: {
                 el: new checkbox(config, {
-                    label: localization.en.showLengthNAs,
+                    label: sampleMoment.t('showLengthNAs'),
                     no: "showLengthNAs",
                     newline: true,
 					style: "mt-2",
@@ -184,14 +128,23 @@ BSkyFormat(results,singleTableOutputHeader ="Statistical Moment" )
             objects.missingValues.el.content,  objects.label3.el.content,objects.showLengthNAs.el.content,],
           //  bottom: [MissingVals.el.content],
             nav: {
-                name: localization.en.navigation,
+                name: sampleMoment.t('navigation'),
                 icon: "icon-sample",
                 modal: config.id
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: sampleMoment.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: sampleMoment.t('help.body')
+        }
+;
     }
    
 }
-module.exports.item = new sampleMoment().render()
+
+module.exports = {
+    render: () => new sampleMoment().render()
+}

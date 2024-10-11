@@ -1,61 +1,14 @@
 
-var localization = {
-    en: {
-        title: "Cullen and Frey graph with descriptives of an empirical distribution for non-censored data",
-		navigation: "Distribution Analysis (Cullen and Frey graph)",
-		
-		variableSelcted: "Select a variable that contains the distribution",
-		boot: "(Optional) Boot values of skewness and kurtosis. If specified must be an integer above 10",
-		discreteChk: "Discrete - unchecked (default) for uniform, normal, logistic, lognormal, beta and gamma. Checked for poisson and negative binomial",
-		method: "Unbiased (default) for unbiased estimated values of statistics or sample for sample values",
-	
-		help: {
-            title: "Description of an empirical distribution for non-censored data",
-            r_help: "help(descdist, package = fitdistrplus)",
-			body: `
-				<b>Description</b></br>
-				Computes descriptive parameters of an empirical distribution for non-censored data and provides a skewness-kurtosis plot
-				<br/>
-				For the detail help - use R help(descdist, package = fitdistrplus)
-				<br/>
-				<br/>
-				Minimum, maximum, median, mean, sample sd, and sample (if method=="sample") or by default unbiased estimations of 
-				skewness and Pearsons's kurtosis values are printed (Sokal and Rohlf, 1995). A skewness-kurtosis plot such as the 
-				one proposed by Cullen and Frey (1999) is given for the empirical distribution. On this plot, values for common 
-				distributions are also displayed as a tools to help the choice of distributions to fit to data. For some 
-				distributions (normal, uniform, logistic, exponential for example), there is only one possible value for the skewness 
-				and the kurtosis (for a normal distribution for example, skewness = 0 and kurtosis = 3), and the distribution is thus 
-				represented by a point on the plot. For other distributions, areas of possible values are represented, consisting in 
-				lines (gamma and lognormal distributions for example), or larger areas (beta distribution for example). 
-				The Weibull distribution is not represented on the graph but it is indicated on the legend that shapes close to 
-				lognormal and gamma distributions may be obtained with this distribution.
-				<br/>
-				<br/>
-				In order to take into account the uncertainty of the estimated values of kurtosis and skewness from data, the data set 
-				may be bootstraped by fixing the argument boot to an integer above 10. boot values of skewness and kurtosis 
-				corresponding to the boot bootstrap samples are then computed and reported in blue color on the skewness-kurtosis plot.
-				<br/>
-				<br/>
-				If discrete is TRUE, the represented distributions are the Poisson, negative binomial distributions, and the normal 
-				distribution to which previous discrete distributions may converge. If discrete is FALSE, these are uniform, normal, 
-				logistic, lognormal, beta and gamma distributions.
-				<br/>
-				<br/>
-				<a href="https://stats.stackexchange.com/questions/132652/how-to-determine-which-distribution-fits-my-data-best">For a good overview of distribution fit, see https://stats.stackexchange.com/questions/132652/how-to-determine-which-distribution-fits-my-data-best</a>
-				<br/>
-				<br/>
-				<br/>
-				-x-
-			`
-		},
-	}
-}
+
 
 class distributionDescriptives extends baseModal {
+    static dialogId = 'distributionDescriptives'
+    static t = baseModal.makeT(distributionDescriptives.dialogId)
+
     constructor() {
         var config = {
-            id: "distributionDescriptives",
-            label: localization.en.title,
+            id: distributionDescriptives.dialogId,
+            label: distributionDescriptives.t('title'),
             modalType: "two",
             RCode:`
 
@@ -95,7 +48,7 @@ if(!is.null(descdist_ret_vals))
             content_var: { el: new srcVariableList(config, {action: "move", scroll:true}) }, 
 			variableSelcted: {
                 el: new dstVariable(config, {
-                    label: localization.en.variableSelcted,
+                    label: distributionDescriptives.t('variableSelcted'),
                     no: "variableSelcted",
                     required: true,
                     //filter: "String|Numeric|Logical|Ordinal|Nominal|Scale",
@@ -107,7 +60,7 @@ if(!is.null(descdist_ret_vals))
 			boot: {
                 el: new input(config, {
                     no: 'boot',
-                    label: localization.en.boot,
+                    label: distributionDescriptives.t('boot'),
                     placeholder: "",
                     required: false,
                     type: "numeric",
@@ -122,7 +75,7 @@ if(!is.null(descdist_ret_vals))
             },
 			discreteChk: {
                 el: new checkbox(config, {
-                    label: localization.en.discreteChk,
+                    label: distributionDescriptives.t('discreteChk'),
                     no: "discreteChk",
                     style: "mb-2",
                     bs_type: "valuebox",
@@ -135,7 +88,7 @@ if(!is.null(descdist_ret_vals))
 			method: {
                 el: new selectVar(config, {
                     no: 'method',
-                    label: localization.en.method,
+                    label: distributionDescriptives.t('method'),
                     multiple: false,
                     //required: true,
                     extraction: "NoPrefix|UseComma",
@@ -153,13 +106,22 @@ if(!is.null(descdist_ret_vals))
 					objects.method.el.content
 					],
             nav: {
-                name: localization.en.navigation,
+                name: distributionDescriptives.t('navigation'),
                 icon: "icon-gaussian-function",
                 modal: config.id
             }
         };
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: distributionDescriptives.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: distributionDescriptives.t('help.body')
+        }
+;
     }
 }
-module.exports.item = new distributionDescriptives().render()
+
+module.exports = {
+    render: () => new distributionDescriptives().render()
+}

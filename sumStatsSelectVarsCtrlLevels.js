@@ -1,24 +1,5 @@
 
-var localization = {
-    en: {
-        title: "Summary Statistics (Selected variables)",
-        navigation: "Summary Statistics, selected variables, control levels (Legacy)",
-        subsetvars: "Selected Variables",
-        levels: "Specify the number of levels to display counts for factor variables. NOTE: Less frequent levels of factor variables are summarized in the (Other) category.",
-        help: {
-            title: "Summary Statistics (Control levels)",
-            r_help: "",
-            body: `
-<b>Description</b></br>
-Generates the summaries for every variable selected while allowing you to control the number of levels for which counts are displayed.</br>
-NOTE: COUNTS OF LESS FREQUENT VARIABLES ARE SUMMARIZED IN THE (OTHER) CATEGORY</br>
-Shows Minimum, 1st Quartile, Median, Mean, 3rd Quartile, Maximum and count of NAs for numeric and date variables.</br>
-For factor variable it displays the counts of each level.</br>
-For logical variable it displays the counts of TRUE, FALSE and NAs</br>
-R Help is not available because in we have written custom code using  multiple  R functions. If you need to inspect the code click the "<>" button.</br>
-`}
-    }
-}
+
 
 
 
@@ -28,10 +9,13 @@ R Help is not available because in we have written custom code using  multiple  
 
 
 class sumStatsSelectVarsCtrlLevels extends baseModal {
+    static dialogId = 'sumStatsSelectVarsCtrlLevels'
+    static t = baseModal.makeT(sumStatsSelectVarsCtrlLevels.dialogId)
+
     constructor() {
         var config = {
-            id: "sumStatsSelectVarsCtrlLevels",
-            label: localization.en.title,
+            id: sumStatsSelectVarsCtrlLevels.dialogId,
+            label: sumStatsSelectVarsCtrlLevels.t('title'),
             modalType: "two",
             RCode: `
 BSky_Dataset_Overview = data.frame(Dataset = c("{{dataset.name}}"),Variables = length(names({{dataset.name}})),Observations = nrow({{dataset.name}}))
@@ -47,7 +31,7 @@ BSkyFormat(BSky_Summary_By_Variable, singleTableOutputHeader=c("Summary By Varia
             content_var: { el: new srcVariableList(config, {action: "move"}) },
             subsetvars: {
                 el: new dstVariableList(config, {
-                    label: localization.en.subsetvars,
+                    label: sumStatsSelectVarsCtrlLevels.t('subsetvars'),
                     no: "subsetvars",
                     filter: "String|Numeric|Date|Logical|Ordinal|Nominal|Scale",
                     extraction: "NoPrefix|UseComma|Enclosed",
@@ -57,7 +41,7 @@ BSkyFormat(BSky_Summary_By_Variable, singleTableOutputHeader=c("Summary By Varia
             levels: {
                 el: new inputSpinner(config, {
                     no: 'levels',
-                    label: localization.en.levels,
+                    label: sumStatsSelectVarsCtrlLevels.t('levels'),
                     min: 1,
                     max: 9999999,
                     required: true,
@@ -71,13 +55,22 @@ BSkyFormat(BSky_Summary_By_Variable, singleTableOutputHeader=c("Summary By Varia
             left: [objects.content_var.el.content],
             right: [objects.subsetvars.el.content, objects.levels.el.content],
             nav: {
-                name: localization.en.navigation,
+                name: sumStatsSelectVarsCtrlLevels.t('navigation'),
                 icon: "icon-sigma-control-variables",
                 modal: config.id
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: sumStatsSelectVarsCtrlLevels.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: sumStatsSelectVarsCtrlLevels.t('help.body')
+        }
+;
     }
 }
-module.exports.item = new sumStatsSelectVarsCtrlLevels().render()
+
+module.exports = {
+    render: () => new sumStatsSelectVarsCtrlLevels().render()
+}

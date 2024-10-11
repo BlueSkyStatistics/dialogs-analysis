@@ -1,57 +1,13 @@
-var localization = {
-    en: {
-        title: "Multivariate ANOVA",
-        navigation: "MANOVA",
-        modelname: "Model name",
-        tvarbox1: "Dependent variables",
-        tvarbox2: "Fixed factor",
-        blockVar: "Covariate(s)",
-        testStatistic: "Test statistic",
-        label2: "Options for posthocs ",
-        combon: "Compare Means using:",
-        emm: "Estimated marginal means",
-        displayBoxMDetails: "Display details associated with Box's M test (Note: Results of Box's M test are always shown)",
-        adjust: "Method for adjusting p-values",
-        levenesTest: "Levene's test",
-        posthocs: "Posthocs",
-        plotMeansCI: "Plot of means and confidence intervals",
-        help: {
-            title: "Multivariate ANOVA",
-            r_help: "help(manova, package='stats')",
-            body: `
-<b>Description</b></br>
-Multivariate ANOVA: Omnibus multivariate tests and corresponding F and  p values are provided. Follow up univariate tests are also provided.</br> NOTE: We currently support a single independent factor</br>
-NOTE: We don't display the confidence interval in the plot of means as there are unnecessary warnings displayed. We are working with the author of the gplots package to rectify this.</br>
-<br/>
-<b>Usage</b>
-<br/>
-<code> 
-manova(...)</br>
-manova(data = dataset1, cbind(var1,var2...) ~ factor1  )
-</code> <br/>
-<b>Arguments</b><br/>
-<ul>
-<li>
-...: Arguments passed to aov
-</li>
-</ul>
-<b>Details</b></br>
-Class "manova" differs from class "aov" in selecting a different summary method. Function manova calls aov and then add class "manova" to the result object for each stratum.​</br>
-<b>Value</b><br/>
-See aov help, details below<br/>
-<b>Package</b></br>
-stats</br>
-<b>Help</b></br>
-Click the R Help button to get detailed R help.</br> You can also enter help(manova, package ='stats') and hit CTRL Enter in the R syntax editor to get help</br>
-`}
-    }
-}
+
 
 class MANOVA extends baseModal {
+    static dialogId = 'MANOVA'
+    static t = baseModal.makeT(MANOVA.dialogId)
+
     constructor() {
         var config = {
-            id: "MANOVA",
-            label: localization.en.title,
+            id: MANOVA.dialogId,
+            label: MANOVA.t('title'),
             modalType: "two",
             RCode: `
 `
@@ -61,7 +17,7 @@ class MANOVA extends baseModal {
             modelname: {
                 el: new input(config, {
                     no: 'modelname',
-                    label: localization.en.modelname,
+                    label: MANOVA.t('modelname'),
                     placeholder: "",
                     required: true,
                     type: "character",
@@ -72,7 +28,7 @@ class MANOVA extends baseModal {
             },
             tvarbox1: {
                 el: new dstVariableList(config, {
-                    label: localization.en.tvarbox1,
+                    label: MANOVA.t('tvarbox1'),
                     no: "tvarbox1",
                     filter: "Numeric|Scale",
                     extraction: "NoPrefix|UseComma",
@@ -81,7 +37,7 @@ class MANOVA extends baseModal {
             },
             tvarbox2: {
                 el: new dstVariable(config, {
-                    label: localization.en.tvarbox2,
+                    label: MANOVA.t('tvarbox2'),
                     no: "tvarbox2",
                     filter: "String|Numeric|Logical|Ordinal|Nominal",
                     extraction: "NoPrefix|UseComma",
@@ -90,7 +46,7 @@ class MANOVA extends baseModal {
             },
             blockVar: {
                 el: new dstVariableList(config, {
-                    label: localization.en.blockVar,
+                    label: MANOVA.t('blockVar'),
                     no: "blockVar",
                     filter: "String|Numeric|Logical|Ordinal|Nominal|Scale",
                     extraction: "NoPrefix|UsePlus",
@@ -99,23 +55,23 @@ class MANOVA extends baseModal {
             testStatistic: {
                 el: new comboBox(config, {
                     no: 'testStatistic',
-                    label: localization.en.testStatistic,
+                    label: MANOVA.t('testStatistic'),
                     multiple: false,
                     extraction: "NoPrefix|UseComma",
                     options: ["Hotelling-Lawley", "Pillai", "Roy", "Wilks"],
                     default: "Wilks"
                 })
             },
-            plotMeansCI: { el: new checkbox(config, { label: localization.en.plotMeansCI, newline: true, no: "plotMeansCI", extraction: "Boolean" }) },
-            displayBoxMDetails: { el: new checkbox(config, { label: localization.en.displayBoxMDetails, no: "displayBoxMDetails", newline: true, extraction: "Boolean" }) },
-            emm: { el: new checkbox(config, { label: localization.en.emm, newline: true, no: "emm", style: "mb-2", extraction: "Boolean" }) },
-            posthocs: { el: new checkbox(config, { label: localization.en.posthocs, newline: true, no: "chk3", extraction: "Boolean" }) },
-            levenesTest: { el: new checkbox(config, { label: localization.en.levenesTest, no: "levenesTest", newline: true, extraction: "Boolean" }) },
-            label2: { el: new labelVar(config, { label: localization.en.label2, h: 6 }) },
+            plotMeansCI: { el: new checkbox(config, { label: MANOVA.t('plotMeansCI'), newline: true, no: "plotMeansCI", extraction: "Boolean" }) },
+            displayBoxMDetails: { el: new checkbox(config, { label: MANOVA.t('displayBoxMDetails'), no: "displayBoxMDetails", newline: true, extraction: "Boolean" }) },
+            emm: { el: new checkbox(config, { label: MANOVA.t('emm'), newline: true, no: "emm", style: "mb-2", extraction: "Boolean" }) },
+            posthocs: { el: new checkbox(config, { label: MANOVA.t('posthocs'), newline: true, no: "chk3", extraction: "Boolean" }) },
+            levenesTest: { el: new checkbox(config, { label: MANOVA.t('levenesTest'), no: "levenesTest", newline: true, extraction: "Boolean" }) },
+            label2: { el: new labelVar(config, { label: MANOVA.t('label2'), h: 6 }) },
             combon: {
                 el: new comboBox(config, {
                     no: 'combon',
-                    label: localization.en.combon,
+                    label: MANOVA.t('combon'),
                     multiple: false,
                     extraction: "NoPrefix|UseComma",
                     options: ["pairwise", "revpairwise", "poly", "trt.vs.ctrl1", "trt.vs.ctrlk", "eff", "def", "consec", "mean_chg"],
@@ -125,7 +81,7 @@ class MANOVA extends baseModal {
             adjust: {
                 el: new comboBox(config, {
                     no: 'adjust',
-                    label: localization.en.adjust,
+                    label: MANOVA.t('adjust'),
                     multiple: false,
                     extraction: "NoPrefix|UseComma",
                     options: ["holm", "BY", "bonferroni", "fdr", "hochberg", "BH", "hommel", "none", "mvt", "scheffe", "sidak", "tukey"],
@@ -136,7 +92,7 @@ class MANOVA extends baseModal {
         var opts = {
             el: new optionsVar(config, {
                 no: "MANOVA_options",
-                name: localization.en.options,
+                name: MANOVA.t('options'),
                 content: [
                     objects.plotMeansCI.el,
                     objects.displayBoxMDetails.el,
@@ -154,13 +110,19 @@ class MANOVA extends baseModal {
             right: [objects.modelname.el.content, objects.tvarbox1.el.content, objects.tvarbox2.el.content, objects.blockVar.el.content, objects.testStatistic.el.content],
             bottom: [opts.el.content],
             nav: {
-                name: localization.en.navigation,
+                name: MANOVA.t('navigation'),
                 icon: "icon-manova",
                 modal: config.id
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: MANOVA.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: MANOVA.t('help.body')
+        }
+;
     }
     prepareExecution(instance) {
         let cmd = {};
@@ -263,4 +225,7 @@ if (exists('BSkyLeveneTest')){rm(BSkyLeveneTest)}
         return res;
     }
 }
-module.exports.item = new MANOVA().render()
+
+module.exports = {
+    render: () => new MANOVA().render()
+}

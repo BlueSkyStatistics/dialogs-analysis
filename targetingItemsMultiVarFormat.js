@@ -1,283 +1,14 @@
 
-var localization = {
-    en: {
-        title: "Targeting Items, Multi-Variable Format",
-        navigation: "Targeting Items, Multi-Variable Format",
-        src: "Columns",
-        destination: "Variables representing items in a basket",
-        prunerules: "Prune rules",
-        graphs: "Show visualizations",
-        test3: "Difference < 0",
-        txtbox2: "Null hypothesis (mu)",
-        txtbox1: "Confidence level",
-		label1 : "Generate Rules",
-		rulesobj : "Rules object name",
-		rulesobjhint : "This object holds all the rules and can be specified in other related dialogs. i.e Display Rules, Plot Rules ",
-		support: "Minimum support value",
-		supphint: "The support of an item(s) is the fraction of transactions in data set that contain that item(s).",
-		confidence : "Minimum confidence value",
-		confhint: "The confidence of a rule is the likelihood that it is true for a new transaction that contains the items on the LHS of the rule",
-		label2: "Targeting Items",
-		label3: "Enter levels of the variables you are interested in, in the format variable name=level. For example if variable name Survived has levels Yes and No, enter Survived=Yes,Survived=No",
-		lhs:"Items appearing on left hand side",
-		rhs: "Items appearing on right hand side",
-		both: "Items appearing on both sides",
-		none: "Items not appearing at all",
-        label4: "default appearance",
-		rdboth:"both",
-		rdlhs:"lhs",
-		rdrhs:"rhs",
-		rdnone: "none",
-		advoptions : "Advanced Options",
-		minlen: "Minimum number of items on the left",
-        maxlen: "Maximum number of items on the left",
-        sortopt: "Sort Options",
-        sortby: "Sort by",
-        rd1:"Confidence",
-        rd2:"Lift",
-        rd3:"Support",
-        sortord:"Sort order",
-        increasing:"Ascending",
-        decreasing:"Descending",
-        noofrules:"Number of rules to display",
-        rulecount:"",
-        fromto:"Display rules",
-        from:"From",
-        to:"To",        
-		
-        help: {
-            title: "Targeting Items, Multi-Variable Format",
-            r_help: "help(apriori, package='arules')",
-            body: `
-                    <b>
-                    NOTE: Depending on the format of the data, you will choose either the 'Basket data format; or 'Multi-line transaction format' or Multi-Variable format.  A separate set of dialogs are provided for each of these data formats. See below for details:
-                    </b>
-                    <br/><br/>
-                    <b>
-                    Basket Data Format
-                    </b>
-                    <br/>
-                    With Basket data format, all the items in a single basket are contained in a single column in the dataset. Multiple items are separated by any single character like comma(,) , semi-colon (;) or colon (:) etc.
-                    <br/>
-                    <b>
-                    Example 1
-                    </b>
-                    <table style="border: 1px solid ; border-collapse: collapse;">
-                    <tr>
-                    <th style="border: 1px solid ; border-collapse: collapse;">Items</th>
-                    </tr>
-                    <tr>
-                    <td style="border: 1px solid ; border-collapse: collapse;">item10,item20,item23,item24</td>
-                    </tr>
-                    <tr>
-                    <td style="border: 1px solid ; border-collapse: collapse;">item12,item13,item43</td>
-                    </tr>
-                    <tr>
-                    <td style="border: 1px solid ; border-collapse: collapse;">item12,item14,item32</td>
-                    </tr>            
-                </table> 
 
-                <br/>
-                <b>
-                Example 2
-                </b>
-                <table style="border: 1px solid ; border-collapse: collapse;">
-                <tr>
-                    <th style="border: 1px solid ; border-collapse: collapse;">Food Items</th>
-                </tr>
-                <tr>
-                    <td style="border: 1px solid ; border-collapse: collapse;">apples,mangos,beer</td>
-                </tr>
-                <tr>
-                    <td style="border: 1px solid ; border-collapse: collapse;">milk,chicken,cheese</td>
-                </tr>
-                <tr>
-                    <td style="border: 1px solid ; border-collapse: collapse;">apples,wine,cheese</td>
-                </tr>            
-                </table>    
-                <br/>
-                <br>
-                <b>
-                Multi-line Transaction Data Format
-                </b>
-                <br/>
-                With transaction format, every item in a single basket is represented in a separate row. All rows representing items in a single basket contain a common transaction id. The transaction ID is captured in a separate column        
-                <br/>
-                <b>
-                Example 1
-                </b>
-                <table style="border: 1px solid ; border-collapse: collapse;">
-                <tr>
-                <th style="border: 1px solid ; border-collapse: collapse;">ID</th>
-                <th style="border: 1px solid ; border-collapse: collapse;">Items</th>
-                </tr>
-                <tr>
-                <td style="border: 1px solid ; border-collapse: collapse;">1</td>
-                <td style="border: 1px solid ; border-collapse: collapse;">Bread</td>
-                </tr>
-                <tr>
-                <td style="border: 1px solid ; border-collapse: collapse;">1</td>
-                <td style="border: 1px solid ; border-collapse: collapse;">Butter</td>
-                </tr>
-                <tr>
-                <td style="border: 1px solid ; border-collapse: collapse;">2</td>
-                <td style="border: 1px solid ; border-collapse: collapse;">Meat</td>
-                </tr>      
-                <tr>
-                <td style="border: 1px solid ; border-collapse: collapse;">2</td>
-                <td style="border: 1px solid ; border-collapse: collapse;">Eggs</td>
-                </tr>
-                <tr>
-                <td style="border: 1px solid ; border-collapse: collapse;">2</td>
-                <td style="border: 1px solid ; border-collapse: collapse;">Cheese</td>
-                </tr>
-                <tr>
-                <td style="border: 1px solid ; border-collapse: collapse;">2</td>
-                <td style="border: 1px solid ; border-collapse: collapse;">Milk</td>
-                </tr>                              
-            </table> 
-            <br/>
-            So basket 1 contains bread and butter and basket 2 contains Meat, Eggs, Cheese and Milk
-
-            <br/><br/>
-            <b>
-            Multi-Variable Data Format
-            </b>
-            <br/>
-            In this format, every level of a variable in a dataset represents an item. Every row of the dataset represents a basket. See below
-            <br/>
-            <b>
-            Example 1
-            </b>
-            <table style="border: 1px solid ; border-collapse: collapse;">
-            <tr>
-                <th style="border: 1px solid ; border-collapse: collapse;">Baked goods</th>
-                <th style="border: 1px solid ; border-collapse: collapse;">Dairy </th>
-                <th style="border: 1px solid ; border-collapse: collapse;">Meat</th>
-                <th style="border: 1px solid ; border-collapse: collapse;">Vegetables</th>        
-            </tr>
-            <tr>
-                <td style="border: 1px solid ; border-collapse: collapse;">Bread</td>
-                <td style="border: 1px solid ; border-collapse: collapse;">Milk</td>
-                <td style="border: 1px solid ; border-collapse: collapse;">Chicken</td>
-                <td style="border: 1px solid ; border-collapse: collapse;">Tomatoes</td>
-            </tr>
-            <tr>
-                <td style="border: 1px solid ; border-collapse: collapse;">NA</td>
-                <td style="border: 1px solid ; border-collapse: collapse;">Cheese</td>
-                <td style="border: 1px solid ; border-collapse: collapse;">NA</td>
-                <td style="border: 1px solid ; border-collapse: collapse;">Onions</td>
-            </tr>
-            </table> 
-            <br/>
-            The prune rules check box allows you to prune rules. When selected, the redundant rules are displayed and the pruned model with redundant rules removed is saved and displayed. 
-            <br/>
-            When clicking the show visualizations check box, graphs are displayed. We have commented the  #plot(rule1, method ="paracoord",control = list(reorder=TRUE)) as it can take a long time to execute. You can paste the syntax  and run the command manually.            
-            <br/>
-            <br/>
-            <b>Target Items</b>
-            <br/>
-            Now that we know how to generate rules, limit the output by removing redundant rules, lets say we wanted to target items to generate rules. There are two types of targets we might be interested in that are illustrated with a grocery store  example of “milk”:
-            <br/><br/>
-            What are customers likely to buy before buying milk
-            <br/><br/>
-            What are customers likely to buy if they purchase milk?
-            <br/><br/>
-            This essentially means we want to set either the Left Hand Side and Right Hand Side. 
-            <br/><br/>
-            If you are interested in what items people buy before they buy milk, enter milk  in textbox for right hand side (RHS) below.Since all other items can appear on LHS, check radio button relating to default appearance to LHS.
-            <br/><br/>
-            Remember the default appearance is relevant to all items that are not explicitly mentioned in LHS, RHS, items appearing on both sides or items not appearing at all
-            <br/><br/>
-            If you are interested in what are customers likely to buy if they purchase  milk, put milk in the LHS and since any item can appear in the RHS, check radio button relating to default appearance to RHS
-            <br/>
-            <br/>
-            <b>
-            Output
-            </b>
-            <br/>
-            The results are displayed in Tabular format
-            <br/>
-            The Columns in the table are below
-            <br/><br/>
-            <b>LHS:</b> These represent the items in the basket
-            <br/><br/>
-            <b>RHS:</b> Given the items in the basket (LHS), the RHS contains a single item that will likely be bought
-            <br/><br/>
-            <b>Support:</b> Support is the fraction of transactions in the dataset that contain the items on the LHS
-            <br/><br/>
-            <b>Confidence:</b> Confidence is conditional probability that customer buying items on the LHS will also buy item on RHS
-            <br/><br/>
-            <b>Lift:</b> If someone buys items on the LHS,  what would the % of chance of buying product on RHS would increase. So basically how much our confidence has increased that the RHS will be purchased given the LHS is purchased. If lift is >1, the presence of items on LHS has increased the probability of items on RHS will occur in transaction, if <1 , presence of items on LHS will make probability of items on RHS lower, if =1, then LHS and RHS are independent
-            <br/><br/>
-            For details see 
-            <br/><br/>
-            http://infocenter.informationbuilders.com/wf80/index.jsp?topic=%2Fpubdocs%2FRStat16%2Fsource%2Ftopic49.htm
-            <br/><br/>
-            https://discourse.snowplowanalytics.com/t/market-basket-analysis-identifying-products-and-content-that-go-well-together/1132
-            <br/><br/>
-            http://www.listendata.com/2015/12/market-basket-analysis-with-r.html
-            <br/><br/>
-            http://www.salemmarafi.com/code/market-basket-analysis-with-r/
-            <br/><br/>
-        
-            <b>Package : arules</b> 
-            <br/><br/>
-            <b>Description</b> 
-            <br/>
-            Mine frequent itemsets, association rules or association hyperedges using the Apriori algorithm. The Apriori algorithm employs level-wise search for frequent itemsets. The implementation of Apriori used includes some improvements (e.g., a prefix tree and item sorting).
-            <br/><br/>
-            <b>Usage</b> 
-            <br/>
-            <code>
-            apriori(data, parameter = NULL, appearance = NULL, control = NULL)
-            </code>
-            <br/><br/>
-        
-            <b>Arguments</b><br/>
-            <ul>
-            <li>
-            data: object of class transactions or any data structure which can be coerced into transactions (e.g., a binary matrix or data.frame).
-            </li>
-            <li>
-            parameter: object of class APparameter or named list. The default behavior is to mine rules with minimum support of 0.1, minimum confidence of 0.8, maximum of 10 items (maxlen), and a maximal time for subset checking of 5 seconds (maxtime).
-            </li>
-            <li>
-            appearance: object of class APappearance or named list. With this argument item appearance can be restricted (implements rule templates). By default all items can appear unrestricted.
-            </li>
-            <li>
-            control: object of class APcontrol or named list. Controls the algorithmic performance of the mining algorithm (item sorting, report progress (verbose), etc.)
-            </li>
-            </ul>
-            <br/><br/>
-            <b>Details</b><br/>
-            Calls the C implementation of the Apriori algorithm by Christian Borgelt for mining frequent itemsets, rules or hyperedges.
-            <br/><br/>
-        
-            <b>Note</b>
-            Apriori only creates rules with one item in the RHS (Consequent)! The default value in APparameter for minlen is 1. This means that rules with only one item (i.e., an empty antecedent/LHS) like
-            <br/><br/>
-            <code>{} => {beer}</code>
-            <br/><br/>
-            will be created. These rules mean that no matter what other items are involved, the item in the RHS will appear with the probability given by the rule's confidence (which equals the support). If you want to avoid these rules then use the argument parameter=list(minlen=2).
-            <br/><br/>
-            <b>Notes on run time and memory usage:</b>
-            If the minimum support is chosen too low for the dataset, then the algorithm will try to create an extremely large set of itemsets/rules. This will result in very long run time and eventually the process will run out of memory. To prevent this, the default maximal length of itemsets/rules is restricted to 10 items (via the parameter element maxlen=10) and the time for checking subsets is limited to 5 seconds (via maxtime=5). The output will show if you hit these limits in the "checking subsets" line of the output. The time limit is only checked when the subset size increases, so it may run significantly longer than what you specify in maxtime. Setting maxtime=0 disables the time limit.
-            <br/>
-            Interrupting execution with Control-C/Esc is not recommended. Memory cleanup will be prevented resulting in a memory leak. Also, interrupts are only checked when the subset size increases, so it may take some time till the execution actually stops.
-            <br/><br/>
-            <b>Value</b><br/><br/>
-            Returns an object of class rules or itemsets.
-            <br/>            
-    `}
-    }
-}
 
 class targetingItemsMultiVarFormat extends baseModal {
+    static dialogId = 'targetingItemsMultiVarFormat'
+    static t = baseModal.makeT(targetingItemsMultiVarFormat.dialogId)
+
     constructor() {
         var config = {
-            id: "targetingItemsMultiVarFormat",
-            label: localization.en.title,
+            id: targetingItemsMultiVarFormat.dialogId,
+            label: targetingItemsMultiVarFormat.t('title'),
             modalType: "two",
             RCode: `
 library(arules);
@@ -388,14 +119,14 @@ local(
         var objects = {
             content_var: { 
 			el: new srcVariableList(config, {
-                    label: localization.en.src,
+                    label: targetingItemsMultiVarFormat.t('src'),
                     no: "src",
 					action: "move"
 				}) 
 			},
             destination: {
                 el: new dstVariableList(config, {
-                    label: localization.en.destination,
+                    label: targetingItemsMultiVarFormat.t('destination'),
                     no: "destination",
                     filter: "String|Numeric|Logical|Ordinal|Nominal|Scale",
                     extraction: "NoPrefix|UseComma|Enclosed",
@@ -404,7 +135,7 @@ local(
             },
 			prunerules: { 
 				el: new checkbox(config, { 
-					label: localization.en.prunerules, 
+					label: targetingItemsMultiVarFormat.t('prunerules'), 
 					newline:true, 
                     no: "prunerules", 
                     state: "checked",
@@ -413,7 +144,7 @@ local(
 			},
 			graphs: { 
 				el: new checkbox(config, {
-					label: localization.en.graphs, 
+					label: targetingItemsMultiVarFormat.t('graphs'), 
 					newline:true, 
                     no: "graphs", 
 					extraction: "Boolean" 
@@ -422,7 +153,7 @@ local(
 			
             label1: { 
 				el: new labelVar(config, { 
-					label: localization.en.label1, 
+					label: targetingItemsMultiVarFormat.t('label1'), 
                     no: "label1",
 					style:"mt-2",h: 5 
 				}) 
@@ -431,7 +162,7 @@ local(
 			rulesobj: {
                 el: new input(config, {
                     no: 'rulesobj',
-                    label: localization.en.rulesobj,
+                    label: targetingItemsMultiVarFormat.t('rulesobj'),
                     value:"Rules6",
                     extraction: "TextAsIs",
                     required: true,
@@ -441,7 +172,7 @@ local(
             },
 			rulesobjhint: { 
 				el: new labelVar(config, {
-					label: localization.en.rulesobjhint, 
+					label: targetingItemsMultiVarFormat.t('rulesobjhint'), 
                     no: "rulesobjhint",
 					style:"mt-2",h: 6 
 				}) 
@@ -451,7 +182,7 @@ local(
 			support: {
                 el: new inputSpinner(config, {
                     no: 'support',
-                    label: localization.en.support,
+                    label: targetingItemsMultiVarFormat.t('support'),
                     min: 0,
                     max: 9999999,
                     step: 0.01,
@@ -461,7 +192,7 @@ local(
             },
 			supphint: { 
 				el: new labelVar(config, { 
-					label: localization.en.supphint, 
+					label: targetingItemsMultiVarFormat.t('supphint'), 
                     no: "supphint",
 					style:"mt-2",h: 6 
 				}) 
@@ -471,7 +202,7 @@ local(
 			confidence: {
                 el: new inputSpinner(config, {
                     no: 'confidence',
-                    label: localization.en.confidence,
+                    label: targetingItemsMultiVarFormat.t('confidence'),
                     min: 0,
                     max: 9999999,
                     step: 0.01,
@@ -481,7 +212,7 @@ local(
             },
 			confhint: { 
 				el: new labelVar(config, { 
-					label: localization.en.confhint, 
+					label: targetingItemsMultiVarFormat.t('confhint'), 
                     no:"confhint",
 					style:"mt-2",h: 6 
 				}) 
@@ -489,14 +220,14 @@ local(
 			
             label2: { 
 				el: new labelVar(config, { 
-					label: localization.en.label2, 
+					label: targetingItemsMultiVarFormat.t('label2'), 
                     no: "label2",
 					style:"mt-2",h: 5 
 				}) 
 			},
             label3: { 
 				el: new labelVar(config, { 
-					label: localization.en.label3, 
+					label: targetingItemsMultiVarFormat.t('label3'), 
                     no: "label3",
 					style:"mt-2",h: 5 
 				}) 
@@ -505,7 +236,7 @@ local(
 			lhs: {
                 el: new input(config, {
                     no: 'lhs',
-                    label: localization.en.lhs,
+                    label: targetingItemsMultiVarFormat.t('lhs'),
                     value:"",
                     extraction: "CreateArray|RemoveSpaces",
                     allow_spaces:true,
@@ -516,7 +247,7 @@ local(
 			rhs: {
                 el: new input(config, {
                     no: 'rhs',
-                    label: localization.en.rhs,
+                    label: targetingItemsMultiVarFormat.t('rhs'),
                     value:"",
                     extraction: "CreateArray|RemoveSpaces" ,
                     allow_spaces:true,
@@ -527,7 +258,7 @@ local(
 			both: {
                 el: new input(config, {
                     no: 'both',
-                    label: localization.en.both,
+                    label: targetingItemsMultiVarFormat.t('both'),
                     value:"",
                     extraction: "CreateArray|RemoveSpaces" ,
                     allow_spaces:true,
@@ -538,7 +269,7 @@ local(
 			none: {
                 el: new input(config, {
                     no: 'none',
-                    label: localization.en.none,
+                    label: targetingItemsMultiVarFormat.t('none'),
                     value:"",
                     extraction: "CreateArray|RemoveSpaces",
                     allow_spaces:true,
@@ -549,7 +280,7 @@ local(
 
             label4: { 
 				el: new labelVar(config, { 
-					label: localization.en.label4, 
+					label: targetingItemsMultiVarFormat.t('label4'), 
                     no: "label4",
 					style:"mt-2",h: 5 
 				}) 
@@ -557,7 +288,7 @@ local(
 
             both2: { 
 				el: new radioButton(config, { 
-					label: localization.en.rdboth, 
+					label: targetingItemsMultiVarFormat.t('rdboth'), 
 					no: "defgrp", 
 					increment: "both2", 
 					value: "both", 
@@ -567,7 +298,7 @@ local(
 			},
             lhs2: { 
 				el: new radioButton(config, { 
-					label: localization.en.rdlhs, 
+					label: targetingItemsMultiVarFormat.t('rdlhs'), 
 					no: "defgrp", 
 					increment: "lhs2", 
 					value: "lhs", 
@@ -577,7 +308,7 @@ local(
 			},
             rhs2: { 
 				el: new radioButton(config, { 
-					label: localization.en.rdrhs, 
+					label: targetingItemsMultiVarFormat.t('rdrhs'), 
 					no: "defgrp", 
 					increment: "rhs2", 
 					value: "rhs", 
@@ -587,7 +318,7 @@ local(
 			},
             none2: { 
 				el: new radioButton(config, { 
-					label: localization.en.rdnone, 
+					label: targetingItemsMultiVarFormat.t('rdnone'), 
 					no: "defgrp", 
 					increment: "none2", 
 					value: "none", 
@@ -599,7 +330,7 @@ local(
 			minlen: {
                 el: new inputSpinner(config, {
                     no: 'minlen',
-                    label: localization.en.minlen,
+                    label: targetingItemsMultiVarFormat.t('minlen'),
                     min: 0,
                     max: 9999999,
                     step: 1,
@@ -610,7 +341,7 @@ local(
 			maxlen: {
                 el: new inputSpinner(config, {
                     no: 'maxlen',
-                    label: localization.en.maxlen,
+                    label: targetingItemsMultiVarFormat.t('maxlen'),
                     min: 0,
                     max: 9999999,
                     step: 1,
@@ -621,7 +352,7 @@ local(
 			
 			sortopt: { 
 				el: new labelVar(config, { 
-					label: localization.en.sortopt, 
+					label: targetingItemsMultiVarFormat.t('sortopt'), 
                     no:"sortopt",
 					style:"mt-2",h: 5 
 				}) 
@@ -629,14 +360,14 @@ local(
 			
 			sortby: { 
 				el: new labelVar(config, { 
-					label: localization.en.sortby, 
+					label: targetingItemsMultiVarFormat.t('sortby'), 
                     no: "sortby",
 					style:"mt-3",h: 5 
 				}) 
 			},
             rd1: { 
 				el: new radioButton(config, { 
-					label: localization.en.rd1, 
+					label: targetingItemsMultiVarFormat.t('rd1'), 
 					no: "sortgrp", 
 					increment: "rd1", 
 					value: "confidence", 
@@ -646,7 +377,7 @@ local(
 			},
             rd2: { 
 				el: new radioButton(config, { 
-					label: localization.en.rd2, 
+					label: targetingItemsMultiVarFormat.t('rd2'), 
 					no: "sortgrp", 
 					increment: "rd2", 
 					value: "lift", 
@@ -656,7 +387,7 @@ local(
 			},
             rd3: { 
 				el: new radioButton(config, { 
-					label: localization.en.rd3, 
+					label: targetingItemsMultiVarFormat.t('rd3'), 
 					no: "sortgrp", 
 					increment: "rd3", 
 					value: "support", 
@@ -668,7 +399,7 @@ local(
 			
 			sortord: { 
 				el: new labelVar(config, { 
-					label: localization.en.sortord, 
+					label: targetingItemsMultiVarFormat.t('sortord'), 
                     no: "sortord",
 					style:"mt-3",
 					h: 5 
@@ -676,7 +407,7 @@ local(
 			},
             increasing: { 
 				el: new radioButton(config, { 
-					label: localization.en.increasing, 
+					label: targetingItemsMultiVarFormat.t('increasing'), 
 					no: "ordergrp", 
 					increment: "increasing", 
 					value: "FALSE", 
@@ -686,7 +417,7 @@ local(
 			},
             decreasing: { 
 				el: new radioButton(config, { 
-					label: localization.en.decreasing, 
+					label: targetingItemsMultiVarFormat.t('decreasing'), 
 					no: "ordergrp", 
 					increment: "decreasing", 
 					value: "TRUE", 
@@ -699,7 +430,7 @@ local(
 			
 			noofrules: { 
 				el: new labelVar(config, { 
-					label: localization.en.noofrules, 
+					label: targetingItemsMultiVarFormat.t('noofrules'), 
                     no:"noofrules",
 					style:"mt-2",
 					h: 5 
@@ -707,7 +438,7 @@ local(
 			},
             numofrule: { 
 				el: new radioButton(config, { 
-					label: localization.en.noofrules, 
+					label: targetingItemsMultiVarFormat.t('noofrules'), 
 					no: "gpbox2", 
 					increment: "numofrule", 
 					value: "FALSE", 
@@ -719,7 +450,7 @@ local(
 			rulecount: {
                 el: new inputSpinner(config, {
                     no: 'rulecount',
-                    label: localization.en.rulecount,
+                    label: targetingItemsMultiVarFormat.t('rulecount'),
                     min: 0,
                     max: 9999999,
                     step: 1,
@@ -730,7 +461,7 @@ local(
 			
             fromto: { 
 				el: new radioButton(config, { 
-					label: localization.en.fromto, 
+					label: targetingItemsMultiVarFormat.t('fromto'), 
 					no: "gpbox2", 
 					increment: "fromto", 
 					value: "", 
@@ -742,7 +473,7 @@ local(
 			from: {
                 el: new inputSpinner(config, {
                     no: 'from',
-                    label: localization.en.from,
+                    label: targetingItemsMultiVarFormat.t('from'),
                     min: 0,
                     max: 9999999,
                     step: 1,
@@ -754,7 +485,7 @@ local(
 			to: {
                 el: new inputSpinner(config, {
                     no: 'to',
-                    label: localization.en.to,
+                    label: targetingItemsMultiVarFormat.t('to'),
                     min: 0,
                     max: 9999999,
                     step: 1,
@@ -769,7 +500,7 @@ local(
 		var advoptions = {
             el: new optionsVar(config, {
                 no: "advoptions",
-                name: localization.en.advoptions,
+                name: targetingItemsMultiVarFormat.t('advoptions'),
                 content: [
                     objects.minlen.el,
                     objects.maxlen.el,
@@ -803,13 +534,19 @@ local(
 				objects.lhs2.el.content, objects.rhs2.el.content,objects.both2.el.content, objects.none2.el.content,
                 advoptions.el.content],
             nav: {
-                name: localization.en.navigation,
+                name: targetingItemsMultiVarFormat.t('navigation'),
                 icon: "icon-target",
                 modal: config.id
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: targetingItemsMultiVarFormat.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: targetingItemsMultiVarFormat.t('help.body')
+        }
+;
     }
     prepareExecution(instance) {
         var res = [];
@@ -830,4 +567,7 @@ local(
         return res;
     }
 }
-module.exports.item = new targetingItemsMultiVarFormat().render()
+
+module.exports = {
+    render: () => new targetingItemsMultiVarFormat().render()
+}

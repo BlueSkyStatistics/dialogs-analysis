@@ -1,101 +1,14 @@
 
-var localization = {
-    en: {
-        title: "Fit of univariate distributions to non-censored data",
-		navigation: "Distribution Fit",
-		
-		variableSelcted: "Select a variable that contains the distribution",
-		//boot: "(Optional) Boot values of skewness and kurtosis. If specified must be an integer above 10",
-		//discreteChk: "Discrete - unchecked (default) for uniform, normal, logistic, lognormal, beta and gamma. Checked for poisson and negative binomial",
-		
-		label2: "Fit test for various distributions",
-		
-		normDistChk: "Normal",
-		weibullDistChk: "Weibull",
-		lnormDistChk: "Log Normal",
-		poissonDistChk: "Poisson",
-		expDistChk: "Exponential",
-		gammaDistChk: "Gamma",
-		nbinomDistChk: "Negative Binomial",
-		geomDistChk: "Geometric",
-		betaDistChk: "Beta",
-		unifDistChk: "Uniform",
-		logisDistChk: "Logistic",
-		cauchyDistChk: "Cauchy",
-		
-		method: "Fitting method",
-		gof: "Goodness-of-fit (gof) - required only when 'mge' method of fitting is chosen above",
-		
-		//fitdist(data, distr, method = c("mme", "mge", "mle", "qme", "mse"), 
-		//	start=NULL, fix.arg=NULL, discrete, keepdata = TRUE, keepdata.nb=100, …)
-		//"norm", "lnorm", "pois", "exp", "gamma", "nbinom", "geom", "beta", "unif" and "logis"
-		
-		//classical Cramer-von Mises distance ("CvM"), the classical Kolmogorov-Smirnov distance ("KS"), 
-		//the classical Anderson-Darling distance ("AD") 
-	
-		help: {
-            title: "Fit of univariate distributions to non-censored data",
-            r_help: "help(fitdist, package = fitdistrplus)",
-			body: `
-				<b>Description</b></br>
-				Fit of univariate distributions to non-censored data by maximum likelihood (mle), moment matching (mme), quantile matching (qme) or maximizing goodness-of-fit estimation (mge) which is also known as minimizing distance estimation.
-				<br/>
-				<br/>
-				For the detail help - use R help(fitdist, package = fitdistrplus) and help(gofstat, package = fitdistrplus)
-				<br/>
-				<br/>
-				The four possible fitting methods are described below:
-				<br/>
-				<br/>
-				When method="mle" (default)
-				Maximum likelihood estimation consists in maximizing the log-likelihood. A numerical optimization is carried out in mledist via optim to find the best values (see mledist for details).
-				<br/>
-				<br/>
-				When method="mme"
-				Moment matching estimation consists in equalizing theoretical and empirical moments. Estimated values of the distribution parameters are computed by a closed-form formula for the following distributions : "norm", "lnorm", "pois", "exp", "gamma", "nbinom", "geom", "beta", "unif" and "logis". Otherwise the theoretical and the empirical moments are matched numerically, by minimization of the sum of squared differences between observed and theoretical moments. In this last case, further arguments are needed in the call to fitdist: order and memp (see mmedist for details).
-				<br/>
-				<br/>
-				When method = "qme"
-				Quantile matching estimation consists in equalizing theoretical and empirical quantile. A numerical optimization is carried out in qmedist via optim to minimize of the sum of squared differences between observed and theoretical quantiles. The use of this method requires an additional argument probs, defined as the numeric vector of the probabilities for which the quantile(s) is(are) to be matched (see qmedist for details).
-				<br/>
-				<br/>
-				When method = "mge"
-				Maximum goodness-of-fit estimation consists in maximizing a goodness-of-fit statistics. A numerical optimization is carried out in mgedist via optim to minimize the goodness-of-fit distance. The use of this method requires an additional argument gof coding for the goodness-of-fit distance chosen. One can use the classical Cramer-von Mises distance ("CvM"), the classical Kolmogorov-Smirnov distance ("KS"), the classical Anderson-Darling distance ("AD") which gives more weight to the tails of the distribution, or one of the variants of this last distance proposed by Luceno (2006) (see mgedist for more details). This method is not suitable for discrete distributions.
-				<br/>
-				<br/>
-				When method = "mse"
-				Maximum goodness-of-fit estimation consists in maximizing the average log spacing. A numerical optimization is carried out in msedist via optim.
-				<br/>
-				<br/>
-				convergence is 
-				an integer code for the convergence of optim/constrOptim defined as below or defined by the user in the user-supplied optimization function. 0 indicates successful convergence. 1 indicates that the iteration limit of optim has been reached. 10 indicates degeneracy of the Nealder-Mead simplex. 100 indicates that optim encountered an internal error.
-				<br/>
-				<br/>
-				Goodness-of-fit statistics are computed by gofstat(). The Chi-squared statistic is computed using cells defined by the argument chisqbreaks or cells automatically defined from data, in order to reach roughly the same number of observations per cell, roughly equal to the argument meancount, or sligthly more if there are some ties. 
-				<br/>
-				<br/>
-				For continuous distributions, Kolmogorov-Smirnov, Cramer-von Mises and Anderson-Darling and statistics are also computed, as defined by Stephens (1986).
-				<br/>
-				<br/>
-				Statistics of importance are Cramer-von Mises, Anderson-Darling and Kolmogorov statistics for continuous distributions and Chi-squared statistics for discrete ones ( "binom", "nbinom", "geom", "hyper" and "pois" )
-				<br/>
-				<br/>
-				<a href="https://stats.stackexchange.com/questions/132652/how-to-determine-which-distribution-fits-my-data-best">For a good overview of distribution fit, see https://stats.stackexchange.com/questions/132652/how-to-determine-which-distribution-fits-my-data-best</a>
-				<br/>
-				<br/>
-				<br/>
-				<a href="https://stats.stackexchange.com/questions/132652/how-to-determine-which-distribution-fits-my-data-best">For a good overview of distribution fit, see https://stats.stackexchange.com/questions/132652/how-to-determine-which-distribution-fits-my-data-best</a>
-				<br/>
-			`
-		},
-	}
-}
+
 
 class distributionFit extends baseModal {
+    static dialogId = 'distributionFit'
+    static t = baseModal.makeT(distributionFit.dialogId)
+
     constructor() {
         var config = {
-            id: "distributionFit1",
-            label: localization.en.title,
+            id: distributionFit.dialogId,
+            label: distributionFit.t('title'),
             modalType: "two",
             RCode:`
 
@@ -792,7 +705,7 @@ if(length(dist_test_comp_list) > 1){
             content_var: { el: new srcVariableList(config, {action: "move", scroll:true}) }, 
 			variableSelcted: {
                 el: new dstVariable(config, {
-                    label: localization.en.variableSelcted,
+                    label: distributionFit.t('variableSelcted'),
                     no: "variableSelcted",
                     required: true,
                     //filter: "String|Numeric|Logical|Ordinal|Nominal|Scale",
@@ -805,7 +718,7 @@ if(length(dist_test_comp_list) > 1){
 			boot: {
                 el: new input(config, {
                     no: 'boot',
-                    label: localization.en.boot,
+                    label: distributionFit.t('boot'),
                     placeholder: "",
                     required: false,
                     type: "numeric",
@@ -821,7 +734,7 @@ if(length(dist_test_comp_list) > 1){
 			*/
 			/*discreteChk: {
                 el: new checkbox(config, {
-                    label: localization.en.discreteChk,
+                    label: distributionFit.t('discreteChk'),
                     no: "discreteChk",
                     style: "mb-2",
                     bs_type: "valuebox",
@@ -833,14 +746,14 @@ if(length(dist_test_comp_list) > 1){
             },*/
 			label2: { 
 				el: new labelVar(config, { 
-					label: localization.en.label2, 
+					label: distributionFit.t('label2'), 
 					h: 6, 
 					style: "mb-2",
 				}) 
 			},
 			cauchyDistChk: {
                 el: new checkbox(config, {
-                    label: localization.en.cauchyDistChk,
+                    label: distributionFit.t('cauchyDistChk'),
                     no: "cauchyDistChk",
                     style: "mb-2",
                     bs_type: "valuebox",
@@ -852,7 +765,7 @@ if(length(dist_test_comp_list) > 1){
             },
 			logisDistChk: {
                 el: new checkbox(config, {
-                    label: localization.en.logisDistChk,
+                    label: distributionFit.t('logisDistChk'),
                     no: "logisDistChk",
                     style: "mb-2",
                     bs_type: "valuebox",
@@ -864,7 +777,7 @@ if(length(dist_test_comp_list) > 1){
             },
 			unifDistChk: {
                 el: new checkbox(config, {
-                    label: localization.en.unifDistChk,
+                    label: distributionFit.t('unifDistChk'),
                     no: "unifDistChk",
                     style: "mb-2",
                     bs_type: "valuebox",
@@ -876,7 +789,7 @@ if(length(dist_test_comp_list) > 1){
             },
 			betaDistChk: {
                 el: new checkbox(config, {
-                    label: localization.en.betaDistChk,
+                    label: distributionFit.t('betaDistChk'),
                     no: "betaDistChk",
                     style: "mb-2",
                     bs_type: "valuebox",
@@ -888,7 +801,7 @@ if(length(dist_test_comp_list) > 1){
             },
 			geomDistChk: {
                 el: new checkbox(config, {
-                    label: localization.en.geomDistChk,
+                    label: distributionFit.t('geomDistChk'),
                     no: "geomDistChk",
                     style: "mb-2",
                     bs_type: "valuebox",
@@ -900,7 +813,7 @@ if(length(dist_test_comp_list) > 1){
             },
 			nbinomDistChk: {
                 el: new checkbox(config, {
-                    label: localization.en.nbinomDistChk,
+                    label: distributionFit.t('nbinomDistChk'),
                     no: "nbinomDistChk",
                     style: "mb-2",
                     bs_type: "valuebox",
@@ -912,7 +825,7 @@ if(length(dist_test_comp_list) > 1){
             },
 			gammaDistChk: {
                 el: new checkbox(config, {
-                    label: localization.en.gammaDistChk,
+                    label: distributionFit.t('gammaDistChk'),
                     no: "gammaDistChk",
                     style: "mb-2",
                     bs_type: "valuebox",
@@ -924,7 +837,7 @@ if(length(dist_test_comp_list) > 1){
             },
 			expDistChk: {
                 el: new checkbox(config, {
-                    label: localization.en.expDistChk,
+                    label: distributionFit.t('expDistChk'),
                     no: "expDistChk",
                     style: "mb-2",
                     bs_type: "valuebox",
@@ -936,7 +849,7 @@ if(length(dist_test_comp_list) > 1){
             },
 			poissonDistChk: {
                 el: new checkbox(config, {
-                    label: localization.en.poissonDistChk,
+                    label: distributionFit.t('poissonDistChk'),
                     no: "poissonDistChk",
                     style: "mb-2",
                     bs_type: "valuebox",
@@ -948,7 +861,7 @@ if(length(dist_test_comp_list) > 1){
             },
 			lnormDistChk: {
                 el: new checkbox(config, {
-                    label: localization.en.lnormDistChk,
+                    label: distributionFit.t('lnormDistChk'),
                     no: "lnormDistChk",
                     style: "mb-2",
                     bs_type: "valuebox",
@@ -960,7 +873,7 @@ if(length(dist_test_comp_list) > 1){
             }, 
 			weibullDistChk: {
                 el: new checkbox(config, {
-                    label: localization.en.weibullDistChk,
+                    label: distributionFit.t('weibullDistChk'),
                     no: "weibullDistChk",
                     style: "mb-2",
                     bs_type: "valuebox",
@@ -972,7 +885,7 @@ if(length(dist_test_comp_list) > 1){
             },
 			normDistChk: {
                 el: new checkbox(config, {
-                    label: localization.en.normDistChk,
+                    label: distributionFit.t('normDistChk'),
                     no: "normDistChk",
                     style: "mb-2",
                     bs_type: "valuebox",
@@ -986,7 +899,7 @@ if(length(dist_test_comp_list) > 1){
 			method: {
                 el: new selectVar(config, {
                     no: 'method',
-                    label: localization.en.method,
+                    label: distributionFit.t('method'),
                     multiple: false,
                     //required: true,
                     extraction: "NoPrefix|UseComma",
@@ -997,7 +910,7 @@ if(length(dist_test_comp_list) > 1){
 			gof: {
                 el: new selectVar(config, {
                     no: 'gof',
-                    label: localization.en.gof,
+                    label: distributionFit.t('gof'),
                     multiple: false,
                     //required: true,
                     extraction: "NoPrefix|UseComma",
@@ -1030,13 +943,22 @@ if(length(dist_test_comp_list) > 1){
 					objects.gof.el.content
 					],
             nav: {
-                name: localization.en.navigation,
+                name: distributionFit.t('navigation'),
                 icon: "icon-sixsigma",
                 modal: config.id
             }
         };
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: distributionFit.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: distributionFit.t('help.body')
+        }
+;
     }
 }
-module.exports.item = new distributionFit().render()
+
+module.exports = {
+    render: () => new distributionFit().render()
+}

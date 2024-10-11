@@ -9,90 +9,15 @@
 
 
 
-var localization = {
-    en: {
-        title: "t-test, Independent Samples",
-        navigation: "t-test, Independent Samples (Legacy)",
-        Target: "Select variables",
-        textbox1: "Confidence interval",
-        textbox2: "Null hypothesis (mu)",
-        label1: "Aternative hypothesis",
-        test1: "group1 != group2",
-        test2: "group1 > group2",
-        test3: "group1 < group2",
-        Target2: "Factor variable with 2 levels",
-        label2: "Missing Values",
-        Analysis: "Analysis by analysis",
-        Listwise: "Listwise",
-        conflevel: "Confidence Interval:",
-        MissingVals: "Options for missing values",
-        cohensdNoCorrection: "Cohen's d",
-        hedgesgNoCorrection: "Hedges' g",
-        glassdNoCorrection: "Glass's delta",
-        hedgesgCorrect: "Hedges' g with bias corrected",
-        glassdCorrect: "Glass's delta with bias corrected",
-        glassdNoCorrection: "Glass's delta",
-        effectsizes: "Effect sizes",
-        cohensdCorrect: "Cohen's d with bias corrected",
-        label3: "Options for Cohen's d",
-        label4: "Options for Hedges' g",
-        label5: "Options for Glass's delta",
-        showEffectSizes: "Display effect sizes",
-        help: {
-            title: "t-test, Independent Samples",
-            r_help: "help(t.test, package ='stats')",
-            body: `
-<b>Description</b></br>
-Performs a one sample t-tests against the two groups formed by a factor variable (with two levels). Displays results for equal variances TRUE and FALSE. For equal variances the pooled variance is used otherwise the Welch (or Satterthwaite) approximation to the degrees of freedom is used. Internally calls t.test in the stats package for every selected variable 
-<br/>
-<b>Usage</b>
-<br/>
-<code> 
-BSkyIndSmTTest(varNamesOrVarGlobalIndices=c('var1','var2'), group=c('var3'), conf.level = 0.95, alternative="two.sided", missing =0, datasetNameOrDatasetGlobalIndex = 'Dataset') 
-</code> <br/>
-<b>Arguments</b><br/>
-<ul>
-<li>
-varNamesOrVarGlobalIndices: selected scale variables (say var1, var2)
-</li>
-<li>
-group: a factor variable with two levels (say var3)
-</li>
-<li>
-conf.level: a numeric value  (say 0.95) .
-</li>
-<li>
-missing: missing values are handled on a per variable basis (missing =0) or list wise across all variables (missing=1). 
-</li>
-<li>
-datasetNameOrDatasetGlobalIndex: Name of the dataset (say Dataset)  from which var1, var2 and var3 are selected.
-</li>
-<li>
-alternative:  a character string specifying the alternative hypothesis, must be one of "two.sided"  (default), "greater" or "less". You can specify just the initial letter.
-</li>
-</ul>
-<b>Details</b></br>
-A list with resulting tables is returned.
-<br/>
-<b>Example</b></br>
-<code> 
-Dataset <- data.frame(Expenses=c(20,23,19,25,26), Sales=c(48,50,55,51,49), Gender=c('m','f','f','m','m'), Deptt=c('IT', 'Sales', 'IT','Sales','IT'))</br>
-# Dataset must be loaded in the UI grid</br>
-BSkyLoadRefresh("Dataset")</br>
-BSky_One_Simple_T_Test = BSkyIndSmTTest(varNamesOrVarGlobalIndices =c('Sales','Expenses'),group=c('Deptt'),conf.level=0.95, alternative="less", datasetNameOrDatasetGlobalIndex ='Dataset')</br>
-</code> <br/>
-<b>Package</b></br>
-stats</br>
-<b>Help</b></br>
-For detailed help click on the R icon on the top right hand side of this dialog overlay or run the following command help(t.test, package ='stats') by creating a R code chunk by clicking + in the output window           
-    `}
-    }
-}
+
 class ttestIndependentSamplesLegacy extends baseModal {
+    static dialogId = 'ttestIndependentSamplesLegacy'
+    static t = baseModal.makeT(ttestIndependentSamplesLegacy.dialogId)
+
     constructor() {
         var config = {
-            id: "ttestIndependentSamplesLegacy",
-            label: localization.en.title,
+            id: ttestIndependentSamplesLegacy.dialogId,
+            label: ttestIndependentSamplesLegacy.t('title'),
             splitProcessing: false,
             modalType: "two",
             RCode: `
@@ -127,17 +52,17 @@ if ( exists('BSky_Independent_Sample_T_Test')) rm(BSky_Independent_Sample_T_Test
             content_var: { el: new srcVariableList(config, {action: "move"}) },
             Target: {
                 el: new dstVariableList(config, {
-                    label: localization.en.Target,
+                    label: ttestIndependentSamplesLegacy.t('Target'),
                     no: "Target",
                     required: true,
                     filter: "Numeric|Scale",
                     extraction: "NoPrefix|UseComma|Enclosed",
                 }), r: ['{{ var | safe}}']
             },
-            label1: { el: new labelVar(config, { label: localization.en.label1, h: 6 }) },
+            label1: { el: new labelVar(config, { label: ttestIndependentSamplesLegacy.t('label1'), h: 6 }) },
             twosided: {
                 el: new radioButton(config, {
-                    label: localization.en.test1,
+                    label: ttestIndependentSamplesLegacy.t('test1'),
                     no: "gpbox2",
                     increment: "twosided",
                     value: "two.sided",
@@ -147,7 +72,7 @@ if ( exists('BSky_Independent_Sample_T_Test')) rm(BSky_Independent_Sample_T_Test
             },
             greater: {
                 el: new radioButton(config, {
-                    label: localization.en.test2,
+                    label: ttestIndependentSamplesLegacy.t('test2'),
                     no: "gpbox2",
                     increment: "greater",
                     value: "greater",
@@ -157,7 +82,7 @@ if ( exists('BSky_Independent_Sample_T_Test')) rm(BSky_Independent_Sample_T_Test
             },
             less: {
                 el: new radioButton(config, {
-                    label: localization.en.test3,
+                    label: ttestIndependentSamplesLegacy.t('test3'),
                     no: "gpbox2",
                     increment: "less",
                     value: "less",
@@ -167,7 +92,7 @@ if ( exists('BSky_Independent_Sample_T_Test')) rm(BSky_Independent_Sample_T_Test
             },
             Target2: {
                 el: new dstVariable(config, {
-                    label: localization.en.Target2,
+                    label: ttestIndependentSamplesLegacy.t('Target2'),
                     no: "Target2",
                     required: true,
                     filter: "Numeric|Logical|Ordinal|Nominal",
@@ -177,7 +102,7 @@ if ( exists('BSky_Independent_Sample_T_Test')) rm(BSky_Independent_Sample_T_Test
             conf_level: {
                 el: new inputSpinner(config, {
                     no: 'conflevel',
-                    label: localization.en.conflevel,
+                    label: ttestIndependentSamplesLegacy.t('conflevel'),
                     min: 0,
                     max: 1,
                     step: 0.01,
@@ -185,10 +110,10 @@ if ( exists('BSky_Independent_Sample_T_Test')) rm(BSky_Independent_Sample_T_Test
                     extraction: "NoPrefix|UseComma"
                 })
             },
-            label2: { el: new labelVar(config, { label: localization.en.label2, h: 6 }) },
+            label2: { el: new labelVar(config, { label: ttestIndependentSamplesLegacy.t('label2'), h: 6 }) },
             Analysis: {
                 el: new radioButton(config, {
-                    label: localization.en.Analysis,
+                    label: ttestIndependentSamplesLegacy.t('Analysis'),
                     no: "Missvals",
                     increment: "Analysis",
                     value: "0",
@@ -198,7 +123,7 @@ if ( exists('BSky_Independent_Sample_T_Test')) rm(BSky_Independent_Sample_T_Test
             },
             Listwise: {
                 el: new radioButton(config, {
-                    label: localization.en.Listwise,
+                    label: ttestIndependentSamplesLegacy.t('Listwise'),
                     no: "Missvals",
                     increment: "Listwise",
                     value: "1",
@@ -208,16 +133,16 @@ if ( exists('BSky_Independent_Sample_T_Test')) rm(BSky_Independent_Sample_T_Test
             },
             showEffectSizes: {
                 el: new checkbox(config, {
-                    label: localization.en.showEffectSizes,
+                    label: ttestIndependentSamplesLegacy.t('showEffectSizes'),
                     no: "showEffectSizes",
                     newline: true,
                     extraction: "Boolean",
                 })
             },
-            label3: { el: new labelVar(config, { label: localization.en.label3, style: "mb-1, mt-1", h: 6 }) },
+            label3: { el: new labelVar(config, { label: ttestIndependentSamplesLegacy.t('label3'), style: "mb-1, mt-1", h: 6 }) },
             cohensdNoCorrection: {
                 el: new radioButton(config, {
-                    label: localization.en.cohensdNoCorrection,
+                    label: ttestIndependentSamplesLegacy.t('cohensdNoCorrection'),
                     no: "cohensd",
                     increment: "cohensdNoCorrection",
                     value: "0",
@@ -227,7 +152,7 @@ if ( exists('BSky_Independent_Sample_T_Test')) rm(BSky_Independent_Sample_T_Test
             },
             cohensdCorrect: {
                 el: new radioButton(config, {
-                    label: localization.en.cohensdCorrect,
+                    label: ttestIndependentSamplesLegacy.t('cohensdCorrect'),
                     no: "cohensd",
                     increment: "cohensdCorrect",
                     value: "1",
@@ -237,7 +162,7 @@ if ( exists('BSky_Independent_Sample_T_Test')) rm(BSky_Independent_Sample_T_Test
             },
             hedgesgNoCorrection: {
                 el: new radioButton(config, {
-                    label: localization.en.hedgesgNoCorrection,
+                    label: ttestIndependentSamplesLegacy.t('hedgesgNoCorrection'),
                     no: "hedgesg",
                     increment: "hedgesgNoCorrection",
                     value: "0",
@@ -247,7 +172,7 @@ if ( exists('BSky_Independent_Sample_T_Test')) rm(BSky_Independent_Sample_T_Test
             },
             hedgesgCorrect: {
                 el: new radioButton(config, {
-                    label: localization.en.hedgesgCorrect,
+                    label: ttestIndependentSamplesLegacy.t('hedgesgCorrect'),
                     no: "hedgesg",
                     increment: "hedgesgCorrect",
                     value: "1",
@@ -255,13 +180,13 @@ if ( exists('BSky_Independent_Sample_T_Test')) rm(BSky_Independent_Sample_T_Test
                     extraction: "ValueAsIs"
                 })
             },
-            label4: { el: new labelVar(config, { label: localization.en.label4, style: "mb-1, mt-1", h: 6 }) },
+            label4: { el: new labelVar(config, { label: ttestIndependentSamplesLegacy.t('label4'), style: "mb-1, mt-1", h: 6 }) },
 
 
-            label5: { el: new labelVar(config, { label: localization.en.label5, style: "mb-1, mt-1", h: 6 }) },
+            label5: { el: new labelVar(config, { label: ttestIndependentSamplesLegacy.t('label5'), style: "mb-1, mt-1", h: 6 }) },
             glassdNoCorrection: {
                 el: new radioButton(config, {
-                    label: localization.en.glassdNoCorrection,
+                    label: ttestIndependentSamplesLegacy.t('glassdNoCorrection'),
                     no: "glassd",
                     increment: "glassdNoCorrection",
                     value: "0",
@@ -271,7 +196,7 @@ if ( exists('BSky_Independent_Sample_T_Test')) rm(BSky_Independent_Sample_T_Test
             },
             glassdCorrect: {
                 el: new radioButton(config, {
-                    label: localization.en.glassdCorrect,
+                    label: ttestIndependentSamplesLegacy.t('glassdCorrect'),
                     no: "glassd",
                     increment: "glassdCorrect",
                     value: "1",
@@ -283,7 +208,7 @@ if ( exists('BSky_Independent_Sample_T_Test')) rm(BSky_Independent_Sample_T_Test
         var effectsizes = {
             el: new optionsVar(config, {
                 no: "effects",
-                name: localization.en.effectsizes,
+                name: ttestIndependentSamplesLegacy.t('effectsizes'),
                 content: [
                     objects.showEffectSizes.el,
                     objects.label3.el,
@@ -301,7 +226,7 @@ if ( exists('BSky_Independent_Sample_T_Test')) rm(BSky_Independent_Sample_T_Test
         var MissingVals = {
             el: new optionsVar(config, {
                 no: "MissingVals",
-                name: localization.en.MissingVals,
+                name: ttestIndependentSamplesLegacy.t('MissingVals'),
                 content: [
                     objects.label2.el,
                     objects.Analysis.el,
@@ -316,13 +241,22 @@ if ( exists('BSky_Independent_Sample_T_Test')) rm(BSky_Independent_Sample_T_Test
             objects.conf_level.el.content],
             bottom: [effectsizes.el.content, MissingVals.el.content],
             nav: {
-                name: localization.en.navigation,
+                name: ttestIndependentSamplesLegacy.t('navigation'),
                 icon: "icon-t2",
                 modal: config.id
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: ttestIndependentSamplesLegacy.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: ttestIndependentSamplesLegacy.t('help.body')
+        }
+;
     }
 }
-module.exports.item = new ttestIndependentSamplesLegacy().render()
+
+module.exports = {
+    render: () => new ttestIndependentSamplesLegacy().render()
+}

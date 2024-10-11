@@ -1,81 +1,5 @@
 
-var localization = {
-    en: {
-        title: "Hierarchical Cluster",
-        navigation: "Hierarchical",
-        destination: "Destination",
-        clusters: "No of clusters",
-        storeClusterInDataset: "Assign clusters to the dataset",
-        variablename: "Variable name to store clusters",
-        biplot: "Show cluster biplot",
-        dendogram: "Plot cluster dendogram",
-        labelForClusteringMethod: "Clustering method",
-        help: {
-            title: "Hierarchical Cluster",
-            r_help: "help(hclust, package ='stats')",
-            body: `
-<b>Description</b></br>
-Hierarchical cluster analysis on a set of dissimilarities and methods for analyzing it.
-<br/>
-<b>Usage</b>
-<br/>
-<code> 
-BSkyHierClust <-BSkyHierClus(varsToCluster, method="ward.D",noOfClusters, distance="euclidian",plotDendogram=FALSE, assignClusterToDataset=FALSE, label, plotBiplot =FALSE,dataset="datasetname")
-</code> <br/>
-<b>Arguments</b><br/>
-<ul>
-<li>
-varsToCluster: The variables to analyze 
-</li>
-<li>
-method: the agglomeration method to be used. This should be (an unambiguous abbreviation of) one of "ward.D", "ward.D2", 
-"single", "complete", "average" (= UPGMA), "mcquitty" (= WPGMA),"median" (= WPGMC) or "centroid" (= UPGMC).
-</li>
-<li>
-noOfClusters: The number of clusters desired
-</li>
-<li>
-plotDendogram: Plot a dendogram True or false
-</li>
-<li>
-assignClusterToDataset: Save the cluster assignments to the dataset
-</li>
-<li>
-label: name for the new variable that stores the cluster assignments
-</li>
-<li>
-plotBiplot: plot Biplot TRUE or FALSE
-</li>
-</ul>
-<b>Package</b></br>
-BlueSky</br>
-<b>Help</b></br>
-help(hclust, package ='stats')</br></br>
-<b>Description</b></br>
-plotDendrogram: Calls the plot function to plot the cluster dendrogram
-<br/>
-<b>Usage</b>
-<br/>
-<code> 
-plotDendogram(method,distance,dataset)
-</code> <br/>
-<b>Arguments</b><br/>
-<ul>
-<li>
-method: see above
-</li>
-<li>
-distance: see above
-plotBiplot: plot Biplot TRUE or FALSE
-</li>
-</ul>
-<b>Package</b></br>
-BlueSky</br>
-<b>Help</b></br>
-help(plot)
-    `}
-    }
-}
+
 
 
 
@@ -87,10 +11,13 @@ help(plot)
 
 
 class hierarchicalCluster extends baseModal {
+    static dialogId = 'hierarchicalCluster'
+    static t = baseModal.makeT(hierarchicalCluster.dialogId)
+
     constructor() {
         var config = {
-            id: "hierarchicalCluster",
-            label: localization.en.title,
+            id: hierarchicalCluster.dialogId,
+            label: hierarchicalCluster.t('title'),
             modalType: "two",
             RCode: `
 #Run the cluster analysis
@@ -109,7 +36,7 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
             content_var: { el: new srcVariableList(config, {action: "move"}) },
             destination: {
                 el: new dstVariableList(config, {
-                    label: localization.en.destination,
+                    label: hierarchicalCluster.t('destination'),
                     no: "destination",
                     filter: "Numeric|Scale",
                     required: true,
@@ -119,7 +46,7 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
             clusters: {
                 el: new inputSpinner(config, {
                     no: 'clusters',
-                    label: localization.en.clusters,
+                    label: hierarchicalCluster.t('clusters'),
                     min: 1,
                     max: 9999999,
                     step: 1,
@@ -128,11 +55,11 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
                     extraction: "NoPrefix|UseComma"
                 })
             },
-            storeClusterInDataset: { el: new checkbox(config, { label: localization.en.storeClusterInDataset, required: true, dependant_objects: ['variablename'], no: "storeClusterInDataset", extraction: "Boolean" }) },
+            storeClusterInDataset: { el: new checkbox(config, { label: hierarchicalCluster.t('storeClusterInDataset'), required: true, dependant_objects: ['variablename'], no: "storeClusterInDataset", extraction: "Boolean" }) },
             variablename: {
                 el: new input(config, {
                     no: 'variablename',
-                    label: localization.en.variablename,
+                    label: hierarchicalCluster.t('variablename'),
                     ml: 4,
                     placeholder: "",
                     type: "character",
@@ -140,8 +67,8 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
                     value: ""
                 })
             },
-            biplot: { el: new checkbox(config, { label: localization.en.biplot, no: "biplot", extraction: "Boolean" }) },
-            dendogram: { el: new checkbox(config, { label: localization.en.dendogram, no: "dendogram", newline: true, extraction: "Boolean" }) },
+            biplot: { el: new checkbox(config, { label: hierarchicalCluster.t('biplot'), no: "biplot", extraction: "Boolean" }) },
+            dendogram: { el: new checkbox(config, { label: hierarchicalCluster.t('dendogram'), no: "dendogram", newline: true, extraction: "Boolean" }) },
             options: {
                 el: new optionsVar(config, {
                     no: "barchart_options",
@@ -251,13 +178,22 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
             right: [objects.destination.el.content, objects.clusters.el.content, objects.storeClusterInDataset.el.content, objects.variablename.el.content, objects.biplot.el.content, objects.dendogram.el.content],
             bottom: [objects.options.el.content],
             nav: {
-                name: localization.en.navigation,
+                name: hierarchicalCluster.t('navigation'),
                 icon: "icon-hierarchical-structure",
                 modal: config.id
             }
         };
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: hierarchicalCluster.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: hierarchicalCluster.t('help.body')
+        }
+;
     }
 }
-module.exports.item = new hierarchicalCluster().render()
+
+module.exports = {
+    render: () => new hierarchicalCluster().render()
+}

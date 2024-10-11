@@ -1,79 +1,12 @@
-var localization = {
-    en: {
-		navigation: "D'Agostino skewness test",
-		title: "D'Agostino test of skewness",
-        hypothesisType : "Test hypothesis (H1)",
-		twosided: "Two-sided",
-		greater : "Greater",
-		less: "Less",
-		label2: "Other options",
-        showLengthNAs: "Show length and NAs",
-		verbose: "Verbose alternative hypothesis",
-        Target: "Select one or more variables",
-        help: {
-            title: "D'Agostino test of skewness",
-            r_help: "help(agostino.test, package ='moments')",
-            body: `
-<b>Description</b></br>
-Performs D'Agostino test for skewness in normally distributed data.
-<br/>
-<b>Usage</b>
-<br/>
-<code> 
-agostino.test(x, alternative = c("two.sided", "less", "greater"))
-</code> <br/>
-<b>Arguments</b><br/>
-<ul>
-<li>
-x: a numeric vector of data values.
-</li>
-<li>
-y: a character string specifying the alternative hypothesis, must be one of '"two.sided"' (default), '"greater"' or '"less"'. You can specify just the initial letter.
-</li>
-</ul>
-<b>Details</b></br>
-Under the hypothesis of normality, data should be symmetrical (i.e. skewness should be equal to zero). This test has such null hypothesis and is useful to detect a significant skewness in normally distributed data.
-<br/>
-<b>Values</b></br>
-A list with class htest containing the following components:
-<ul>
-<li>
-statistic: the list containing skewness estimator and its transformation.</br>
-</li>
-<li>
-p.value: pvalue of the test. </br>
-</li>
-<li>
-alternative: a character string describing the alternative hypothesis</br>
-</li>
-<li>
-method: a character string indicating what type of test was performed.
-</li>
-<li>
-data.name: Name of the data argument.</br>
-</li>
-</ul>
-<b>Example</b></br>
-<code> 
-set.seed(1234)</br>
-x = rnorm(1000)</br>
-skewness(x)</br>
-agostino.test(x)</br>
-</code> <br/>
-<b>Package</b></br>
-moments</br>
-<b>Help</b></br>
-For detailed help click on the R icon on the top right hand side of this dialog overlay or run the following command help(agostino.test, package ='moments') in the BlueSky Statistics R editor.           
-<br/>
-<br/>	
-`}
-    }
-}
+
 class agostino extends baseModal {
+    static dialogId = 'agostino'
+    static t = baseModal.makeT(agostino.dialogId)
+
     constructor() {
         var config = {
-            id: "agostino",
-            label: localization.en.title,
+            id: agostino.dialogId,
+            label: agostino.t('title'),
             splitProcessing: false,
             modalType: "two",
             RCode: `
@@ -114,17 +47,17 @@ BSkyFormat(results,singleTableOutputHeader = paste("D'Agostino test of skewness 
             content_var: { el: new srcVariableList(config, { action: "move" }) },
             Target: {
                 el: new dstVariableList(config, {
-                    label: localization.en.Target,
+                    label: agostino.t('Target'),
                     no: "Target",
                     required: true,
                     filter: "Numeric|Scale",
                     extraction: "NoPrefix|UseComma|Enclosed",
                 })
             },
-			hypothesisType: { el: new labelVar(config, { label: localization.en.hypothesisType, h: 6 }) },
+			hypothesisType: { el: new labelVar(config, { label: agostino.t('hypothesisType'), h: 6 }) },
             twosided: {
                 el: new radioButton(config, {
-                    label: localization.en.twosided,
+                    label: agostino.t('twosided'),
                     no: "gpbox1",
                     increment: "twosided",
                     value: "two.sided",
@@ -134,7 +67,7 @@ BSkyFormat(results,singleTableOutputHeader = paste("D'Agostino test of skewness 
             },
             greater: {
                 el: new radioButton(config, {
-                    label: localization.en.greater,
+                    label: agostino.t('greater'),
                     no: "gpbox1",
                     increment: "greater",
                     value: "greater",
@@ -144,7 +77,7 @@ BSkyFormat(results,singleTableOutputHeader = paste("D'Agostino test of skewness 
             },
 			less: {
                 el: new radioButton(config, {
-                    label: localization.en.less,
+                    label: agostino.t('less'),
                     no: "gpbox1",
                     increment: "less",
                     value: "less",
@@ -153,10 +86,10 @@ BSkyFormat(results,singleTableOutputHeader = paste("D'Agostino test of skewness 
                     extraction: "ValueAsIs"
                 })
             },	
-			label2: { el: new labelVar(config, { label: localization.en.label2, style: "mt-2", h: 6 }) },			         
+			label2: { el: new labelVar(config, { label: agostino.t('label2'), style: "mt-2", h: 6 }) },			         
             showLengthNAs: {
                 el: new checkbox(config, {
-                    label: localization.en.showLengthNAs,
+                    label: agostino.t('showLengthNAs'),
                     no: "showLengthNAs",
                     newline: true,
 					style: "mt-2",
@@ -169,7 +102,7 @@ BSkyFormat(results,singleTableOutputHeader = paste("D'Agostino test of skewness 
             
             verbose: {
                 el: new checkbox(config, {
-                    label: localization.en.verbose,
+                    label: agostino.t('verbose'),
                     no: "verbose",
                     newline: true,
                     bs_type: "valuebox",
@@ -187,14 +120,23 @@ BSkyFormat(results,singleTableOutputHeader = paste("D'Agostino test of skewness 
             objects.label2.el.content, objects.showLengthNAs.el.content, objects.verbose.el.content],
           //  bottom: [MissingVals.el.content],
             nav: {
-                name: localization.en.navigation,
+                name: agostino.t('navigation'),
                 icon: "icon-log-normal-distribution",
                 modal: config.id
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: agostino.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: agostino.t('help.body')
+        }
+;
     }
    
 }
-module.exports.item = new agostino().render()
+
+module.exports = {
+    render: () => new agostino().render()
+}

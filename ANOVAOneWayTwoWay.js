@@ -1,79 +1,12 @@
-var localization = {
-    en: {
-        title: "ANOVA, 1 and 2 way",
-        modelname:"Enter a name for the model",
-        label3: "Effect size",
-        confInterval: "Confidence interval for effect sizes",
-        effectsizes: "Select effect size measure",
-        navigation: "ANOVA, 1 and 2 way",
-        target: "Target variable (numeric/scale)",
-        dest: "Specify  a maximum of 2 factor variables",
-        options: "Options",
-        Interaction: "Ignore interaction terms in model",
-        type: "Select type I/II/III Sums of squares",
-        levene: "Levene's test for homogeneity of variances",
-        label1: "Post-hoc",
-        combon: "Compare Means using:",
-        adjust: "Method for adjusting p-values",
-        compactly: "Comparing means compactly",
-        alpha: "Enter a value of alpha:",
-        label2: "Plots",
-        diag: "Diagnostic plots",
-        plot1: "Plot all comparisons",
-        plot2: "Least square means interaction plots",
-        showEffectSizes: "Display effect sizes",
-        labelSaveResiduals: "Save model statistics to the dataset",
-        residuals: "Residuals are saved with a variable name residuals with an optional prefix",
-        stuResiduals: "Studentized residuals are saved with a variable name resStudentized with an optional prefix",
-        fittedVals: "Fitted values are saved with a variable name fitted with an optional prefix " ,
-        prefixForSavedStatistics: "Optionally enter a prefix for saved values above, the prefix is appended to the variables name(s) above",
-        help: {
-            title: "Anova (1 Way and 2 Way)",
-            r_help: "help(aov, package='stats')",
-            body: `
-<b>Description</b></br>
-Fits a analysis of variance model along with data summaries, displays type I,II,III sum of squares, displays marginal means and contrasts (using marginal means). Model is built with and without interaction effects. Optionally performs  Levene's test for homogeneity of variance across groups and plots graphs.</br>
-The following is displayed</br>
-1. Summarizes the data</br>
-<br/>
-<b>Usage</b>
-<br/>
-<code> 
-dplyr::group_by(year,origin,cylinder) %>% dplyr::summarize(n=n(),mean=mean(mpg,na.rm =TRUE)
-</code> <br/>
-<b>Package</b></br>
-dplyr</br>
-<b>Help</b></br>
-help(group_by, package ='dplyr')</br>
-2. Optionally builds and summarizes a full factorial anova model or a model without interaction terms</br>
-<b>Package</b></br>
-stats</br>
-<b>Help</b></br>
-help(aov, package='stats')</br> 
-3. Displays Anova table with Type I/II/III sum of squares</br>
-Uses function Anova in package car for Type II, III sum of squares, function anova in package stats for Type I. When computing type III sum of squares appropriate contrasts (contr.sum) are set for factor variables.</br>
-<b>Package</b></br>
-car</br>
-<b>Help</b></br>
-help(Anova, package='car')</br> 
-4. Displays estimated marginal means</br>
-<b>Package</b></br>
-emmeans</br>
-<b>Help</b></br>
-help(emmeans, package='car')</br>
-5. (Optional) Computes Levene's test for homogeneity of variance across groups. 
-<b>Package</b></br>
-emmeans;car;dplyr;ggplot2;multcomp</br>
-<b>Help</b></br>
-help(leveneTest, package='car')
-`}
-    }
-}
+
 class ANOVAOneWayTwoWay extends baseModal {
+    static dialogId = 'ANOVAOneWayTwoWay'
+    static t = baseModal.makeT(ANOVAOneWayTwoWay.dialogId)
+
     constructor() {
         var config = {
-            id: "ANOVAOneWayTwoWay",
-            label: localization.en.title,
+            id: ANOVAOneWayTwoWay.dialogId,
+            label: ANOVAOneWayTwoWay.t('title'),
             modalType: "two",
             RCode: `
         `
@@ -83,7 +16,7 @@ class ANOVAOneWayTwoWay extends baseModal {
             modelname: {
                 el: new input(config, {
                     no: 'modelname',
-                    label: localization.en.modelname,
+                    label: ANOVAOneWayTwoWay.t('modelname'),
                     placeholder: "",
                     required: true,
                     type: "character",
@@ -94,7 +27,7 @@ class ANOVAOneWayTwoWay extends baseModal {
             },
             target: {
                 el: new dstVariable(config, {
-                    label: localization.en.target,
+                    label: ANOVAOneWayTwoWay.t('target'),
                     no: "target",
                     filter: "Numeric|Scale",
                     extraction: "NoPrefix|UseComma",
@@ -103,7 +36,7 @@ class ANOVAOneWayTwoWay extends baseModal {
             },
             dest: {
                 el: new dstVariableList(config, {
-                    label: localization.en.dest,
+                    label: ANOVAOneWayTwoWay.t('dest'),
                     no: "dest",
                     filter: "Numeric|Logical|Ordinal|Nominal",
                     extraction: "NoPrefix|UseComma",
@@ -112,7 +45,7 @@ class ANOVAOneWayTwoWay extends baseModal {
             },
             Interaction: {
                 el: new checkbox(config, {
-                    label: localization.en.Interaction,
+                    label: ANOVAOneWayTwoWay.t('Interaction'),
                     no: "Interaction",
                     bs_type: "valuebox",
                     newline: true,
@@ -124,7 +57,7 @@ class ANOVAOneWayTwoWay extends baseModal {
             type: {
                 el: new comboBox(config, {
                     no: 'type',
-                    label: localization.en.type,
+                    label: ANOVAOneWayTwoWay.t('type'),
                     multiple: false,
                     extraction: "NoPrefix|UseComma",
                     options: ["III", "II", "I"],
@@ -133,7 +66,7 @@ class ANOVAOneWayTwoWay extends baseModal {
             },
             levene: {
                 el: new checkbox(config, {
-                    label: localization.en.levene,
+                    label: ANOVAOneWayTwoWay.t('levene'),
                     no: "levene",
                     bs_type: "valuebox",
                     newline: true,
@@ -143,11 +76,11 @@ class ANOVAOneWayTwoWay extends baseModal {
                     false_value: "FALSE",
                 })
             },
-            label1: { el: new labelVar(config, { label: localization.en.label1, h: 5 }) },
+            label1: { el: new labelVar(config, { label: ANOVAOneWayTwoWay.t('label1'), h: 5 }) },
             combon: {
                 el: new comboBox(config, {
                     no: 'combon',
-                    label: localization.en.combon,
+                    label: ANOVAOneWayTwoWay.t('combon'),
                     multiple: false,
                     extraction: "NoPrefix|UseComma",
                     options: ["pairwise", "revpairwise", "poly", "trt.vs.ctrl1", "trt.vs.ctrlk", "eff", "def", "consec", "mean_chg"],
@@ -157,7 +90,7 @@ class ANOVAOneWayTwoWay extends baseModal {
             adjust: {
                 el: new comboBox(config, {
                     no: 'adjust',
-                    label: localization.en.adjust,
+                    label: ANOVAOneWayTwoWay.t('adjust'),
                     multiple: false,
                     extraction: "NoPrefix|UseComma",
                     options: ["holm", "BY", "bonferroni", "fdr", "hochberg", "BH", "hommel", "none", "mvt", "scheffe", "sidak", "tukey"],
@@ -166,7 +99,7 @@ class ANOVAOneWayTwoWay extends baseModal {
             },
             compactly: {
                 el: new checkbox(config, {
-                    label: localization.en.compactly,
+                    label: ANOVAOneWayTwoWay.t('compactly'),
                     no: "compactly",
                     bs_type: "valuebox",
                     newline: true,
@@ -178,7 +111,7 @@ class ANOVAOneWayTwoWay extends baseModal {
             alpha: {
                 el: new advancedSlider(config, {
                     no: "alpha",
-                    label: localization.en.alpha,
+                    label: ANOVAOneWayTwoWay.t('alpha'),
                     min: 0,
                     max: 1,
                     step: 0.05,
@@ -187,10 +120,10 @@ class ANOVAOneWayTwoWay extends baseModal {
                     extraction: "NoPrefix|UseComma"
                 })
             },
-            label2: { el: new labelVar(config, { label: localization.en.label2, h: 6 }) },
+            label2: { el: new labelVar(config, { label: ANOVAOneWayTwoWay.t('label2'), h: 6 }) },
             diag: {
                 el: new checkbox(config, {
-                    label: localization.en.diag,
+                    label: ANOVAOneWayTwoWay.t('diag'),
                     no: "diag",
                     newline: true,
                     bs_type: "valuebox",
@@ -201,7 +134,7 @@ class ANOVAOneWayTwoWay extends baseModal {
             },
             plot1: {
                 el: new checkbox(config, {
-                    label: localization.en.plot1,
+                    label: ANOVAOneWayTwoWay.t('plot1'),
                     no: "plot1",
                     bs_type: "valuebox",
                     newline: true,
@@ -212,7 +145,7 @@ class ANOVAOneWayTwoWay extends baseModal {
             },
             plot2: {
                 el: new checkbox(config, {
-                    label: localization.en.plot2,
+                    label: ANOVAOneWayTwoWay.t('plot2'),
                     no: "plot2",
                     bs_type: "valuebox",
                     extraction: "TextAsIs",
@@ -222,11 +155,11 @@ class ANOVAOneWayTwoWay extends baseModal {
                     false_value: "FALSE",
                 })
             },
-            label3: { el: new labelVar(config, { no: 'label3', label: localization.en.label3, style: "mt-0", h: 5 }) },
+            label3: { el: new labelVar(config, { no: 'label3', label: ANOVAOneWayTwoWay.t('label3'), style: "mt-0", h: 5 }) },
             confInterval: {
                 el: new advancedSlider(config, {
                     no: "confInterval",
-                    label: localization.en.confInterval,
+                    label: ANOVAOneWayTwoWay.t('confInterval'),
                     min: 0,
                     max: 1,
                     step: 0.001,
@@ -237,7 +170,7 @@ class ANOVAOneWayTwoWay extends baseModal {
             },
             showEffectSizes: {
                 el: new checkbox(config, {
-                    label: localization.en.showEffectSizes,
+                    label: ANOVAOneWayTwoWay.t('showEffectSizes'),
                     no: "showEffectSizes",
                     bs_type: "valuebox",
                     extraction: "BooleanValue",
@@ -249,18 +182,18 @@ class ANOVAOneWayTwoWay extends baseModal {
             effectsizes: {
                 el: new comboBox(config, {
                     no: 'effectsizes',
-                    label: localization.en.effectsizes,
+                    label: ANOVAOneWayTwoWay.t('effectsizes'),
                     multiple: false,
                     extraction: "NoPrefix|UseComma",
                     options: ["eta_squared", "partial_eta_squared", "omega_squared", "epsilon_squared", "cohens_f"],
                     default: "partial_eta_squared"
                 })
             },
-            labelSaveResiduals: { el: new labelVar(config, { no: 'labelSaveResiduals', style: "mt-3",label: localization.en.labelSaveResiduals, h: 5 }) },
+            labelSaveResiduals: { el: new labelVar(config, { no: 'labelSaveResiduals', style: "mt-3",label: ANOVAOneWayTwoWay.t('labelSaveResiduals'), h: 5 }) },
 
 residuals: {
     el: new checkbox(config, {
-      label: localization.en.residuals,
+      label: ANOVAOneWayTwoWay.t('residuals'),
       no: "residuals",
       extraction: "Boolean"
     })
@@ -269,7 +202,7 @@ residuals: {
  
 stuResiduals: {
     el: new checkbox(config, {
-      label: localization.en.stuResiduals,
+      label: ANOVAOneWayTwoWay.t('stuResiduals'),
       no: "stuResiduals",
       extraction: "Boolean"
     })
@@ -277,7 +210,7 @@ stuResiduals: {
   
 fittedVals: {
     el: new checkbox(config, {
-      label: localization.en.fittedVals,
+      label: ANOVAOneWayTwoWay.t('fittedVals'),
       no: "fittedVals",
       extraction: "Boolean"
     })
@@ -286,7 +219,7 @@ fittedVals: {
   prefixForSavedStatistics: {
     el: new input(config, {
         no: 'prefixForSavedStatistics',
-        label: localization.en.prefixForSavedStatistics,
+        label: ANOVAOneWayTwoWay.t('prefixForSavedStatistics'),
         placeholder: "",
         type: "character",
         enforceRobjectRules:false,
@@ -300,7 +233,7 @@ fittedVals: {
         var opts = {
             el: new optionsVar(config, {
                 no: "Heatmap_options",
-                name: localization.en.options,
+                name: ANOVAOneWayTwoWay.t('options'),
                 content: [
                     objects.Interaction.el,
                     objects.type.el,
@@ -330,13 +263,19 @@ fittedVals: {
             right: [objects.modelname.el.content,objects.target.el.content, objects.dest.el.content],
             bottom: [opts.el.content],
             nav: {
-                name: localization.en.navigation,
+                name: ANOVAOneWayTwoWay.t('navigation'),
                 icon: "icon-variance",
                 modal: config.id
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: ANOVAOneWayTwoWay.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: ANOVAOneWayTwoWay.t('help.body')
+        }
+;
         this.opts = opts;
     }
     prepareExecution(instance) {
@@ -797,4 +736,7 @@ if (exists("resEmmeans")) rm (resEmmeans)
         return res;
     }
 }
-module.exports.item = new ANOVAOneWayTwoWay().render()
+
+module.exports = {
+    render: () => new ANOVAOneWayTwoWay().render()
+}

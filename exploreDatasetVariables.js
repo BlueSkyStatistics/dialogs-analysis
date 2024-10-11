@@ -1,50 +1,14 @@
 
-var localization = {
-    en: {
-        title: "Explore variable(s)",
-		navigation: "Explore variables",
-		
-		variableListSelcted: "Select one or more variables to explore",
-		
-		histCurveDispChk: "Display a normal curve on the histogram (missing values are removed for curve to display)",
-		statTableOrientionChk: "Summary statistics in columns",
-		histBins: "Specify the number of bins for the histogram",
-		
-		help: {
-            title: "Explore characteristics of one or more variable(s)",
-            r_help: "help(summary)",
-			body: `
-				<b>Description</b></br>
-				Outputs the following descriptive statistics and plots:
-				min, max, mean, median, modes, sum, sd, cv (coefficient of variance), var, stderror, skew, kurtosi, mad, iqr, and quartiles. In addition, 95% confidence interval for mean and sd are computed. Histogram and QQ plots are displayed. 
-				<br/>
-				<br/>
-				For the detail help - use R help(summary, package = base)
-				<br/>
-				<br/>
-				To compute skew and kurtosis, type = 3 parameter is used as default. With parameter type = 2, the values for skew and kurtosis will likely match with the values from MS Excel formula SKEW() and KURT()
-				<br/>
-				psych::skew(x, na.rm = TRUE, type=3)
-				<br/>
-				psych::kurtosi(x, na.rm = TRUE, type=3)
-				<br/>
-				See more details 
-				<br/>
-				help(skew, package = psych)
-				<br/>
-				help(kurtosi, package = psych)
-				<br/>
-			`
-		},
-		
-	}
-}
+
 
 class DatasetDatasetVariables extends baseModal {
+    static dialogId = 'DatasetDatasetVariables'
+    static t = baseModal.makeT(DatasetDatasetVariables.dialogId)
+
     constructor() {
         var config = {
-            id: "DatasetDatasetVariables",
-            label: localization.en.title,
+            id: DatasetDatasetVariables.dialogId,
+            label: DatasetDatasetVariables.t('title'),
             modalType: "two",
             RCode:`
 	
@@ -196,7 +160,7 @@ class DatasetDatasetVariables extends baseModal {
 			content_var: { el: new srcVariableList(config, {action: "move", scroll:true}) }, 
 			summaryPrintChk: {
                 el: new checkbox(config, {
-                    label: localization.en.summaryPrintChk, 
+                    label: DatasetDatasetVariables.t('summaryPrintChk'), 
 					no: "summaryPrintChk",
                     bs_type: "valuebox",
                     style: "mt-2 mb-3",
@@ -209,7 +173,7 @@ class DatasetDatasetVariables extends baseModal {
 			
 			variableListSelcted: {
                 el: new dstVariableList(config, {
-                    label: localization.en.variableListSelcted,
+                    label: DatasetDatasetVariables.t('variableListSelcted'),
                     no: "variableListSelcted",
                     required: true,
                     filter: "String|Numeric|Logical|Ordinal|Nominal|Scale",
@@ -220,7 +184,7 @@ class DatasetDatasetVariables extends baseModal {
             },
 			statTableOrientionChk: {
                 el: new checkbox(config, {
-                    label: localization.en.statTableOrientionChk, 
+                    label: DatasetDatasetVariables.t('statTableOrientionChk'), 
 					no: "statTableOrientionChk",
                     bs_type: "valuebox",
                     style: "mt-2 mb-2",
@@ -233,7 +197,7 @@ class DatasetDatasetVariables extends baseModal {
             },
 			histCurveDispChk: {
                 el: new checkbox(config, {
-                    label: localization.en.histCurveDispChk, 
+                    label: DatasetDatasetVariables.t('histCurveDispChk'), 
 					no: "histCurveDispChk",
                     bs_type: "valuebox",
                     style: "mt-2 mb-1",
@@ -247,7 +211,7 @@ class DatasetDatasetVariables extends baseModal {
 			histBins: {
                 el: new input(config, {
                     no: 'histBins',
-                    label: localization.en.histBins,
+                    label: DatasetDatasetVariables.t('histBins'),
                     placeholder: "",
                     required: false,
                     type: "numeric",
@@ -270,14 +234,23 @@ class DatasetDatasetVariables extends baseModal {
 					objects.statTableOrientionChk.el.content
 					],
             nav: {
-                name: localization.en.navigation,
+                name: DatasetDatasetVariables.t('navigation'),
                 icon: "icon-list-2",
                 modal: config.id
             }
         };
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: DatasetDatasetVariables.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: DatasetDatasetVariables.t('help.body')
+        }
+;
     }
 
 }
-module.exports.item = new DatasetDatasetVariables().render()
+
+module.exports = {
+    render: () => new DatasetDatasetVariables().render()
+}

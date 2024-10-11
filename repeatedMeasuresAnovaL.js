@@ -1,87 +1,13 @@
-var localization = {
-    en: {
-        helpText: "Repeated measures ANOVA requires data to be in the long format. If your data is not in the long format, see Datasets > ReShape > Longer",
-        modelname: "Enter model name",
-        title: "Repeated Measures ANOVA",
-        subjectID: "Variable to use as a subject identifier",
-        dependentVariable: "Dependent variable",
-        navigation: "ANOVA, Repeated Measures, Long",
-        response: "Within-subjects variable(s) e.g. Time",
-        Fixed: "Between-subjects factor(s)",
-        covariates: "Covariates",
-        Summary: "Estimated marginal means",
-        Scatter_plot: "Posthocs",
-        Residual: "Residual vs. Fitted plot",
-        Histogram: "Histogram plot of residuals",
-        brownForsythe: "Brown-Forsythe test",
-        levenesTest: "Levene's test",
-        plotMeansCI: "Plot of means and confidence intervals",
-        simpleEffectsTest: "Simple effects test",
-        label2: "Options for posthocs and simple effects test",
-        combon: "Compare Means using:",
-        adjust: "Method for adjusting p-values",
-        displayBoxMDetails: "Display details associated with Box's M test (Note: Results of Box's M test are always shown)",
-        help: {
-            title: "Repeated Measures ANOVA",
-            r_help: "help(aov_ez , package='afex')",
-            body: `
-<b>Description</b></br>
-With repeated measures ANOVA F statistics are computed for each within subjects factor, between subject factor and the interaction term for mixed ANOVA</br>
-Look for the additional ANOVA values tables in the output which display MSE (mean sum of squares for error) and pes (partial eta squared)</br>
-We currently support a single within subject and between subject factor, the between subject factor is optional.</br>
-<br/>
-<b>Usage</b>
-<br/>
-<code> 
-aov_ez(data = dataset1, dv = "dependentVariable", 
-	id = "Identifier", within = c("Time"), 	between = c("Treatment"),  
-	anova_table = list(es = "pes"))
-</code> <br/>
-<b>Arguments</b><br/>
-<ul>
-<li>
-data: A data.frame containing the data. Mandatory
-</li>
-<li>
-dv: character vector (of length 1) indicating the column containing the dependent variable in data.
-</li>
-<li>
-between: character vector indicating the between-subject(s) factor(s)/column(s) in data. Default is NULL indicating no between-subjects factors.
-</li>
-<li>
-within: character vector indicating the within-subject(s)(or repeated-measures) factor(s)/column(s) in data. Default is NULL indicating no within-subjects factors.
-</li>
-<li>
-covariate: character vector indicating the between-subject(s) covariate(s) (i.e., column(s)) in data. Default is NULL indicating no covariates. Please note that factorize needs to be set to FALSE in case the covariate is numeric and should be treated as such.
-</li>
-<li>
-anovatable: list of further arguments passed to function producing the ANOVA table. 
-</li>
-</ul>
-<br/>
-<b>Details</b></br>
-See detailed R help</br>
-<b>Value</b><br/>
-aov_car, aov_4, and aov_ez are wrappers for Anova and aov, the return value is dependent on the return argument. Per default, an S3 object of class "afex_aov" is returned containing the following slots:<br/>
-"anova_table": An ANOVA table of class c("anova", "data.frame").<br/>
-"aov": aov object returned from aov (should not be used to evaluate significance of effects, but can be passed to emmeans for post-hoc tests).<br/>
-"Anova": object returned from Anova, an object of class "Anova.mlm" (if within-subjects factors are present) or of class c("anova", "data.frame").<br/>
-"lm": the object fitted with lm and passed to Anova (i.e., an object of class "lm" or "mlm"). Also returned if return = "lm".<br/>
-"data": a list containing: (1) long (the possibly aggregated data in long format used for aov), wide (the data used to fit the lm object), and idata (if within-subject factors are present, the idata argument passed to car::Anova). Also returned if return = "data".<br/>
-<b>Package</b></br>
-afex</br>
-<b>Help</b></br>
-help(aov_ez, package ='afex')
-Click the R Help button to get detailed R help. You can also enter help(aov_ez, package ='afex') and hit CTRL Enter in the R syntax editor to get help
-    `}
-    }
-}
+
 
 class repeatedMeasuresAnovaL extends baseModal {
+    static dialogId = 'repeatedMeasuresAnovaL'
+    static t = baseModal.makeT(repeatedMeasuresAnovaL.dialogId)
+
     constructor() {
         var config = {
-            id: "repeatedMeasuresAnovaL",
-            label: localization.en.title,
+            id: repeatedMeasuresAnovaL.dialogId,
+            label: repeatedMeasuresAnovaL.t('title'),
             modalType: "two",
             RCode: `
 require(afex)
@@ -213,7 +139,7 @@ if (exists('BSkyLevenesFactor')) rm(BSkyLevenesFactor)
             modelname: {
                 el: new input(config, {
                     no: 'modelname',
-                    label: localization.en.modelname,
+                    label: repeatedMeasuresAnovaL.t('modelname'),
                     placeholder: "",
                     required: true,
                     type: "character",
@@ -224,7 +150,7 @@ if (exists('BSkyLevenesFactor')) rm(BSkyLevenesFactor)
             },
             dependentVariable: {
                 el: new dstVariable(config, {
-                    label: localization.en.dependentVariable,
+                    label: repeatedMeasuresAnovaL.t('dependentVariable'),
                     no: "dependentVariable",
                     filter: "String|Numeric|Logical|Ordinal|Nominal|Scale",
                     extraction: "NoPrefix|UseComma",
@@ -233,7 +159,7 @@ if (exists('BSkyLevenesFactor')) rm(BSkyLevenesFactor)
             },
             subjectID: {
                 el: new dstVariable(config, {
-                    label: localization.en.subjectID,
+                    label: repeatedMeasuresAnovaL.t('subjectID'),
                     no: "subjectID",
                     filter: "String|Numeric|Ordinal|Nominal|Scale",
                     extraction: "NoPrefix|UseComma",
@@ -242,7 +168,7 @@ if (exists('BSkyLevenesFactor')) rm(BSkyLevenesFactor)
             },
             response: {
                 el: new dstVariable(config, {
-                    label: localization.en.response,
+                    label: repeatedMeasuresAnovaL.t('response'),
                     no: "response",
                     filter: "String|Numeric|Logical|Ordinal|Nominal|Scale",
                     extraction: "NoPrefix|UseComma",
@@ -251,7 +177,7 @@ if (exists('BSkyLevenesFactor')) rm(BSkyLevenesFactor)
             },
             Fixed: {
                 el: new dstVariable(config, {
-                    label: localization.en.Fixed,
+                    label: repeatedMeasuresAnovaL.t('Fixed'),
                     no: "Fixed",
                     filter: "String|Numeric|Logical|Ordinal|Nominal|Scale",
                     extraction: "NoPrefix|UseComma",
@@ -259,25 +185,25 @@ if (exists('BSkyLevenesFactor')) rm(BSkyLevenesFactor)
             },
             covariates: {
                 el: new dstVariableList(config, {
-                    label: localization.en.covariates,
+                    label: repeatedMeasuresAnovaL.t('covariates'),
                     no: "covariates",
                     filter: "Numeric|Scale",
                     extraction: "NoPrefix|UseComma|Enclosed",
                 }), r: ['{{ var | safe}}']
             },
-            plotMeansCI: { el: new checkbox(config, { label: localization.en.plotMeansCI, newline: true, checked: true, no: "plotMeansCI", extraction: "Boolean" }) },
-            Summary: { el: new checkbox(config, { label: localization.en.Summary, newline: true, checked: true, no: "chk5", style: "mb-2", extraction: "Boolean" }) },
-            Scatter_plot: { el: new checkbox(config, { label: localization.en.Scatter_plot, newline: true, no: "chk3", extraction: "Boolean" }) },
-            brownForsythe: { el: new checkbox(config, { label: localization.en.brownForsythe, no: "brownForsythe", newline: true, extraction: "Boolean" }) },
-            levenesTest: { el: new checkbox(config, { label: localization.en.levenesTest, no: "levenesTest", newline: true, extraction: "Boolean" }) },
-            simpleEffectsTest: { el: new checkbox(config, { label: localization.en.simpleEffectsTest, no: "simpleEffectsTest", newline: true, extraction: "Boolean" }) },
-            displayBoxMDetails: { el: new checkbox(config, { label: localization.en.displayBoxMDetails, no: "displayBoxMDetails", newline: true, extraction: "Boolean" }) },
-            label2: { el: new labelVar(config, { label: localization.en.label2, h: 6 }) },
-            helpText: { el: new labelVar(config, { label: localization.en.helpText, h: 6 }) },
+            plotMeansCI: { el: new checkbox(config, { label: repeatedMeasuresAnovaL.t('plotMeansCI'), newline: true, checked: true, no: "plotMeansCI", extraction: "Boolean" }) },
+            Summary: { el: new checkbox(config, { label: repeatedMeasuresAnovaL.t('Summary'), newline: true, checked: true, no: "chk5", style: "mb-2", extraction: "Boolean" }) },
+            Scatter_plot: { el: new checkbox(config, { label: repeatedMeasuresAnovaL.t('Scatter_plot'), newline: true, no: "chk3", extraction: "Boolean" }) },
+            brownForsythe: { el: new checkbox(config, { label: repeatedMeasuresAnovaL.t('brownForsythe'), no: "brownForsythe", newline: true, extraction: "Boolean" }) },
+            levenesTest: { el: new checkbox(config, { label: repeatedMeasuresAnovaL.t('levenesTest'), no: "levenesTest", newline: true, extraction: "Boolean" }) },
+            simpleEffectsTest: { el: new checkbox(config, { label: repeatedMeasuresAnovaL.t('simpleEffectsTest'), no: "simpleEffectsTest", newline: true, extraction: "Boolean" }) },
+            displayBoxMDetails: { el: new checkbox(config, { label: repeatedMeasuresAnovaL.t('displayBoxMDetails'), no: "displayBoxMDetails", newline: true, extraction: "Boolean" }) },
+            label2: { el: new labelVar(config, { label: repeatedMeasuresAnovaL.t('label2'), h: 6 }) },
+            helpText: { el: new labelVar(config, { label: repeatedMeasuresAnovaL.t('helpText'), h: 6 }) },
             combon: {
                 el: new comboBox(config, {
                     no: 'combon',
-                    label: localization.en.combon,
+                    label: repeatedMeasuresAnovaL.t('combon'),
                     multiple: false,
                     extraction: "NoPrefix|UseComma",
                     options: ["pairwise", "revpairwise", "poly", "trt.vs.ctrl1", "trt.vs.ctrlk", "eff", "def", "consec", "mean_chg"],
@@ -287,7 +213,7 @@ if (exists('BSkyLevenesFactor')) rm(BSkyLevenesFactor)
             adjust: {
                 el: new comboBox(config, {
                     no: 'adjust',
-                    label: localization.en.adjust,
+                    label: repeatedMeasuresAnovaL.t('adjust'),
                     multiple: false,
                     extraction: "NoPrefix|UseComma",
                     options: ["holm", "BY", "bonferroni", "fdr", "hochberg", "BH", "hommel", "none", "mvt", "scheffe", "sidak", "tukey"],
@@ -298,7 +224,7 @@ if (exists('BSkyLevenesFactor')) rm(BSkyLevenesFactor)
         var opts = {
             el: new optionsVar(config, {
                 no: "RepeatedMeasures_options",
-                name: localization.en.options,
+                name: repeatedMeasuresAnovaL.t('options'),
                 content: [
                     objects.plotMeansCI.el,
                     objects.Summary.el,
@@ -319,13 +245,22 @@ if (exists('BSkyLevenesFactor')) rm(BSkyLevenesFactor)
             right: [objects.modelname.el.content, objects.dependentVariable.el.content, objects.subjectID.el.content, objects.response.el.content, objects.Fixed.el.content, objects.covariates.el.content,],
             bottom: [opts.el.content],
             nav: {
-                name: localization.en.navigation,
+                name: repeatedMeasuresAnovaL.t('navigation'),
                 icon: "icon-repeated_measures-long",
                 modal: config.id
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: repeatedMeasuresAnovaL.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: repeatedMeasuresAnovaL.t('help.body')
+        }
+;
     }
 }
-module.exports.item = new repeatedMeasuresAnovaL().render()
+
+module.exports = {
+    render: () => new repeatedMeasuresAnovaL().render()
+}

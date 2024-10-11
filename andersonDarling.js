@@ -1,50 +1,12 @@
-var localization = {
-    en: {
-        title: "Anderson-Darling Test of Normality",
-        navigation: "Anderson-Darling Normality Test",
-        trg: "Target variables",
-        help: {
-            title: "Anderson-Darling Test of Normality",
-            r_help: "help(ad.test, package=nortest)",
-            body: `
-<b>Description</b></br>
-Anderson-Darling test for normality. 
-<br/>
-<b>Usage</b>
-<br/>
-<code>
-ad.test(x)
-</code> <br/>
-<b>Arguments</b><br/>
-<ul>
-<li>
-x: a numeric vector of data values, the number of which must be greater than 7. Missing values are allowed.
-</li>
-</ul>
-<b>Details</b></br>
-The Anderson-Darling test is an EDF omnibus test for the composite hypothesis of normality.<br/>
-<b>Value</b><br/>
-A list with class “htest” containing the following components:<br/>
-<ul>
-<li>
-statistic: the value of the Anderson-Darling statistic.
-</li>
-<li>
-p.value: P value of the test.
-</li>
-</ul>
-<b>Package</b></br>
-nortest</br>
-<b>Help</b></br>
-help(ad.test, package =nortest)
-`}
-    }
-}
+
 class andersonDarling extends baseModal {
+    static dialogId = 'andersonDarling'
+    static t = baseModal.makeT(andersonDarling.dialogId)
+
     constructor() {
         var config = {
-            id: "andersonDarling",
-            label: localization.en.title,
+            id: andersonDarling.dialogId,
+            label: andersonDarling.t('title'),
             modalType: "two",
             splitProcessing: false,
             RCode: `
@@ -57,7 +19,7 @@ BSkyFormat( BSkyResults, outputTableIndex = c(tableone=1), outputTableRenames = 
             content_var: { el: new srcVariableList(config, { action: "move" }) },
             trg: {
                 el: new dstVariableList(config, {
-                    label: localization.en.trg,
+                    label: andersonDarling.t('trg'),
                     no: "trg",
                     filter: "|Numeric|Scale",
                     extraction: "Prefix|UseComma",
@@ -69,13 +31,19 @@ BSkyFormat( BSkyResults, outputTableIndex = c(tableone=1), outputTableRenames = 
             left: [objects.content_var.el.content],
             right: [objects.trg.el.content],
             nav: {
-                name: localization.en.navigation,
+                name: andersonDarling.t('navigation'),
                 icon: "icon-gaussian-function",
                 modal: config.id
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: andersonDarling.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: andersonDarling.t('help.body')
+        }
+;
     }
     prepareExecution(instance) {
         var res = [];

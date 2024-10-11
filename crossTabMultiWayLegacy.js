@@ -6,86 +6,14 @@
 
 
 
-var localization = {
-    en: {
-        help: {
-            title: "Crosstab",
-            r_help: "help(CrossTable, package=gmodels)",
-            body: `
-            <b>Description</b></br>
-Creates crosstab with row, column and layer variables and optionally displays the following<br/>
-Expected counts<br/>
-Row and column percentages<br/>
-Unstandardized, standardized and adjusted residuals<br/>
-Chisq with odds ratio, McNemar and Fisher statistics<br/>
-<br/>
-<b>Usage</b>
-<br/>
-<code> 
-BSkyCrossTable(x,y,layers, weight, datasetname, chisq= FALSE, prop.r=FALSE, prop.c=FALSE, resid=FALSE, sresid=FALSE, expected=FALSE, asresid=FALSE)
-</code> <br/>
-<b>Arguments</b><br/>
-<ul>
-<li>
-x: row variable
-</li>
-<li>
-y: column variable
-</li>
-<li>
-layers: one or more variables for layers
-</li>
-<li>
-weights: a numeric variable containing the frequency weights
-</li>
-<li>
-datasetname: Name of the dataset from which x,y and layers (variables) are chosen
-</li>
-<li>
-chisq:  if TRUE generates chi-square table
-</li>
-<li>
-prop.r: Row percentages are produced if this is TRUE
-</li>
-<li>
-prop.c: Column percentages are generated if this is TRUE
-</li>
-<li>
-resid: if TRUE, unstandardized residual are generated
-</li>
-<li>
-sresid: if TRUE, standardized residuals are generated
-</li>
-<li>
-expected: Expected counts are generated if this is TRUE
-</li>
-<li>
-asresid:  if TRUE, adjusted residuals are generated
-</li>
-</ul>
-<b>value</b></br>
-A list with the results
-<br/>
-<b>Example</b></br>
-<code> 
-BSky_Multiway_Cross_Tab = BSkyCrossTable(x=c('manufact'),y=c('model'),<br/>
-layers=c('type'),datasetname='Dataset2',<br/>
-chisq = FALSE,prop.r=FALSE,prop.c=FALSE,<br/>
-resid=FALSE,sresid=FALSE,expected=FALSE,<br/>
-asresid=FALSE)</br>
-BSkyFormat(BSky_Multiway_Cross_Tab)</br>
-</code> <br/>
-<b>Package</b></br>
-gmodels</br>
-<b>Help</b></br>
-For detailed help click on the R icon on the top right hand side of this dialog overlay or run the following command help(CrossTable, package=gmodels) by creating a R code chunk by clicking + in the output window  
-    `}
-    }
-}
+
 class crossTabMultiWayLegacy extends baseModal {
+    static dialogId = 'crossTabMultiWayLegacy'
+    static t = baseModal.makeT(crossTabMultiWayLegacy.dialogId)
+
     constructor() {
         var config = {
-            id: "crossTabMultiWayLegacy",
+            id: crossTabMultiWayLegacy.dialogId,
             label: "Crosstab",
             modalType: "two",
             splitProcessing:false,
@@ -261,7 +189,16 @@ BSkyFormat(BSky_Multiway_Cross_Tab)`
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: crossTabMultiWayLegacy.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: crossTabMultiWayLegacy.t('help.body')
+        }
+;
     }
 }
-module.exports.item = new crossTabMultiWayLegacy().render()
+
+module.exports = {
+    render: () => new crossTabMultiWayLegacy().render()
+}

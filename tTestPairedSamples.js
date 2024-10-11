@@ -1,23 +1,5 @@
 
-var localization = {
-    en: {
-        title: "t-test, Paired Samples",
-        navigation: "t-test, paired samples",
-        tvarbox1: "First Numeric Variable (One)",
-        tvarbox2: "Second Numeric Variable (One)",
-        label1: "Alternative Hypothesis",
-        test1: "Difference != 0",
-        test2: "Difference > 0",
-        test3: "Difference < 0",
-        txtbox2: "Null hypothesis (mu)",
-        txtbox1: "Confidence level",
-        help: {
-            title: "Paired Sample t-test",
-            r_help: "help(sample_n, package='dplyr')",
-            body: `
-    `}
-    }
-}
+
 
 
 
@@ -27,10 +9,13 @@ var localization = {
 
 
 class tTestPairedSamples extends baseModal {
+    static dialogId = 'tTestPairedSamples'
+    static t = baseModal.makeT(tTestPairedSamples.dialogId)
+
     constructor() {
         var config = {
-            id: "tTestPairedSamples",
-            label: localization.en.title,
+            id: tTestPairedSamples.dialogId,
+            label: tTestPairedSamples.t('title'),
             modalType: "two",
             RCode: `
 require(psych)
@@ -49,7 +34,7 @@ BSkyFormat(BSky_Paired_t_Test)
             content_var: { el: new srcVariableList(config, {action: "move"}) },
             tvarbox1: {
                 el: new dstVariable(config, {
-                    label: localization.en.tvarbox1,
+                    label: tTestPairedSamples.t('tvarbox1'),
                     no: "tvarbox1",
                     filter: "Numeric|Scale",
                     extraction: "NoPrefix|UseComma",
@@ -57,20 +42,20 @@ BSkyFormat(BSky_Paired_t_Test)
             },
             tvarbox2: {
                 el: new dstVariable(config, {
-                    label: localization.en.tvarbox2,
+                    label: tTestPairedSamples.t('tvarbox2'),
                     no: "tvarbox2",
                     filter: "Numeric|Scale",
                     extraction: "NoPrefix|UseComma",
                 }), r: ['{{ var | safe}}']
             },
-            label1: { el: new labelVar(config, { label: localization.en.label1, style:"mt-2",h: 6 }) },
-            test1: { el: new radioButton(config, { label: localization.en.test1, no: "gpbox2", increment: "test1", value: "two.sided", state: "checked", extraction: "ValueAsIs" }) },
-            test2: { el: new radioButton(config, { label: localization.en.test2, no: "gpbox2", increment: "test2", value: "greater", state: "", extraction: "ValueAsIs" }) },
-            test3: { el: new radioButton(config, { label: localization.en.test3, no: "gpbox2", increment: "test3", value: "less", state: "", extraction: "ValueAsIs" }) },
+            label1: { el: new labelVar(config, { label: tTestPairedSamples.t('label1'), style:"mt-2",h: 6 }) },
+            test1: { el: new radioButton(config, { label: tTestPairedSamples.t('test1'), no: "gpbox2", increment: "test1", value: "two.sided", state: "checked", extraction: "ValueAsIs" }) },
+            test2: { el: new radioButton(config, { label: tTestPairedSamples.t('test2'), no: "gpbox2", increment: "test2", value: "greater", state: "", extraction: "ValueAsIs" }) },
+            test3: { el: new radioButton(config, { label: tTestPairedSamples.t('test3'), no: "gpbox2", increment: "test3", value: "less", state: "", extraction: "ValueAsIs" }) },
             txtbox2: {
                 el: new input(config, {
                     no: 'txtbox2',
-                    label: localization.en.txtbox2,
+                    label: tTestPairedSamples.t('txtbox2'),
                     placeholder: "",
                     extraction: "TextAsIs",
                     value: "0"
@@ -79,7 +64,7 @@ BSkyFormat(BSky_Paired_t_Test)
             txtbox1: {
                 el: new input(config, {
                     no: 'txtbox1',
-                    label: localization.en.txtbox1,
+                    label: tTestPairedSamples.t('txtbox1'),
                     placeholder: "",
                     extraction: "TextAsIs",
                     value: "0.95"
@@ -90,13 +75,22 @@ BSkyFormat(BSky_Paired_t_Test)
             left: [objects.content_var.el.content],
             right: [objects.tvarbox1.el.content, objects.tvarbox2.el.content, objects.label1.el.content, objects.test1.el.content, objects.test2.el.content, objects.test3.el.content, objects.txtbox2.el.content, objects.txtbox1.el.content],
             nav: {
-                name: localization.en.navigation,
+                name: tTestPairedSamples.t('navigation'),
                 icon: "icon-tp",
                 modal: config.id
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: tTestPairedSamples.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: tTestPairedSamples.t('help.body')
+        }
+;
     }
 }
-module.exports.item = new tTestPairedSamples().render()
+
+module.exports = {
+    render: () => new tTestPairedSamples().render()
+}

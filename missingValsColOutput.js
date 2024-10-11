@@ -1,35 +1,16 @@
 
-var localization = {
-    en: {
-        title: "Missing Value Analysis, column layout",
-        navigation:"Column Layout",
-        label1: "Displays the results of missing values in columnar format",
-        help: {
-            title: "Missing Value Analysis",
-            r_help: "help(sapply)",
-            body: `
-            <b>Description</b></br>
-            Displays the following information on missing values<br/>
-            1. The number of variables and observations in the dataset<br/>
-            2. The count of missing values per variable<br/>
-            3. The count of non-missing values per variable<br/>
-            4. The row numbers of the variables that contain missing values<br/>
-            We use several functions in the base package including sapply, which, ifelse<br/>
-            <b>Package</b></br>
-            base</br>
-            <b>Help</b></br>
-            For detailed help click on the R icon on the top right hand side of this dialog overlay or run the following command help(sapply) by creating a R code chunk by clicking + in the output window
-`}
-    }
-}
+
 
 
 
 class missingValsColOutput extends baseModal {
+    static dialogId = 'missingValsColOutput'
+    static t = baseModal.makeT(missingValsColOutput.dialogId)
+
     constructor() {
         var config = {
-            id: "missingValsColOutput",
-            label: localization.en.title,
+            id: missingValsColOutput.dialogId,
+            label: missingValsColOutput.t('title'),
             modalType: "one",
             RCode: `
 BSky_Dataset_Overview = data.frame(Dataset = c("{{dataset.name}}"), Variables = length(names({{dataset.name}})), Observations = nrow({{dataset.name}}))
@@ -58,12 +39,12 @@ remove(BSkyFiller)
 }
         var objects = {
 
-            label1: {el: new labelVar(config, {no: 'label1', label: localization.en.label1, h: 9}) },
+            label1: {el: new labelVar(config, {no: 'label1', label: missingValsColOutput.t('label1'), h: 9}) },
           }
         const content = {
             items: [objects.label1.el.content],
             nav: {
-                name: localization.en.navigation,
+                name: missingValsColOutput.t('navigation'),
                 icon: "icon-na_column",
                 modal: config.id
             }
@@ -71,4 +52,7 @@ remove(BSkyFiller)
         super(config, objects, content);
     }
 }
-module.exports.item = new missingValsColOutput().render()
+
+module.exports = {
+    render: () => new missingValsColOutput().render()
+}

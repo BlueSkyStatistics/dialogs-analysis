@@ -1,79 +1,12 @@
-var localization = {
-    en: {
-		navigation: "Anscombe-Glynn kurtosis test",
-		title: "Anscombe-Glynn test of kurtosis",
-        hypothesisType : "Test hypothesis (H1)",
-		twosided: "Two-sided",
-		greater : "Greater",
-		less: "Less",
-		label2: "Other options",
-        showLengthNAs: "Show length and NAs",
-		verbose: "Verbose alternative hypothesis",
-        Target: "Select one or more variables",
-        help: {
-            title: "Anscombe-Glynn test of kurtosis",
-            r_help: "help(anscombe.test, package ='moments')",
-            body: `
-<b>Description</b></br>
-Performs Anscombe-Glynn test of kurtosis for normal samples
-<br/>
-<b>Usage</b>
-<br/>
-<code> 
-anscombe.test(x, alternative = c("two.sided", "less", "greater"))
-</code> <br/>
-<b>Arguments</b><br/>
-<ul>
-<li>
-x: a numeric vector of data values.
-</li>
-<li>
-y: a character string specifying the alternative hypothesis, must be one of '"two.sided"' (default), '"greater"' or '"less"'. You can specify just the initial letter.
-</li>
-</ul>
-<b>Details</b></br>
-Under the hypothesis of normality, data should have kurtosis equal to 3. This test has such null hypothesis and is useful to detect a significant difference of kurtosis in normally distributed data.
-<br/>
-<b>Values</b></br>
-A list with class htest containing the following components:
-<ul>
-<li>
-statistic: the list containing kurtosis estimator and its transformation.</br>
-</li>
-<li>
-p.value: pvalue of the test. </br>
-</li>
-<li>
-alternative: a character string describing the alternative hypothesis</br>
-</li>
-<li>
-method: a character string indicating what type of test was performed.
-</li>
-<li>
-data.name: Name of the data argument.</br>
-</li>
-</ul>
-<b>Example</b></br>
-<code> 
-set.seed(1234)</br>
-x = rnorm(1000)</br>
-kurtosis(x)</br>
-anscombe.test(x)</br>
-</code> <br/>
-<b>Package</b></br>
-moments</br>
-<b>Help</b></br>
-For detailed help click on the R icon on the top right hand side of this dialog overlay or run the following command help(anscombe.test, package ='moments') in the BlueSky Statistics R editor.           
-<br/>
-<br/>	
-`}
-    }
-}
+
 class Anscombe extends baseModal {
+    static dialogId = 'Anscombe'
+    static t = baseModal.makeT(Anscombe.dialogId)
+
     constructor() {
         var config = {
-            id: "Anscombe",
-            label: localization.en.title,
+            id: Anscombe.dialogId,
+            label: Anscombe.t('title'),
             splitProcessing: false,
             modalType: "two",
             RCode: `
@@ -114,17 +47,17 @@ BSkyFormat(results,singleTableOutputHeader = paste("Anscombe-Glynn test of kurto
             content_var: { el: new srcVariableList(config, { action: "move" }) },
             Target: {
                 el: new dstVariableList(config, {
-                    label: localization.en.Target,
+                    label: Anscombe.t('Target'),
                     no: "Target",
                     required: true,
                     filter: "Numeric|Scale",
                     extraction: "NoPrefix|UseComma|Enclosed",
                 })
             },
-			hypothesisType: { el: new labelVar(config, { label: localization.en.hypothesisType, h: 6 }) },
+			hypothesisType: { el: new labelVar(config, { label: Anscombe.t('hypothesisType'), h: 6 }) },
             twosided: {
                 el: new radioButton(config, {
-                    label: localization.en.twosided,
+                    label: Anscombe.t('twosided'),
                     no: "gpbox1",
                     increment: "twosided",
                     value: "two.sided",
@@ -134,7 +67,7 @@ BSkyFormat(results,singleTableOutputHeader = paste("Anscombe-Glynn test of kurto
             },
             greater: {
                 el: new radioButton(config, {
-                    label: localization.en.greater,
+                    label: Anscombe.t('greater'),
                     no: "gpbox1",
                     increment: "greater",
                     value: "greater",
@@ -144,7 +77,7 @@ BSkyFormat(results,singleTableOutputHeader = paste("Anscombe-Glynn test of kurto
             },
 			less: {
                 el: new radioButton(config, {
-                    label: localization.en.less,
+                    label: Anscombe.t('less'),
                     no: "gpbox1",
                     increment: "less",
                     value: "less",
@@ -153,10 +86,10 @@ BSkyFormat(results,singleTableOutputHeader = paste("Anscombe-Glynn test of kurto
                     extraction: "ValueAsIs"
                 })
             },	
-			label2: { el: new labelVar(config, { label: localization.en.label2, style: "mt-2", h: 6 }) },			         
+			label2: { el: new labelVar(config, { label: Anscombe.t('label2'), style: "mt-2", h: 6 }) },			         
             showLengthNAs: {
                 el: new checkbox(config, {
-                    label: localization.en.showLengthNAs,
+                    label: Anscombe.t('showLengthNAs'),
                     no: "showLengthNAs",
                     newline: true,
 					style: "mt-2",
@@ -169,7 +102,7 @@ BSkyFormat(results,singleTableOutputHeader = paste("Anscombe-Glynn test of kurto
             
             verbose: {
                 el: new checkbox(config, {
-                    label: localization.en.verbose,
+                    label: Anscombe.t('verbose'),
                     no: "verbose",
                     newline: true,
                     bs_type: "valuebox",
@@ -187,14 +120,23 @@ BSkyFormat(results,singleTableOutputHeader = paste("Anscombe-Glynn test of kurto
             objects.label2.el.content, objects.showLengthNAs.el.content, objects.verbose.el.content],
           //  bottom: [MissingVals.el.content],
             nav: {
-                name: localization.en.navigation,
+                name: Anscombe.t('navigation'),
                 icon: "icon-anscombe-glynn",
                 modal: config.id
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: Anscombe.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: Anscombe.t('help.body')
+        }
+;
     }
    
 }
-module.exports.item = new Anscombe().render()
+
+module.exports = {
+    render: () => new Anscombe().render()
+}

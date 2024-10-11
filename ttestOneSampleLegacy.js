@@ -1,89 +1,12 @@
-var localization = {
-    en: {
-        title: "t-test, One Sample",
-        navigation: "t-test, One Sample (Legacy)",
-        tvarbox1: "Select variables",
-        textbox1: "Confidence interval",
-        textbox2: "Null hypothesis (mu)",
-        label1: "Aternative hypothesis",
-        test1: "Population mean !=mu",
-        test2: "Population mean > mu",
-        test3: "Population mean < mu",
-        testval: "Test value (mu)",
-        label2: "Missing values",
-        Analysis: "Analysis by analysis",
-        Listwise: "Listwise",
-        conflevel: "Confidence interval:",
-        MissingVals: "Options for missing values",
-        cohensdNoCorrection: "Cohen's d",
-        hedgesgNoCorrection: "Hedges' g",
-        glassd: "Glass's delta",
-        hedgesgCorrect: "Hedges' g with bias corrected",
-        glassdCorrect: "Correct bias for Glass's Delta",
-        hedgesg: "Hedges' g",
-        glassd: "Glass's delta",
-        effectsizes: "Effect sizes",
-        cohensdCorrect: "Cohen's d with bias corrected",
-        label3: "Options for Cohen's d",
-        label4: "Options for Hedges' g",
-        showEffectSizes: "Display effect sizes",
-        help: {
-            title: "t-test, One Sample",
-            r_help: "help(t.test, package=stats)",
-            body: `
-<b>Description</b></br>
-Performs one sample t-tests on selected variables. Optionally computes effect size indices for standardized differences: Cohen's d and Hedges' g (This function returns the population estimate.)
-<br/>
-<b>Usage</b>
-<br/>
-<code> 
-BSkyOneSmTTest(varNamesOrVarGlobalIndices  =c('var1','var2'), mu=.9, conf.level=0.95, alternative= "two.sided",datasetNameOrDatasetGlobalIndex='Dataset', missing=1) 
-cohens_d(var1~1, mu=valuetocompare, correction =FALSE, ci = 0.95)
-</code> <br/>
-<b>Arguments</b><br/>
-<ul>
-<li>
-varNamesOrVarGlobalIndices: selected scale variables (say var1, var2)
-</li>
-<li>
-mu: a number indicating the true value of the mean. (say 10)
-</li>
-<li>
-conf.level: a numeric value  (say 0.95) .
-</li>
-<li>
-missing: missing values are handled on a per variable basis (missing =0) or list wise across all variables (missing=1). 
-</li>
-<li>
-datasetNameOrDatasetGlobalIndex: Name of the dataset (say Dataset)  from which var1, var2 and var3 are selected.
-</li>
-<li>
-alternative:  a character string specifying the alternative hypothesis, must be one of "two.sided"  (default), "greater" or "less". You can specify just the initial letter.
-</li>
-</ul>
-<b>Details</b></br>
-A list with the results of the test
-<br/>
-<b>Example</b></br>
-<code> 
-Dataset <- data.frame(Expenses=c(20,23,19,25,26), Sales=c(48,50,55,51,49), Gender=c('m','f','f','m','m'), Deptt=c('IT', 'Sales', 'IT','Sales','IT'))</br>
-# Dataset must also be loaded in the UI grid</br>
-BSkyLoadRefreshDataframe(Dataset)</br> 
-BSky_One_Simple_T_Test = BSkyOneSmTTest(varNamesOrVarGlobalIndices =c('Sales','Expenses'),mu=.9,conf.level=0.95,alternative ="two.sided", datasetNameOrDatasetGlobalIndex ='Dataset',missing=1</br>
-</code> <br/>
-<b>Package</b></br>
-stats</br>
-<b>Help</b></br>
-For detailed help click on the R icon on the top right hand side of this dialog overlay or run the following command help(t.test, package ='stats') by creating a R code chunk by clicking + in the output window
-`
-        }
-    }
-}
+
 class ttestOneSampleLegacy extends baseModal {
+    static dialogId = 'ttestOneSampleLegacy'
+    static t = baseModal.makeT(ttestOneSampleLegacy.dialogId)
+
     constructor() {
         var config = {
-            id: "ttestOneSampleLegacy",
-            label: localization.en.title,
+            id: ttestOneSampleLegacy.dialogId,
+            label: ttestOneSampleLegacy.t('title'),
             splitProcessing: false,
             modalType: "two",
             RCode: `
@@ -116,17 +39,17 @@ if (exists('BSky_One_Sample_T_Test')) rm(BSky_One_Sample_T_Test)
             content_var: { el: new srcVariableList(config, { action: "move" }) },
             tvarbox1: {
                 el: new dstVariableList(config, {
-                    label: localization.en.tvarbox1,
+                    label: ttestOneSampleLegacy.t('tvarbox1'),
                     no: "tvarbox1",
                     required: true,
                     filter: "Numeric|Scale",
                     extraction: "NoPrefix|UseComma|Enclosed",
                 })
             },
-            label1: { el: new labelVar(config, { label: localization.en.label1, style: "mt-2", h: 6 }) },
+            label1: { el: new labelVar(config, { label: ttestOneSampleLegacy.t('label1'), style: "mt-2", h: 6 }) },
             twosided: {
                 el: new radioButton(config, {
-                    label: localization.en.test1,
+                    label: ttestOneSampleLegacy.t('test1'),
                     no: "gpbox2",
                     increment: "twosided",
                     value: "two.sided",
@@ -136,7 +59,7 @@ if (exists('BSky_One_Sample_T_Test')) rm(BSky_One_Sample_T_Test)
             },
             greater: {
                 el: new radioButton(config, {
-                    label: localization.en.test2,
+                    label: ttestOneSampleLegacy.t('test2'),
                     no: "gpbox2",
                     increment: "greater",
                     value: "greater",
@@ -146,7 +69,7 @@ if (exists('BSky_One_Sample_T_Test')) rm(BSky_One_Sample_T_Test)
             },
             less: {
                 el: new radioButton(config, {
-                    label: localization.en.test3,
+                    label: ttestOneSampleLegacy.t('test3'),
                     no: "gpbox2",
                     increment: "less",
                     value: "less",
@@ -157,7 +80,7 @@ if (exists('BSky_One_Sample_T_Test')) rm(BSky_One_Sample_T_Test)
             testval: {
                 el: new inputSpinner(config, {
                     no: 'testval',
-                    label: localization.en.testval,
+                    label: ttestOneSampleLegacy.t('testval'),
                     min: -9999999,
                     max: 9999999,
                     step: 1,
@@ -168,7 +91,7 @@ if (exists('BSky_One_Sample_T_Test')) rm(BSky_One_Sample_T_Test)
             conf_level: {
                 el: new inputSpinner(config, {
                     no: 'conflevel',
-                    label: localization.en.conflevel,
+                    label: ttestOneSampleLegacy.t('conflevel'),
                     min: 0,
                     max: 1,
                     step: 0.01,
@@ -176,10 +99,10 @@ if (exists('BSky_One_Sample_T_Test')) rm(BSky_One_Sample_T_Test)
                     extraction: "NoPrefix|UseComma"
                 })
             },
-            label2: { el: new labelVar(config, { label: localization.en.label2, h: 6 }) },
+            label2: { el: new labelVar(config, { label: ttestOneSampleLegacy.t('label2'), h: 6 }) },
             Analysis: {
                 el: new radioButton(config, {
-                    label: localization.en.Analysis,
+                    label: ttestOneSampleLegacy.t('Analysis'),
                     no: "Missvals",
                     increment: "Analysis",
                     value: "0",
@@ -189,7 +112,7 @@ if (exists('BSky_One_Sample_T_Test')) rm(BSky_One_Sample_T_Test)
             },
             Listwise: {
                 el: new radioButton(config, {
-                    label: localization.en.Listwise,
+                    label: ttestOneSampleLegacy.t('Listwise'),
                     no: "Missvals",
                     increment: "Listwise",
                     value: "1",
@@ -200,7 +123,7 @@ if (exists('BSky_One_Sample_T_Test')) rm(BSky_One_Sample_T_Test)
 
             showEffectSizes: {
                 el: new checkbox(config, {
-                    label: localization.en.showEffectSizes,
+                    label: ttestOneSampleLegacy.t('showEffectSizes'),
                     no: "showEffectSizes",
                     newline: true,
                     extraction: "Boolean",
@@ -208,10 +131,10 @@ if (exists('BSky_One_Sample_T_Test')) rm(BSky_One_Sample_T_Test)
             },
 
 
-            label3: { el: new labelVar(config, { label: localization.en.label3, style: "mb-1, mt-1", h: 6 }) },
+            label3: { el: new labelVar(config, { label: ttestOneSampleLegacy.t('label3'), style: "mb-1, mt-1", h: 6 }) },
             cohensdNoCorrection: {
                 el: new radioButton(config, {
-                    label: localization.en.cohensdNoCorrection,
+                    label: ttestOneSampleLegacy.t('cohensdNoCorrection'),
                     no: "cohensd",
                     increment: "cohensdNoCorrection",
                     value: "0",
@@ -221,7 +144,7 @@ if (exists('BSky_One_Sample_T_Test')) rm(BSky_One_Sample_T_Test)
             },
             cohensdCorrect: {
                 el: new radioButton(config, {
-                    label: localization.en.cohensdCorrect,
+                    label: ttestOneSampleLegacy.t('cohensdCorrect'),
                     no: "cohensd",
                     increment: "cohensdCorrect",
                     value: "1",
@@ -231,7 +154,7 @@ if (exists('BSky_One_Sample_T_Test')) rm(BSky_One_Sample_T_Test)
             },
             hedgesgNoCorrection: {
                 el: new radioButton(config, {
-                    label: localization.en.hedgesgNoCorrection,
+                    label: ttestOneSampleLegacy.t('hedgesgNoCorrection'),
                     no: "hedgesg",
                     increment: "hedgesgNoCorrection",
                     value: "0",
@@ -241,7 +164,7 @@ if (exists('BSky_One_Sample_T_Test')) rm(BSky_One_Sample_T_Test)
             },
             hedgesgCorrect: {
                 el: new radioButton(config, {
-                    label: localization.en.hedgesgCorrect,
+                    label: ttestOneSampleLegacy.t('hedgesgCorrect'),
                     no: "hedgesg",
                     increment: "hedgesgCorrect",
                     value: "1",
@@ -249,10 +172,10 @@ if (exists('BSky_One_Sample_T_Test')) rm(BSky_One_Sample_T_Test)
                     extraction: "ValueAsIs"
                 })
             },
-            label4: { el: new labelVar(config, { label: localization.en.label4, style: "mb-1, mt-1", h: 6 }) },
+            label4: { el: new labelVar(config, { label: ttestOneSampleLegacy.t('label4'), style: "mb-1, mt-1", h: 6 }) },
             glassd: {
                 el: new checkbox(config, {
-                    label: localization.en.glassd,
+                    label: ttestOneSampleLegacy.t('glassd'),
                     no: "glassd",
                     newline: true,
                     extraction: "Boolean",
@@ -260,7 +183,7 @@ if (exists('BSky_One_Sample_T_Test')) rm(BSky_One_Sample_T_Test)
             },
             glassdCorrect: {
                 el: new checkbox(config, {
-                    label: localization.en.glassdCorrect,
+                    label: ttestOneSampleLegacy.t('glassdCorrect'),
                     no: "glassdCorrect",
                     extraction: "Boolean",
                 })
@@ -269,7 +192,7 @@ if (exists('BSky_One_Sample_T_Test')) rm(BSky_One_Sample_T_Test)
         var effectsizes = {
             el: new optionsVar(config, {
                 no: "effects",
-                name: localization.en.effectsizes,
+                name: ttestOneSampleLegacy.t('effectsizes'),
                 content: [
                     objects.showEffectSizes.el,
                     objects.label3.el,
@@ -284,7 +207,7 @@ if (exists('BSky_One_Sample_T_Test')) rm(BSky_One_Sample_T_Test)
         var MissingVals = {
             el: new optionsVar(config, {
                 no: "MissingVals",
-                name: localization.en.MissingVals,
+                name: ttestOneSampleLegacy.t('MissingVals'),
                 content: [
                     objects.label2.el,
                     objects.Analysis.el,
@@ -299,13 +222,22 @@ if (exists('BSky_One_Sample_T_Test')) rm(BSky_One_Sample_T_Test)
             objects.testval.el.content, objects.conf_level.el.content],
             bottom: [effectsizes.el.content, MissingVals.el.content],
             nav: {
-                name: localization.en.navigation,
+                name: ttestOneSampleLegacy.t('navigation'),
                 icon: "icon-t1",
                 modal: config.id
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: ttestOneSampleLegacy.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: ttestOneSampleLegacy.t('help.body')
+        }
+;
     }
 }
-module.exports.item = new ttestOneSampleLegacy().render()
+
+module.exports = {
+    render: () => new ttestOneSampleLegacy().render()
+}

@@ -1,58 +1,5 @@
 
-var localization = {
-    en: {
-        title: "Semi-partial Correlations",
-        navigation: "Semi-partial",
-        statistic: "Select a method",
-        tvarbox1: "Select variables",
-        correlationType: "Type of correlation",
-        tvarbox2: "Select control variables",
-        help: {
-            title: "Semi-partial Correlations",
-            r_help: "help(spcor.test, package=ppcor)",
-            body: `
-            <b>Description</b></br>
-            Semi-partial correlation for two variables given a third variable. We will calculate the pairwise semi-partial correlation between each of the variables specified in the select variables control, controlling for the variables specified in the control variables control.<br/>
-            We have written a wrapper around the function spcor.test that calls spcor.test for each pair of the variables specified.
-            <br/>
-            <b>Usage</b>
-            <br/>
-            <code> 
-            spcor.test(x, y, z, method = c("pearson", "kendall", "spearman"))</br>
-            </code> <br/>
-            <b>Arguments</b><br/>
-            <ul>
-            <li>
-            Arguments
-            x: a numeric vector.
-            </li>
-            <li>
-            y: a numeric vector.
-            </li>
-            <li>
-            y: a numeric vector.
-            </li>
-            <li>
-            method: a character string indicating which partial correlation coefficient is to be computed. One of "pearson" (default), "kendall", or "spearman" can be abbreviated..
-            </li>
-            </ul>
-            <b>Details</b></br>
-            Semi-partial correlation is the correlation of two variables with variation from a third variable removed only from the second variable. When the determinant of variance-covariance matrix is numerically zero, Moore-Penrose generalized matrix inverse is used. In this case, no p-value and statistic will be provided if the number of variables are greater than or equal to the sample size.</br>
-            <b>Value</b><br/>
-            estimate: the semi-partial (part) correlation coefficient between two variables.<br/>
-            p.value: the p-value of the test.<br/>
-            n: The number of samples.<br/>
-            <b>Examples</b><br/>
-            <code> 
-            spcor.test(y.data$hl,y.data$disp,y.data[,c("deg","BC")])
-            </code> <br/>
-            <b>Package</b></br>
-            ppcor</br>
-            <b>Help</b></br>
-            help(pcor.test, package=ppcor)
-`}
-    }
-}
+
 
 
 
@@ -61,10 +8,13 @@ var localization = {
 
 
 class partialCorrelation extends baseModal {
+    static dialogId = 'partialCorrelation'
+    static t = baseModal.makeT(partialCorrelation.dialogId)
+
     constructor() {
         var config = {
-            id: "partialCorrelation",
-            label: localization.en.title,
+            id: partialCorrelation.dialogId,
+            label: partialCorrelation.t('title'),
             modalType: "two",
             RCode: `
 library(ppcor)
@@ -94,7 +44,7 @@ if (exists("BSkyResults"))
             statistic: {
                 el: new selectVar(config, {
                     no: 'statistic',
-                    label: localization.en.statistic,
+                    label: partialCorrelation.t('statistic'),
                     multiple: false,
                     extraction: "NoPrefix|UseComma|Enclosed",
                     options: ["pearson", "kendall", "spearman"],
@@ -103,7 +53,7 @@ if (exists("BSkyResults"))
             },
             tvarbox1: {
                 el: new dstVariableList(config, {
-                    label: localization.en.tvarbox1,
+                    label: partialCorrelation.t('tvarbox1'),
                     no: "tvarbox1",
                     filter: "Numeric|Scale",
                     extraction: "NoPrefix|UseComma|Enclosed",
@@ -112,7 +62,7 @@ if (exists("BSkyResults"))
             },
             tvarbox2: {
                 el: new dstVariableList(config, {
-                    label: localization.en.tvarbox2,
+                    label: partialCorrelation.t('tvarbox2'),
                     no: "tvarbox2",
                     filter: "Numeric|Scale",
                     extraction: "NoPrefix|UseComma|Enclosed",
@@ -124,13 +74,22 @@ if (exists("BSkyResults"))
             left: [objects.content_var.el.content],
             right: [objects.statistic.el.content, objects.tvarbox1.el.content, objects.tvarbox2.el.content],
             nav: {
-                name: localization.en.navigation,
+                name: partialCorrelation.t('navigation'),
                 icon: "icon-semi-partial",
                 modal: config.id
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: partialCorrelation.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: partialCorrelation.t('help.body')
+        }
+;
     }
 }
-module.exports.item = new partialCorrelation().render()
+
+module.exports = {
+    render: () => new partialCorrelation().render()
+}

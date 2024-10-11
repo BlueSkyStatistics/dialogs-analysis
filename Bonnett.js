@@ -1,79 +1,12 @@
-var localization = {
-    en: {
-		navigation: "Bonett-Seier kurtosis test",
-		title: "Bonett-Seier test of Geary's kurtosis",
-        hypothesisType : "Test hypothesis (H1)",
-		twosided: "Two-sided",
-		greater : "Greater",
-		less: "Less",
-		label2: "Other options",
-        showLengthNAs: "Show length and NAs",
-		verbose: "Verbose alternative hypothesis",
-        Target: "Select one or more variables",
-        help: {
-            title: "Bonett-Seier test of Geary's kurtosis",
-            r_help: "help(bonett.test, package ='moments')",
-            body: `
-<b>Description</b></br>
-Performs a Bonett-Seier test of Geary's measure of kurtosis for normally distributed data.
-<br/>
-<b>Usage</b>
-<br/>
-<code> 
-bonett.test(x, alternative = c("two.sided", "less", "greater"))
-</code> <br/>
-<b>Arguments</b><br/>
-<ul>
-<li>
-x: a numeric vector of data values.
-</li>
-<li>
-y: a character string specifying the alternative hypothesis, must be one of '"two.sided"' (default), '"greater"' or '"less"'. You can specify just the initial letter.
-</li>
-</ul>
-<b>Details</b></br>
-Under the hypothesis of normality, data should have Geary's kurtosis equal to sqrt(2/pi) (0.7979). This test has such null hypothesis and is useful to detect a significant difference of Geary's kurtosis in normally distributed data.
-<br/>
-<b>Values</b></br>
-A list with class htest containing the following components:
-<ul>
-<li>
-statistic: the list containing Geary's kurtosis estimator and its transformation.</br>
-</li>
-<li>
-p.value: pvalue of the test. </br>
-</li>
-<li>
-alternative: a character string describing the alternative hypothesis</br>
-</li>
-<li>
-method: a character string indicating what type of test was performed.
-</li>
-<li>
-data.name: Name of the data argument.</br>
-</li>
-</ul>
-<b>Example</b></br>
-<code> 
-set.seed(1234)</br>
-x = rnorm(1000)</br>
-geary(x)</br>
-bonett.test(x)</br>
-</code> <br/>
-<b>Package</b></br>
-moments</br>
-<b>Help</b></br>
-For detailed help click on the R icon on the top right hand side of this dialog overlay or run the following command help(bonett.test, package ='moments') in the BlueSky Statistics R editor.           
-<br/>
-<br/>
-`}
-    }
-}
+
 class Bonnett extends baseModal {
+    static dialogId = 'Bonnett'
+    static t = baseModal.makeT(Bonnett.dialogId)
+
     constructor() {
         var config = {
-            id: "Bonnett",
-            label: localization.en.title,
+            id: Bonnett.dialogId,
+            label: Bonnett.t('title'),
             splitProcessing: false,
             modalType: "two",
             RCode: `
@@ -116,17 +49,17 @@ BSkyFormat(results, singleTableOutputHeader =paste("Bonett-Seier test of Geary's
             content_var: { el: new srcVariableList(config, { action: "move" }) },
             Target: {
                 el: new dstVariableList(config, {
-                    label: localization.en.Target,
+                    label: Bonnett.t('Target'),
                     no: "Target",
                     required: true,
                     filter: "Numeric|Scale",
                     extraction: "NoPrefix|UseComma|Enclosed",
                 })
             },
-			hypothesisType: { el: new labelVar(config, { label: localization.en.hypothesisType, h: 6 }) },
+			hypothesisType: { el: new labelVar(config, { label: Bonnett.t('hypothesisType'), h: 6 }) },
             twosided: {
                 el: new radioButton(config, {
-                    label: localization.en.twosided,
+                    label: Bonnett.t('twosided'),
                     no: "gpbox1",
                     increment: "twosided",
                     value: "two.sided",
@@ -136,7 +69,7 @@ BSkyFormat(results, singleTableOutputHeader =paste("Bonett-Seier test of Geary's
             },
             greater: {
                 el: new radioButton(config, {
-                    label: localization.en.greater,
+                    label: Bonnett.t('greater'),
                     no: "gpbox1",
                     increment: "greater",
                     value: "greater",
@@ -146,7 +79,7 @@ BSkyFormat(results, singleTableOutputHeader =paste("Bonett-Seier test of Geary's
             },
 			less: {
                 el: new radioButton(config, {
-                    label: localization.en.less,
+                    label: Bonnett.t('less'),
                     no: "gpbox1",
                     increment: "less",
                     value: "less",
@@ -155,10 +88,10 @@ BSkyFormat(results, singleTableOutputHeader =paste("Bonett-Seier test of Geary's
                     extraction: "ValueAsIs"
                 })
             },	
-			label2: { el: new labelVar(config, { label: localization.en.label2, style: "mt-2", h: 6 }) },			         
+			label2: { el: new labelVar(config, { label: Bonnett.t('label2'), style: "mt-2", h: 6 }) },			         
             showLengthNAs: {
                 el: new checkbox(config, {
-                    label: localization.en.showLengthNAs,
+                    label: Bonnett.t('showLengthNAs'),
                     no: "showLengthNAs",
                     newline: true,
 					style: "mt-2",
@@ -171,7 +104,7 @@ BSkyFormat(results, singleTableOutputHeader =paste("Bonett-Seier test of Geary's
             
             verbose: {
                 el: new checkbox(config, {
-                    label: localization.en.verbose,
+                    label: Bonnett.t('verbose'),
                     no: "verbose",
                     newline: true,
                     bs_type: "valuebox",
@@ -189,14 +122,23 @@ BSkyFormat(results, singleTableOutputHeader =paste("Bonett-Seier test of Geary's
             objects.label2.el.content, objects.showLengthNAs.el.content, objects.verbose.el.content],
           //  bottom: [MissingVals.el.content],
             nav: {
-                name: localization.en.navigation,
+                name: Bonnett.t('navigation'),
                 icon: "icon-bonett-seier",
                 modal: config.id
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: Bonnett.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: Bonnett.t('help.body')
+        }
+;
     }
    
 }
-module.exports.item = new Bonnett().render()
+
+module.exports = {
+    render: () => new Bonnett().render()
+}

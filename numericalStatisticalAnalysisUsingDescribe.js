@@ -1,37 +1,5 @@
 
-var localization = {
-    en: {
-        title: "Numerical Statistics, using describe",
-        navigation: "Numerical Summaries, using describe (Legacy)",
-        tvarbox1: "Select variables",
-        tvarbox2 :"Select grouping variables",
-        help: {
-            title: "Numerical Statistics, using describe",
-            r_help: "help(describe, package=psych)",
-            body: `
-<b>Description</b></br>
-Outputs the  following numerical statistics:</br>
-count, mean, standard deviation, median, trimmed, mad, min, max, range, skew,  kurtosis, standard error
-<br/>
-<b>Usage</b>
-<br/>
-<code> 
-#BSkyFormat displays nicely formatted output<br/>
-BSkyFormat (as.data.frame(psych::describe(x=Dataset[,c('var1','var2'])))
-</code> <br/>
-<b>Arguments</b><br/>
-<ul>
-<li>
-x: A dataframe or matrix
-</li>
-</ul>
-<b>Package</b></br>
-psych</br>
-<b>Help</b></br>
-help(describe, package=psych)
-`}
-    }
-}
+
 
 
 
@@ -39,10 +7,13 @@ help(describe, package=psych)
 
 
 class numericalStatisticalAnalysisUsingDescribe extends baseModal {
+    static dialogId = 'numericalStatisticalAnalysisUsingDescribe'
+    static t = baseModal.makeT(numericalStatisticalAnalysisUsingDescribe.dialogId)
+
     constructor() {
         var config = {
-            id: "numericalStatisticalAnalysisUsingDescribe",
-            label: localization.en.title,
+            id: numericalStatisticalAnalysisUsingDescribe.dialogId,
+            label: numericalStatisticalAnalysisUsingDescribe.t('title'),
             modalType: "two",
             RCode: `
 require(psych)
@@ -57,7 +28,7 @@ BSkyFormat (as.data.frame(psych::describe({{dataset.name}}[,c({{selected.tvarbox
             content_var: { el: new srcVariableList(config, {action: "move"}) },
             tvarbox1: {
                 el: new dstVariableList(config, {
-                    label: localization.en.tvarbox1,
+                    label: numericalStatisticalAnalysisUsingDescribe.t('tvarbox1'),
                     no: "tvarbox1",
                     filter: "Numeric|Scale",
                     extraction: "NoPrefix|UseComma|Enclosed",
@@ -67,7 +38,7 @@ BSkyFormat (as.data.frame(psych::describe({{dataset.name}}[,c({{selected.tvarbox
 
             tvarbox2: {
                 el: new dstVariableList(config, {
-                    label: localization.en.tvarbox2,
+                    label: numericalStatisticalAnalysisUsingDescribe.t('tvarbox2'),
                     no: "tvarbox2",
                     filter: "String|Numeric|Date|Logical|Ordinal|Nominal",
                     extraction: "Prefix|UseComma",
@@ -78,13 +49,22 @@ BSkyFormat (as.data.frame(psych::describe({{dataset.name}}[,c({{selected.tvarbox
             left: [objects.content_var.el.content],
             right: [objects.tvarbox1.el.content, objects.tvarbox2.el.content],
             nav: {
-                name: localization.en.navigation,
+                name: numericalStatisticalAnalysisUsingDescribe.t('navigation'),
                 icon: "icon-sigma-describe",
                 modal: config.id
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: numericalStatisticalAnalysisUsingDescribe.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: numericalStatisticalAnalysisUsingDescribe.t('help.body')
+        }
+;
     }
 }
-module.exports.item = new numericalStatisticalAnalysisUsingDescribe().render()
+
+module.exports = {
+    render: () => new numericalStatisticalAnalysisUsingDescribe().render()
+}

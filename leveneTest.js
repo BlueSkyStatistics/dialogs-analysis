@@ -1,63 +1,5 @@
 
-var localization = {
-    en: {
-        title: "Levene's Test",
-        navigation: "Levene's Test",
-        tvarbox1: "Response Variable (one) ",
-        tvarbox3: "Factor Variable",
-        label1: "Center",
-        median: "Median",
-        mean: "Mean",
-        help: {
-            title: "Levene's Test",
-            r_help: "help(Anova, package='car')",
-            body: `
-<b>Description</b></br>
-Computes Levene's test for homogeneity of variance across groups.
-<br/>
-<b>Usage</b>
-<br/>
-<code> 
-leveneTest(y, ...)<br/>
-## S3 method for class 'formula'<br/>
-leveneTest(y, data, ...)<br/>
-## S3 method for class 'lm'<br/>
-leveneTest(y, ...)<br/>
-## Default S3 method:<br/>
-leveneTest(y, group, center=median, ...)
-</code> <br/>
-<b>Arguments</b><br/>
-<ul>
-<li>
-y: response variable for the default method, or a lm or formula object. If y is a linear-model object or a formula, the variables on the right-hand-side of the model must all be factors and must be completely crossed.
-</li>
-<li>
-group: factor defining groups.
-</li>
-<li>
-center: The name of a function to compute the center of each group; mean gives the original Levene's test; the default, median, provides a more robust test.
-</li>
-<li>
-data: a data frame for evaluating the formula.
-</li>
-<li>
-...: arguments to be passed down, e.g., data for the formula and lm methods; can also be used to pass arguments to the function given by center (e.g., center=mean and trim=0.1 specify the 10% trimmed mean).
-</li>
-</ul>
-<b>Value</b><br/>
-returns an object meant to be printed showing the results of the test.<br/>
-<b>Examples</b><br/>
-<code> 
-Dataframe <- data.frame(Expenses=c(20,23,19,25,26), Sales=c(48,50,55,51,49), Gender=c('m','f','f','m','m'), Deptt=c('Accounts', 'HR', 'Sales','Marketing','IT'))
-Result_Levene_Test = leveneTest( Sales ~ interaction(Gender, Deptt),data=Dataframe,center=base::mean )
-</code> <br/>
-<b>Package</b></br>
-car;moments;dplyr</br>
-<b>Help</b></br>
-help(leveneTest, package=car)
-`}
-    }
-}
+
 
 
 
@@ -67,10 +9,13 @@ help(leveneTest, package=car)
 
 
 class leveneTest extends baseModal {
+    static dialogId = 'leveneTest'
+    static t = baseModal.makeT(leveneTest.dialogId)
+
     constructor() {
         var config = {
-            id: "leveneTest",
-            label: localization.en.title,
+            id: leveneTest.dialogId,
+            label: leveneTest.t('title'),
             modalType: "two",
             RCode: `
 require(car)
@@ -87,7 +32,7 @@ BSkyFormat(as.data.frame(BSky_Levene_Test), singleTableOutputHeader=paste ("Leve
             content_var: { el: new srcVariableList(config, {action: "move"}) },
             tvarbox1: {
                 el: new dstVariable(config, {
-                    label: localization.en.tvarbox1,
+                    label: leveneTest.t('tvarbox1'),
                     no: "tvarbox1",
                     filter: "Numeric|Scale",
                     extraction: "NoPrefix|UseComma",
@@ -96,28 +41,37 @@ BSkyFormat(as.data.frame(BSky_Levene_Test), singleTableOutputHeader=paste ("Leve
             },
             tvarbox3: {
                 el: new dstVariableList(config, {
-                    label: localization.en.tvarbox3,
+                    label: leveneTest.t('tvarbox3'),
                     no: "tvarbox3",
                     filter: "String|Numeric|Date|Logical|Ordinal|Nominal",
                     extraction: "NoPrefix|UseComma",
                     required: true,
                 }), r: ['{{ var | safe}}']
             },
-            label1: { el: new labelVar(config, { label: localization.en.label1, style: "mt-3",h: 5 }) },
-            median: { el: new radioButton(config, { label: localization.en.median, no: "gpbox1", increment: "median", value: "stats::median", state: "checked", extraction: "ValueAsIs" }) },
-            mean: { el: new radioButton(config, { label: localization.en.mean, no: "gpbox1", increment: "mean", value: "base::mean", state: "", extraction: "ValueAsIs" }) },
+            label1: { el: new labelVar(config, { label: leveneTest.t('label1'), style: "mt-3",h: 5 }) },
+            median: { el: new radioButton(config, { label: leveneTest.t('median'), no: "gpbox1", increment: "median", value: "stats::median", state: "checked", extraction: "ValueAsIs" }) },
+            mean: { el: new radioButton(config, { label: leveneTest.t('mean'), no: "gpbox1", increment: "mean", value: "base::mean", state: "", extraction: "ValueAsIs" }) },
         }
         const content = {
             left: [objects.content_var.el.content],
             right: [objects.tvarbox1.el.content, objects.tvarbox3.el.content, objects.label1.el.content, objects.median.el.content, objects.mean.el.content],
             nav: {
-                name: localization.en.navigation,
+                name: leveneTest.t('navigation'),
                 icon: "icon-l",
                 modal: config.id
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: leveneTest.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: leveneTest.t('help.body')
+        }
+;
     }
 }
-module.exports.item = new leveneTest().render()
+
+module.exports = {
+    render: () => new leveneTest().render()
+}
