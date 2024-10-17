@@ -577,7 +577,7 @@ local(
         code_vars.selected.nonestr = code_vars.selected.none.includes("c('')") ? "" : code_vars.selected.none;
 
         const cmd = instance.dialog.renderR(code_vars);
-        res.push({ cmd: cmd, cgid: newCommandGroup() })
+        res.push({ cmd: cmd, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: instance.config.RCode, code_vars: code_vars })
         return res;
     }
 }

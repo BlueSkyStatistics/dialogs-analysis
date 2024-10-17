@@ -196,7 +196,7 @@ if (exists('BSky_Single_Sample_Proportion_Test')){rm(BSky_Single_Sample_Proporti
             code_vars.selected.tvarbox1 =[]
         }
         const cmd =  instance.dialog.renderR(code_vars);
-        res.push({ cmd: cmd, cgid: newCommandGroup() })
+        res.push({ cmd: cmd, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: instance.config.RCode, code_vars: code_vars })
         return res;
     }
 }

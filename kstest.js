@@ -60,7 +60,7 @@ BSkyFormat( BSkyResults, outputTableRenames = c("Kolmogorov-Smirnov Test results
             temp += instance.dialog.renderR(code_vars);
         });
         let cmd = temp
-        res.push({ cmd: cmd, cgid: newCommandGroup() })
+        res.push({ cmd: cmd, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: instance.config.RCode, code_vars: code_vars })
         return res
     }
 }
