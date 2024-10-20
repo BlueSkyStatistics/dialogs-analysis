@@ -276,7 +276,7 @@ if (exists('BSkyLevenesFactor')) rm(BSkyLevenesFactor)
             code_vars.selected.no_subjectID = "TRUE"
         }
         const cmd = instance.dialog.renderR(code_vars);
-        res.push({ cmd: cmd, cgid: newCommandGroup() })
+        res.push({ cmd: cmd, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: instance.config.RCode, code_vars: code_vars })
         return res;
         /*  let i=1;
          let errorRaised =false

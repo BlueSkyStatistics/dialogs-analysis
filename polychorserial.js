@@ -178,8 +178,9 @@ polycor::polyserial(x={{dataset.name}}\${{selected.Target | safe}}, y={{dataset.
     prepareExecution(instance) {
         var res = [];
         var temp = ""
+        var code_vars = ""
         instance.objects.Target.el.getVal().forEach(function (value) {
-            var code_vars = {
+            code_vars = {
                 dataset: {
                     name: $(`#${instance.config.id}`).attr('dataset') ? $(`#${instance.config.id}`).attr('dataset') : getActiveDataset()
                 },
@@ -190,7 +191,7 @@ polycor::polyserial(x={{dataset.name}}\${{selected.Target | safe}}, y={{dataset.
             cmd = removenewline(cmd);
             temp = temp + cmd + "\n";
         })
-        res.push({ cmd: temp, cgid: newCommandGroup() })
+        res.push({ cmd: temp, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: instance.config.RCode, code_vars: code_vars })
         return res;
     }
 }

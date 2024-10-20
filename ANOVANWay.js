@@ -745,7 +745,7 @@ if (exists("BSkyEffectSizeResults")) rm (BSkyEffectSizeResults)
         cmd = instance.dialog.renderSample(snippet14.RCode, code_vars)
         cmd = removenewline(cmd);
         temp = temp + cmd + "\n";
-        res.push({ cmd: temp, cgid: newCommandGroup() })
+        res.push({ cmd: temp, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: instance.config.RCode, code_vars: code_vars })
         return res;
     }
 }
