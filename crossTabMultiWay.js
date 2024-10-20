@@ -293,26 +293,30 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             title: crossTabMultiWay.t('help.title'),
             r_help: "help(data,package='utils')",
             body: crossTabMultiWay.t('help.body')
-        }
-;
+        };
     }
     prepareExecution(instance) {
         var res = [];
         let temp = ""
-        var code_vars = {
-            dataset: {
-                name: $(`#${instance.config.id}`).attr('dataset') ? $(`#${instance.config.id}`).attr('dataset') : getActiveDataset()
-            },
-            selected: instance.dialog.extractData()
-        }
-        code_vars.selected.row = code_vars.selected.row.split(",");
-        code_vars.selected.column = code_vars.selected.column.split(",");
-        code_vars.selected.column.forEach(col => {
-            code_vars.selected.col = col
-            temp = temp + instance.dialog.renderR(code_vars);
-        });
-        const cmd = temp
-        res.push({ cmd: cmd, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: instance.config.RCode, code_vars: code_vars })
+        let count =0
+        instance.objects.column.el.getVal().forEach(function (value) {
+            var code_vars = {
+                dataset: {
+                    name: $(`#${instance.config.id}`).attr('dataset') ? $(`#${instance.config.id}`).attr('dataset') : getActiveDataset()
+                },
+                selected: instance.dialog.extractData()
+            }
+            code_vars.selected.row = code_vars.selected.row.split(",");
+            code_vars.selected.col = value
+            temp = instance.dialog.renderR(code_vars);
+            if (count == 0) {
+                res.push({ cmd: temp, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: instance.config.RCode, code_vars: code_vars })
+            }
+            else {
+                res.push({ cmd: temp, cgid: newCommandGroup(), oriR: instance.config.RCode, code_vars: code_vars })
+            }
+            count++
+        })
         return res;
     }
 }

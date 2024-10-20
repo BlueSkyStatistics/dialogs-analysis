@@ -11,7 +11,7 @@ class andersonDarling extends baseModal {
             splitProcessing: false,
             RCode: `
 #Runs an Anderson-Darling Test for the composite hypothesis of normality for variable: {{selected.varname | safe}}\n
-\nBSkyResults <- nortest::ad.test(x={{selected.vars | safe}})
+\nBSkyResults <- nortest::ad.test(x={{dataset.name}}\${{selected.varname | safe}})
 BSkyFormat( BSkyResults, outputTableIndex = c(tableone=1), outputTableRenames = c("Anderson-Darling Test results for variable: {{selected.varname | safe}}"))
 `
         }
@@ -47,20 +47,26 @@ BSkyFormat( BSkyResults, outputTableIndex = c(tableone=1), outputTableRenames = 
     }
     prepareExecution(instance) {
         var res = [];
-        var code_vars = {
-            dataset: {
-                name: getActiveDataset()
-            },
-            selected: instance.dialog.extractData()
-        }
+        let count =0     
         let temp = ""
         instance.objects.trg.el.getVal().forEach(function (value) {
-            code_vars.selected.vars = code_vars.dataset.name + "\$" + value
+        //Push code_vars inside 
+            var code_vars = {
+                dataset: {
+                    name: getActiveDataset()
+                },
+                selected: instance.dialog.extractData()
+            }      
             code_vars.selected.varname = value
-            temp += instance.dialog.renderR(code_vars);
+            temp = instance.dialog.renderR(code_vars);
+            if (count == 0) {
+                res.push({ cmd: temp, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: instance.config.RCode, code_vars: code_vars })
+            }
+            else {
+                res.push({ cmd: temp, cgid: newCommandGroup(), oriR: instance.config.RCode, code_vars: code_vars })
+            }
+            count++
         });
-        let cmd = temp
-        res.push({ cmd: cmd, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: instance.config.RCode, code_vars: code_vars })
         return res
     }
 }

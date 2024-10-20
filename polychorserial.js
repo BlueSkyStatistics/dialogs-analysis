@@ -178,20 +178,30 @@ polycor::polyserial(x={{dataset.name}}\${{selected.Target | safe}}, y={{dataset.
     prepareExecution(instance) {
         var res = [];
         var temp = ""
-        var code_vars = ""
+        let count =0
         instance.objects.Target.el.getVal().forEach(function (value) {
-            code_vars = {
+            var code_vars = {
                 dataset: {
                     name: $(`#${instance.config.id}`).attr('dataset') ? $(`#${instance.config.id}`).attr('dataset') : getActiveDataset()
                 },
                 selected: instance.dialog.extractData()
             }
             code_vars.selected.Target = value;
-            let cmd = instance.dialog.renderR(code_vars)
-            cmd = removenewline(cmd);
-            temp = temp + cmd + "\n";
+            temp =instance.dialog.renderR(code_vars)
+            //let cmd = instance.dialog.renderR(code_vars)
+            //cmd = removenewline(cmd);
+            // temp = temp + cmd + "\n";
+            if (count == 0) {
+                res.push({ cmd: temp, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: instance.config.RCode, code_vars: code_vars })
+            }
+            else {
+                res.push({ cmd: temp, cgid: newCommandGroup(), oriR: instance.config.RCode, code_vars: code_vars })
+            }
+            count++
+
+
         })
-        res.push({ cmd: temp, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: instance.config.RCode, code_vars: code_vars })
+        //res.push({ cmd: temp, cgid: newCommandGroup() })
         return res;
     }
 }
