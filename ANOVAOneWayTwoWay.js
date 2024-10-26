@@ -573,7 +573,7 @@ if (exists("resEmmeans")) rm (resEmmeans)
         if (noFactorvars == 1) {
             code_vars.selected.dest = instance.dialog.prepareSelected({ dest: instance.objects.dest.el.getVal()[0] }, instance.objects.dest.r);
             cmd = instance.dialog.renderSample(snippet1.RCode, code_vars)
-            res.push({ cmd: cmd, cgid: newCommandGroup() })
+            res.push({ cmd: cmd, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: instance.config.RCode, code_vars: code_vars })
         }
         else {
             code_vars.selected.commaSepDest = instance.objects.dest.el.getVal();
