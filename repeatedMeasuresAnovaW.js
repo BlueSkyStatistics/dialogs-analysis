@@ -222,7 +222,7 @@ if (exists('BSkyLevenesFactor')) rm(BSkyLevenesFactor)
         var opts = {
             el: new optionsVar(config, {
                 no: "RepeatedMeasures_options",
-                name: repeatedMeasuresAnovaW.t('options'),
+                /*name: repeatedMeasuresAnovaW.t('options'),*/
                 content: [
                     objects.plotMeansCI.el,
                     objects.Summary.el,
