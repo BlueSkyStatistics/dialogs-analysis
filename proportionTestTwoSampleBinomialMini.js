@@ -215,7 +215,7 @@ BSky2SampleProportionMT( x1={{selected.noOfEvents | safe}}, x2={{selected.noOfEv
             objects.txtbox1.el.content, objects.txtbox2.el.content, objects.method.el.content],
             nav: {
                 name: proportionTestTwoSampleBinomialMini.t('navigation'),
-                icon: "icon-p1",
+                icon: "icon-p2",
                 modal: config.id,
                 datasetRequired:false
             }
