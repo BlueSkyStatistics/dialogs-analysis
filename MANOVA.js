@@ -92,7 +92,7 @@ class MANOVA extends baseModal {
         var opts = {
             el: new optionsVar(config, {
                 no: "MANOVA_options",
-                name: MANOVA.t('options'),
+                /*name: MANOVA.t('options'),*/
                 content: [
                     objects.plotMeansCI.el,
                     objects.displayBoxMDetails.el,
@@ -227,7 +227,7 @@ if (exists('BSkyLeveneTest')){rm(BSkyLeveneTest)}
         //cmd = removenewline(cmd);
         res.push({ cmd: cmd, cgid: newCommandGroup(), oriR: snippet3.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
         return res;
-        }
+    }
 }
 module.exports = {
     render: () => new MANOVA().render()
