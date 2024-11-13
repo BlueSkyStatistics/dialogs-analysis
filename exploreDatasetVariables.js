@@ -194,7 +194,7 @@ class DatasetDatasetVariables extends baseModal {
         };
         var objects = {
 			content_var: { el: new srcVariableList(config, {action: "move", scroll:true}) }, 
-			summaryPrintChk: {
+			/*summaryPrintChk: {
                 el: new checkbox(config, {
                     label: localization.en.summaryPrintChk, 
 					no: "summaryPrintChk",
@@ -205,7 +205,7 @@ class DatasetDatasetVariables extends baseModal {
                     false_value: "FALSE",
 					newline: true,
                 })
-            },
+            },*/
 			
 			variableListSelcted: {
                 el: new dstVariableList(config, {
