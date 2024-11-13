@@ -136,7 +136,7 @@ class MANOVA extends baseModal {
         var opts = {
             el: new optionsVar(config, {
                 no: "MANOVA_options",
-                name: localization.en.options,
+                /*name: localization.en.options,*/
                 content: [
                     objects.plotMeansCI.el,
                     objects.displayBoxMDetails.el,
