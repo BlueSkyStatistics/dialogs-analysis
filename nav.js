@@ -134,7 +134,7 @@ const nav = {
             "icon": "icon-sigma",
             "children": [
                 "./UberSummary",
-				"./exploreDatasetVariables",
+				"./DatasetDatasetVariables",
                 "./frequencyTable"
                             
             ]
