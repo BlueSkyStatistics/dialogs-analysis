@@ -212,6 +212,7 @@ BSkyFormat(as.data.frame(BSkyLeveneTest), \n\tsingleTableOutputHeader = "Levene'
         let snippet3 = {
             RCode: `
 \n#Removing temporary objects
+#No code is displayed
 if (exists('BSkyMANOVASummary')){rm(BSkyMANOVASummary)}
 if (exists('BSkyAOVSummary')){rm(BSkyAOVSummary)}
 if (exists('BSkyBoxMRes')){rm(BSkyBoxMRes)}
@@ -242,24 +243,27 @@ if (exists('BSkyLeveneTest')){rm(BSkyLeveneTest)}
         if (noFactorvars == 1) {
             code_vars.selected.tvarbox1 = instance.dialog.prepareSelected({ tvarbox1: instance.objects.tvarbox1.el.getVal()[0] }, instance.objects.tvarbox1.r);
             cmd = instance.dialog.renderSample(snippet1.RCode, code_vars)
-            res.push({ cmd: cmd, cgid: newCommandGroup() })
+            res.push({ cmd: cmd, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: snippet1.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
         }
         else {
             code_vars.selected.tvarbox1 = instance.objects.tvarbox1.el.getVal();
             cmd = instance.dialog.renderSample(snippet1.RCode, code_vars)
-            cmd = removenewline(cmd);
-            temp = temp + cmd;
+            res.push({ cmd: cmd, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: snippet1.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
             instance.objects.tvarbox1.el.getVal().forEach(function (value) {
                 code_vars.selected.tvarbox1 = instance.dialog.prepareSelected({ tvarbox1: value }, instance.objects.tvarbox1.r);
                 cmd = instance.dialog.renderSample(snippet2.RCode, code_vars)
-                cmd = removenewline(cmd);
-                temp = temp + cmd;
+                // cmd = removenewline(cmd);
+                // temp = temp + cmd;
+                if (cmd.trim().length !=0)
+                {
+                    res.push({ cmd: cmd, cgid: newCommandGroup(), oriR: snippet2.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
+                }                
             })
         }
         cmd = instance.dialog.renderSample(snippet3.RCode, code_vars)
-        temp = temp + cmd;
-        cmd = removenewline(cmd);
-        res.push({ cmd: temp, cgid: newCommandGroup() })
+        // temp = temp + cmd;
+        // cmd = removenewline(cmd);
+        res.push({ cmd: cmd, cgid: newCommandGroup(), oriR: snippet3.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
         return res;
     }
 }
