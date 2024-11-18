@@ -94,7 +94,7 @@ var localization = {
 class distributionFit extends baseModal {
     constructor() {
         var config = {
-            id: "distributionFit1",
+            id: "distributionFit",
             label: localization.en.title,
             modalType: "two",
             RCode:`
