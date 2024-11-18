@@ -10,7 +10,7 @@
 var localization ={
     en:{  
         title: "ANOVA, one-way with random blocks",
-        navigation: "ANOVA, Random Blocks",    
+        navigation: "ANOVA, 1 way (random blocks)",    
         tvarbox1: "Response Variable",
             tvarbox2: "Fixed Effect",
             blockVar: "Blocking Variable(s)",
@@ -210,7 +210,7 @@ if ({{selected.chk1 | safe}})
             left: [ objects.content_var.el.content ],
             right: [ objects.response.el.content, objects.Fixed.el.content, objects.Block.el.content, objects.chk1.el.content, objects.Post_hoc.el.content ],
             nav: {
-                name: "ANOVA, 1 way (random blocks)",
+                name: localization.en.navigation,
                 icon: "icon-anova_random_blocks",
                 modal: config.id
             }
