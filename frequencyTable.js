@@ -40,7 +40,7 @@ This dialog uses following functions:</br>
 class frequencyTable extends baseModal {
     constructor() {
         var config = {
-            id: "frequencyTable1",
+            id: "frequencyTable",
             label: localization.en.title,
             modalType: "two",
             RCode:`
