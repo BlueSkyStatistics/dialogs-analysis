@@ -30,11 +30,11 @@ const nav = {
             "name": "Correlations",
             "icon": "icon-link",
             "children": [
-                "./partialCorrelations",
+                "./semipartialCorrelation",
                 "./correlationTestMultivariableLegacy",
                 "./correlationTestMultivariable",
-                "./polychorserial",
-                "./semipartialCorrelations"
+                "./polychoricPolyserialCorrelations",
+                "./partialCorrelation"
 
             ]
         },
@@ -53,7 +53,7 @@ const nav = {
                 "./kstest",
                 "./shapiroWilkNormalityTest",
                 "./shapiroWilkNormalityTestLegacy",
-                "./distributionFits",
+                "./distributionFit",
                 "./distributionGamlssAutoFitTests",
                 "./distributionDescriptives"
             ]
@@ -101,7 +101,7 @@ const nav = {
             "children": [
                 "./Anscombe",
                 "./Bonnett",
-                "./DAgostino",       
+                "./agostino",       
                 "./sampleMoment"     
             ]
         },
