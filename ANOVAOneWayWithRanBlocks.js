@@ -7,8 +7,8 @@
 
 
 
-var localization ={
-    en:{  
+var localization = {
+    en: {  
         title: "ANOVA, one-way with random blocks",
         navigation: "ANOVA, 1 way (random blocks)",    
         tvarbox1: "Response Variable",
@@ -80,10 +80,8 @@ help(emmeans,package="cld")</br>
 help(cld,package='emmeans')</br>
 <b>Reference material</b></br>
 http://rcompanion.org/handbook/I_07.html
-`}
-            
-}
-
+`		}
+	}
 }
 
 class ANOVAOneWayWithRanBlocks extends baseModal {
