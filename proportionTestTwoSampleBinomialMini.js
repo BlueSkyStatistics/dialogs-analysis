@@ -5,6 +5,8 @@ var localization = {
         navigation: "Two sample (Beta)",
         tvarbox1: "Numeric or factor with 2 levels/values only",
         tvarbox2: "Numeric or factor with 2 levels/values only",
+        tvarbox3: "Numeric variable",
+        tvarbox4: "Factor variable with 2 levels/values only",
         label1: "Alternative hypothesis",
         test1: "Proportion != Hypothesized proportion",
         test2: "Proportion > Hypothesized proportion",
@@ -12,7 +14,10 @@ var localization = {
         txtbox1: "Confidence level",
         txtbox2: "Null hypothesis (Hypothesized proportion in range 0-1)",
         chkbox1: "With continuity correction",
-        dataInCols: "One or more variables contain samples",
+        dataInCols: "Data is in 2 separate variables",
+        dataInOneCols: "Data is in 1 variables",
+        dataVariable: "Variable containing the data",
+        groupingVariable: "Grouping variable",
         summarized: "Summarized data",
         noOfEvents:"No of events",
         noOfTrials:"No of trials",
@@ -99,6 +104,10 @@ class proportionTestTwoSampleBinomialMini extends baseModal {
 twoPropTestBothSamplesSingleColMini( dataset ="{{dataset.name}}", col1_name ="{{ selected.tvarbox1 | safe}}", col2_name= "{{ selected.tvarbox2 | safe}}",
     p={{selected.txtbox2 | safe}}, alternate="{{selected.gpbox2 | safe}}", conf.level={{selected.txtbox1 | safe}}, testMethod ="{{selected.method | safe}}")
 {{/if}}
+{{if (options.selected.gpbox1 =="dataInOneCols")}}
+BSkyTwoPropTestSingleColMini( dataset ="{{dataset.name}}", col1_name ="{{ selected.tvarbox3 | safe}}", col2_name= "{{ selected.tvarbox4 | safe}}",
+    p={{selected.txtbox2 | safe}}, alternate="{{selected.gpbox2 | safe}}", conf.level={{selected.txtbox1 | safe}}, testMethod ="{{selected.method | safe}}")
+{{/if}}
 {{if (options.selected.gpbox1 =="summarized")}}
 BSky2SampleProportionMT( x1={{selected.noOfEvents | safe}}, x2={{selected.noOfEvents2 | safe}},
     n1={{selected. noOfTrials | safe}}, n2={{selected. noOfTrials2 | safe}}, p={{selected.txtbox2 | safe}}, 
@@ -119,7 +128,18 @@ BSky2SampleProportionMT( x1={{selected.noOfEvents | safe}}, x2={{selected.noOfEv
                   state: "checked",
                   extraction: "ValueAsIs"
                 })
-              },           
+              },  
+              dataInOneCols: {
+                el: new radioButton(config, {
+                  label: localization.en.dataInOneCols,
+                  no: "gpbox1",
+                  increment: "dataInOneCols",
+                  value: "dataInOneCols",
+                  state: "",
+                  extraction: "ValueAsIs"
+                })
+              },     
+              
               summarized: {
                 el: new radioButton(config, {
                   label: localization.en.summarized,
@@ -145,6 +165,23 @@ BSky2SampleProportionMT( x1={{selected.noOfEvents | safe}}, x2={{selected.noOfEv
                 el: new dstVariable(config, {
                     label: localization.en.tvarbox2,
                     no: "tvarbox2",
+                    filter: "Numeric|Logical|Ordinal|Nominal|Scale",
+                    extraction: "NoPrefix|UseComma",    
+                })
+            },
+            tvarbox3: {
+                el: new dstVariable(config, {
+                    label: localization.en.tvarbox3,
+                    no: "tvarbox3",
+                    filter: "Numeric|Logical|Ordinal|Nominal|Scale",
+                    extraction: "NoPrefix|UseComma",
+                  
+                })
+            },
+            tvarbox4: {
+                el: new dstVariable(config, {
+                    label: localization.en.tvarbox4,
+                    no: "tvarbox4",
                     filter: "Numeric|Logical|Ordinal|Nominal|Scale",
                     extraction: "NoPrefix|UseComma",    
                 })
@@ -286,7 +323,7 @@ BSky2SampleProportionMT( x1={{selected.noOfEvents | safe}}, x2={{selected.noOfEv
         }
         const content = {
             left: [objects.content_var.el.content],
-            right: [objects.dataInCols.el.content, objects.tvarbox1.el.content,objects.tvarbox2.el.content, objects.summarized.el.content,objects.label2.el.content,objects.noOfEvents.el.content,objects.noOfTrials.el.content,objects.label3.el.content,objects.noOfEvents2.el.content,objects.noOfTrials2.el.content,objects.label1.el.content,
+            right: [objects.dataInCols.el.content, objects.tvarbox1.el.content,objects.tvarbox2.el.content, objects.dataInOneCols.el.content, objects.tvarbox3.el.content,objects.tvarbox4.el.content,objects.summarized.el.content,objects.label2.el.content,objects.noOfEvents.el.content,objects.noOfTrials.el.content,objects.label3.el.content,objects.noOfEvents2.el.content,objects.noOfTrials2.el.content,objects.label1.el.content,
                 objects.test1.el.content, objects.test2.el.content, objects.test3.el.content,
             //objects.txtbox1.el.content, objects.txtbox2.el.content, objects.chkbox1.el.content],
             objects.txtbox1.el.content, objects.txtbox2.el.content, objects.method.el.content],
