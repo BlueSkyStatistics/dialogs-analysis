@@ -1,12 +1,20 @@
-
-
-
-
-
-
-
 var localization = {
     en: {
+        title : "Correlation Test",
+        navigation : "Pearson, Spearman",
+        tvarbox : "Selected variables (at least two)",
+        lable1 : "Type of correlation",
+        radio_pearson : "Pearson",
+        radio_spearman : "Spearman",
+        lable2 : "Options to handle missing values",
+        radio_cc : "Only complete cases",
+        radio_pairwise : "Pairwise complete cases",
+        lable3 : "Show P value",
+        ajp : "Adjusted P value",
+        unajp : "Un-Adjusted P value",
+        bothp : "Both P values",
+        vis_cor : "Visualize correlation matrix",
+        vis_plot : "Visualize webPlot",
         help: {
             title: "Correlation Analysis",
             r_help: "help(rcorr.adjust, package=RcmdrMisc)",
@@ -50,7 +58,7 @@ class correlationTestMultivariable extends baseModal {
     constructor() {
         var config = {
             id: "correlationTestMultivariable",
-            label: "Correlation Test",
+            label: localization.en.title,
             modalType: "two",
             RCode: `
 require(stats);
@@ -75,25 +83,25 @@ dplyr::select({{selected.tvarbox1 | safe}}) %T>%
             content_var: { el: new srcVariableList(config, {action: "move"}) },
             tvarbox: {
                 el: new dstVariableList(config, {
-                    label: "Selected variables (at least two)",
+                    label: localization.en.tvarbox,
                     required: true,
                     no: "tvarbox1",
                     filter: "Numeric|Scale",
                     extraction: "NoPrefix|UseComma"
                 })
             },
-            lable1: { el: new labelVar(config, { label: "Type of correlation", h: 6 , style:"mt-3"}) },
-            radio_pearson: { el: new radioButton(config, { label: "Pearson", no: "gpbox2", increment: "pearson", value: "Pearson", state: "checked", extraction: "ValueAsIs" }) },
-            radio_spearman: { el: new radioButton(config, { label: "Spearman", no: "gpbox2", increment: "spearman", value: "Spearman", state: "", extraction: "ValueAsIs" }) },
-            lable2: { el: new labelVar(config, { label: "Options to handle missing values", h: 6, style:"mt-3" }) },
-            radio_cc: { el: new radioButton(config, { label: "Only complete cases", no: "gpbox1", increment: "completeCases", value: "complete.obs", state: "checked", extraction: "ValueAsIs" }) },
-            radio_pairwise: { el: new radioButton(config, { label: "Pairwise complete cases", no: "gpbox1", increment: "pairwiseComplete", value: "pairwise.complete.obs", state: "", extraction: "ValueAsIs" }) },
-            lable3: { el: new labelVar(config, { label: "Show P value", h: 6, style:"mt-3" }) },
-            ajp: { el: new radioButton(config, { label: "Adjusted P value", no: "gpbox3", increment: "adjP", value: "adjP", state: "checked", extraction: "ValueAsIs" }) },
-            unajp: { el: new radioButton(config, { label: "Un-Adjusted P value", no: "gpbox3", increment: "unAdjP", value: "unAdjP", state: "", extraction: "ValueAsIs" }) },
-            bothp: { el: new radioButton(config, { label: "Both P values", no: "gpbox3", increment: "bothP", value: "bothP", state: "", extraction: "ValueAsIs" }) },
-            vis_cor: { el: new checkbox(config, { label: "Visualize correlation matrix", no: "visualizeCorrelation", extraction: "Boolean", style:"mt-3" }) },
-            vis_plot: { el: new checkbox(config, { label: "Visualize webPlot", no: "plotweb", newline: true, extraction: "Boolean" }) }
+            lable1: { el: new labelVar(config, { label: localization.en.lable1, h: 6 , style:"mt-3"}) },
+            radio_pearson: { el: new radioButton(config, { label: localization.en.radio_pearson, no: "gpbox2", increment: "pearson", value: "Pearson", state: "checked", extraction: "ValueAsIs" }) },
+            radio_spearman: { el: new radioButton(config, { label: localization.en.radio_spearman, no: "gpbox2", increment: "spearman", value: "Spearman", state: "", extraction: "ValueAsIs" }) },
+            lable2: { el: new labelVar(config, { label: localization.en.lable2, h: 6, style:"mt-3" }) },
+            radio_cc: { el: new radioButton(config, { label: localization.en.radio_cc, no: "gpbox1", increment: "completeCases", value: "complete.obs", state: "checked", extraction: "ValueAsIs" }) },
+            radio_pairwise: { el: new radioButton(config, { label: localization.en.radio_pairwise, no: "gpbox1", increment: "pairwiseComplete", value: "pairwise.complete.obs", state: "", extraction: "ValueAsIs" }) },
+            lable3: { el: new labelVar(config, { label: localization.en.lable3, h: 6, style:"mt-3" }) },
+            ajp: { el: new radioButton(config, { label: localization.en.ajp, no: "gpbox3", increment: "adjP", value: "adjP", state: "checked", extraction: "ValueAsIs" }) },
+            unajp: { el: new radioButton(config, { label: localization.en.unajp, no: "gpbox3", increment: "unAdjP", value: "unAdjP", state: "", extraction: "ValueAsIs" }) },
+            bothp: { el: new radioButton(config, { label: localization.en.bothp, no: "gpbox3", increment: "bothP", value: "bothP", state: "", extraction: "ValueAsIs" }) },
+            vis_cor: { el: new checkbox(config, { label: localization.en.vis_cor, no: "visualizeCorrelation", extraction: "Boolean", style:"mt-3" }) },
+            vis_plot: { el: new checkbox(config, { label: localization.en.vis_plot, no: "plotweb", newline: true, extraction: "Boolean" }) }
         }
         const content = {
             left: [objects.content_var.el.content],
@@ -103,7 +111,7 @@ dplyr::select({{selected.tvarbox1 | safe}}) %T>%
             objects.vis_cor.el.content, objects.vis_plot.el.content
             ],
             nav: {
-                name: "Pearson, Spearman",
+                name: localization.en.navigation,
                 icon: "icon-link",
                 modal: config.id
             }

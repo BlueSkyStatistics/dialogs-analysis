@@ -1,5 +1,35 @@
 var localization = {
     en: {
+        title : "Crosstab",
+        navigation : "Crosstab",
+        label6 : "When multiple row and column variables are specified, we generate a separate cross table for each pair of row and column variables.",
+        rowlabel : "Row Variable",
+        collabel : "Column Variable",
+        layerlabel : "Layer Variable(s)",
+        weightlabel: "Weight (one)",
+        label1 : "Statistics",
+        chisqlabel : "Chisq",
+        chisqNoContCorrection : "No continuity correction for Chi-squared test",
+        chisqContCorrection : "Apply continuity correction for Chi-squared test (Applies to a 2 by 2 table)",
+        chisqSimulatePValues : "Compute p-values using Monte Carlo simulation",
+        chisqNoOfReplicates : "Number of replicates used in the Monte Carlo test",
+        mcnemar : "McNemar",
+        mcnemarContCorrection : "Apply continuity correction for McNemar's test (Applies to a 2 by 2 table)",
+        fisher : "Fisher",
+        fisherSimulatePValues : "Compute p-values using Monte Carlo simulation",
+        fisherNoOfReplicates : "Number of replicates used in the Monte Carlo test",
+        fishersAlternative : "Alternative hypothesis for Fisher's Exact test",
+        label2 : "Residuals",
+        unstandardized : "Unstandardized",
+        standardized : "Standardized",
+        adjusted : "Adjusted",
+        label3 : "Percentages",
+        rowpercent : "Row",
+        colpercent : "Column",
+        label4 : "Counts",
+        expected : "Expected",      
+        label5 : "Output format",
+        longTbl : "List-style table (Constrain table width when many levels)",          
         help: {
             title: "Crosstab",
             r_help: "help(CrossTable, package=gmodels)",
@@ -82,7 +112,7 @@ class crossTabMultiWay extends baseModal {
     constructor() {
         var config = {
             id: "crossTabMultiWay",
-            label: "Crosstab",
+            label: localization.en.title,
             modalType: "two",
             splitProcessing: false,
             RCode: `#Create the crosstab
@@ -115,10 +145,10 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
         }
         var objects = {
             content_var: { el: new srcVariableList(config, { action: "move", scroll: true }) },
-            label6: { el: new labelVar(config, { no: "label6", label: "When multiple row and column variables are specified, we generate a separate cross table for each pair of row and column variables.", h: 5 }) },
+            label6: { el: new labelVar(config, { no: "label6", label: localization.en.label6, h: 5 }) },
             row: {
                 el: new dstVariableList(config, {
-                    label: "Row Variable",
+                    label: localization.en.rowlabel,
                     no: "row",
                     filter: "Numeric|Ordinal|Nominal",
                     extraction: "NoPrefix|UseComma",
@@ -127,7 +157,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             },
             column: {
                 el: new dstVariableList(config, {
-                    label: "Column Variable",
+                    label: localization.en.collabel,
                     no: "column",
                     filter: "Numeric|Ordinal|Nominal",
                     extraction: "NoPrefix|UseComma",
@@ -136,7 +166,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             },
             layer: {
                 el: new dstVariableList(config, {
-                    label: "Layer Variable(s)",
+                    label: localization.en.layerlabel,
                     no: "layer",
                     filter: "Numeric|Ordinal|Nominal|Scale",
                     extraction: "NoPrefix|UseComma",
@@ -145,17 +175,17 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             },
             weight: {
                 el: new dstVariable(config, {
-                    label: "Weight (one)",
+                    label: localization.en.weightlabel,
                     no: "weight",
                     filter: "Numeric|Scale",
                     extraction: "NoPrefix|UseComma|Enclosed",
                     wrapped: 'weight=c(%val%),\n'
                 })
             },
-            label1: { el: new labelVar(config, { no: "label1", label: "Statistics", h: 5 }) },
+            label1: { el: new labelVar(config, { no: "label1", label: localization.en.label1, h: 5 }) },
             chisq: {
                 el: new checkbox(config, {
-                    label: "Chisq",
+                    label: localization.en.chisqlabel,
                     style: "mt-2",
                     no: "chisq",
                     extraction: "Boolean",
@@ -163,7 +193,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             },
             chisqNoContCorrection: {
                 el: new radioButton(config, {
-                    label: "No continuity correction for Chi-squared test",
+                    label: localization.en.chisqNoContCorrection,
                     style: "ml-2",
                     //   dependant_objects: ['chisq'],
                     increment: "chisqNoContCorrection",
@@ -175,7 +205,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             },
             chisqContCorrection: {
                 el: new radioButton(config, {
-                    label: "Apply continuity correction for Chi-squared test (Applies to a 2 by 2 table)",
+                    label: localization.en.chisqContCorrection,
                     style: "ml-2",
                     //  dependant_objects: ['chisq'],
                     increment: "chisqContCorrection",
@@ -186,7 +216,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             },
             chisqSimulatePValues: {
                 el: new radioButton(config, {
-                    label: "Compute p-values using Monte Carlo simulation",
+                    label: localization.en.chisqSimulatePValues,
                     increment: "chisqSimulatePValues",
                     style: "ml-2",
                     //  dependant_objects: ['chisq'],
@@ -198,7 +228,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             chisqNoOfReplicates: {
                 el: new inputSpinner(config, {
                     no: 'chisqNoOfReplicates',
-                    label: "Number of replicates used in the Monte Carlo test",
+                    label: localization.en.chisqNoOfReplicates,
                     min: 0,
                     style: "ml-4",
                     max: 999999999999999,
@@ -209,7 +239,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             },
             mcnemar: {
                 el: new checkbox(config, {
-                    label: "McNemar",
+                    label: localization.en.mcnemar,
                     no: "mcnemar",
                     style: "mt-4",
                     extraction: "Boolean",
@@ -217,7 +247,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             },
             mcnemarContCorrection: {
                 el: new checkbox(config, {
-                    label: "Apply continuity correction for McNemar's test (Applies to a 2 by 2 table)",
+                    label: localization.en.mcnemarContCorrection,
                     style: "ml-2",
                     // dependant_objects: ['mcnemar'],
                     newline: true,
@@ -227,7 +257,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             },
             fisher: {
                 el: new checkbox(config, {
-                    label: "Fisher",
+                    label: localization.en.fisher,
                     no: "fisher",
                     style: "mt-4",
                     newline: true,
@@ -236,7 +266,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             },
             fisherSimulatePValues: {
                 el: new checkbox(config, {
-                    label: "Compute p-values using Monte Carlo simulation",
+                    label: localization.en.fisherSimulatePValues,
                     style: "ml-2",
                     newline: true,
                     no: "fisherSimulatePValues",
@@ -246,7 +276,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             fisherNoOfReplicates: {
                 el: new inputSpinner(config, {
                     no: 'fisherNoOfReplicates',
-                    label: "Number of replicates used in the Monte Carlo test",
+                    label: localization.en.fisherNoOfReplicates,
                     min: 0,
                     style: "ml-4",
                     max: 999999999999999,
@@ -258,7 +288,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             fishersAlternative: {
                 el: new comboBox(config, {
                     no: "fishersAlternative",
-                    label: "Alternative hypothesis for Fisher's Exact test",
+                    label: localization.en.fishersAlternative,
                     multiple: false,
                     style: "ml-2",
                     extraction: "NoPrefix|UseComma",
@@ -266,55 +296,55 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
                     default: "two.sided"
                 })
             },
-            label2: { el: new labelVar(config, { no: "label2", label: "Residuals", h: 5 }) },
+            label2: { el: new labelVar(config, { no: "label2", label: localization.en.label2, h: 5 }) },
             unstandardized: {
                 el: new checkbox(config, {
-                    label: "Unstandardized",
+                    label: localization.en.unstandardized,
                     no: "unstandardized",
                     extraction: "Boolean",
                 })
             },
             standardized: {
                 el: new checkbox(config, {
-                    label: "Standardized",
+                    label: localization.en.standardized,
                     no: "standardized",
                     extraction: "Boolean",
                 })
             },
             adjusted: {
                 el: new checkbox(config, {
-                    label: "Adjusted",
+                    label: localization.en.adjusted,
                     no: "adjusted",
                     extraction: "Boolean",
                 })
             },
-            label3: { el: new labelVar(config, { no: "label3", label: "Percentages", h: 5 }) },
+            label3: { el: new labelVar(config, { no: "label3", label: localization.en.label3, h: 5 }) },
             rowpercent: {
                 el: new checkbox(config, {
-                    label: "Row",
+                    label: localization.en.rowpercent,
                     no: "rowpercent",
                     extraction: "Boolean",
                 })
             },
             colpercent: {
                 el: new checkbox(config, {
-                    label: "Column",
+                    label: localization.en.colpercent,
                     no: "colpercent",
                     extraction: "Boolean",
                 })
             },
-            label4: { el: new labelVar(config, { no: "label4", label: "Counts", h: 5 }) },
+            label4: { el: new labelVar(config, { no: "label4", label: localization.en.label4, h: 5 }) },
             expected: {
                 el: new checkbox(config, {
-                    label: "Expected",
+                    label: localization.en.expected,
                     no: "expected",
                     extraction: "Boolean",
                 })
             },
-            label5: { el: new labelVar(config, { no: "label5", label: "Output format", h: 5 }) },
+            label5: { el: new labelVar(config, { no: "label5", label: localization.en.label5, h: 5 }) },
             longTbl: {
                 el: new checkbox(config, {
-                    label: "List-style table (Constrain table width when many levels)",
+                    label: localization.en.longTbl,
                     no: "longTbl",
                     extraction: "Boolean",
                 })
@@ -357,7 +387,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             right: [objects.row.el.content, objects.column.el.content, objects.layer.el.content, objects.weight.el.content],
             bottom: [advoptions.el.content],
             nav: {
-                name: "Crosstab",
+                name: localization.en.navigation,
                 icon: "icon-crosstab",
                 modal: config.id,
                 datasetRequired: true
