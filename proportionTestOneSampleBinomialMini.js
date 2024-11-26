@@ -1,8 +1,8 @@
 
 var localization = {
     en: {
-        title: "Single Sample Proportion Test (Beta)",
-        navigation: "Single sample (Beta)",
+        title: "Single Sample Proportion Test",
+        navigation: "Single sample",
         tvarbox1: "Numeric or factor with 2 levels/values only",
         label1: "Alternative hypothesis",
         test1: "Proportion != Hypothesized proportion",
@@ -22,7 +22,15 @@ var localization = {
             r_help: "help(prop.test, package=stats)",
             body: `
 <b>Description</b></br>
-prop.test can be used for testing the null that the proportions (probabilities of success) in several groups are the same, or that they equal certain given values.
+prop.test can be used for testing the null that the proportions (probabilities of success) in several groups are the same, or that they equal certain given values.<br/>
+When method = "Exact", an exact test of a simple null hypothesis about the probability of success in a Bernoulli experiment.<br/>
+When method ="Normal approximation" the normal distribution is used as an approximation for the binomal distribution (when sample size is large enough)<br/>
+<code> 
+BSky_Single_Sample_Proportion_Test = stats::binom.test( x =5, n =20 , alternative='two.sided', p=0.5, conf.level=0.95)
+</code> <br/>
+<code> 
+BSky_Single_Sample_Proportion_Test = BSkyNormalApprox( x =6, n =26 , alternative='two.sided', p=0.5, conf.level=0.95)
+</code> <br/>
 <br/>
 <b>Usage</b>
 <br/>

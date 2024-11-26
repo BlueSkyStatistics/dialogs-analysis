@@ -1,8 +1,8 @@
 
 var localization = {
     en: {
-        title: "Two Sample Proportion Test (Beta)",
-        navigation: "Two sample (Beta)",
+        title: "Two Sample Proportion Test",
+        navigation: "Two sample",
         tvarbox1: "Numeric or factor with 2 levels/values only",
         tvarbox2: "Numeric or factor with 2 levels/values only",
         tvarbox3: "Numeric variable",
@@ -15,7 +15,7 @@ var localization = {
         txtbox2: "Null hypothesis (Hypothesized proportion in range 0-1)",
         chkbox1: "With continuity correction",
         dataInCols: "Data is in 2 separate variables",
-        dataInOneCols: "Data is in 1 variables",
+        dataInOneCols: "Data is in 1 variable",
         dataVariable: "Variable containing the data",
         groupingVariable: "Grouping variable",
         summarized: "Summarized data",
@@ -33,6 +33,22 @@ var localization = {
             body: `
 <b>Description</b></br>
 prop.test can be used for testing the null that the proportions (probabilities of success) in several groups are the same, or that they equal certain given values.
+We support the following options </br>
+1. The data is in 2 columns: Here we compare the proportion of the successes in each column. A max of 2 unique values are allowed in each column.</br>
+2. The data is in a single column: Here we compare the proportion of successes in each group in the 1st column, the group is defined by factor levels in another column. A max of 2 unique values are allowed in each column.</br>
+3. The data is entered in summary format.method =Estimate proportions separately.</br>
+When method =Estimate proportions separately we test the null that the proportions (probabilities of success) in each groups are the same, or that they equal certain given values. See code below for data in summarized format.</br>
+<code> 
+BSky2SampleProportionMT( x1=4, x2=5,
+    n1=18, n2=7, p=0, 
+    alternate="two.sided", conf.level=0.95, testMethod ="Estimate proportions separately") <br/>
+</code> <br/>
+When method =use pooled estimate of the proportion, pooled estimate of the proportion is a combined estimate of the proportion based on data from both samples. It is calculated when we assume that the two populations have the same proportion, which is the null hypothesis in many two-sample proportion tests. See example below for data in summarized format.</br>
+<code> 
+BSky2SampleProportionMT( x1=5, x2=3,
+    n1=16, n2=10, p=0, 
+    alternate="two.sided", conf.level=0.95, testMethod ="Use pooled estimate of the proportion")
+</code> <br/>
 <br/>
 <b>Usage</b>
 <br/>
@@ -101,12 +117,20 @@ class proportionTestTwoSampleBinomialMini extends baseModal {
             modalType: "two",
             RCode: `
 {{if (options.selected.gpbox1 =="dataInCols")}}
+{{if (options.selected.tvarbox1 =="" || options.selected.tvarbox2 =="")}}
+    cat("You need to drag and drop variables to the list boxes with labels numeric of factor with 2 levels/values only and numeric or factor with 2 levels/values only")
+{{#else}}
 twoPropTestBothSamplesSingleColMini( dataset ="{{dataset.name}}", col1_name ="{{ selected.tvarbox1 | safe}}", col2_name= "{{ selected.tvarbox2 | safe}}",
     p={{selected.txtbox2 | safe}}, alternate="{{selected.gpbox2 | safe}}", conf.level={{selected.txtbox1 | safe}}, testMethod ="{{selected.method | safe}}")
 {{/if}}
+{{/if}}
 {{if (options.selected.gpbox1 =="dataInOneCols")}}
+{{if (options.selected.tvarbox3 =="" || options.selected.tvarbox4 =="")}}
+    cat("You need to drag and drop variables to the list boxes with labels numeric label and factor variable with 2 levels/values only")
+{{#else}}
 BSkyTwoPropTestSingleColMini( dataset ="{{dataset.name}}", col1_name ="{{ selected.tvarbox3 | safe}}", col2_name= "{{ selected.tvarbox4 | safe}}",
     p={{selected.txtbox2 | safe}}, alternate="{{selected.gpbox2 | safe}}", conf.level={{selected.txtbox1 | safe}}, testMethod ="{{selected.method | safe}}")
+{{/if}}
 {{/if}}
 {{if (options.selected.gpbox1 =="summarized")}}
 BSky2SampleProportionMT( x1={{selected.noOfEvents | safe}}, x2={{selected.noOfEvents2 | safe}},
@@ -134,6 +158,8 @@ BSky2SampleProportionMT( x1={{selected.noOfEvents | safe}}, x2={{selected.noOfEv
                   label: localization.en.dataInOneCols,
                   no: "gpbox1",
                   increment: "dataInOneCols",
+                  dependant_objects: ["tvarbox3", "tvarbox4"],
+                  required:true,
                   value: "dataInOneCols",
                   state: "",
                   extraction: "ValueAsIs"
@@ -324,7 +350,7 @@ BSky2SampleProportionMT( x1={{selected.noOfEvents | safe}}, x2={{selected.noOfEv
         const content = {
             left: [objects.content_var.el.content],
             right: [objects.dataInCols.el.content, objects.tvarbox1.el.content,objects.tvarbox2.el.content, objects.dataInOneCols.el.content, objects.tvarbox3.el.content,objects.tvarbox4.el.content,objects.summarized.el.content,objects.label2.el.content,objects.noOfEvents.el.content,objects.noOfTrials.el.content,objects.label3.el.content,objects.noOfEvents2.el.content,objects.noOfTrials2.el.content,objects.label1.el.content,
-                objects.test1.el.content, objects.test2.el.content, objects.test3.el.content,
+            objects.test1.el.content, objects.test2.el.content, objects.test3.el.content,
             //objects.txtbox1.el.content, objects.txtbox2.el.content, objects.chkbox1.el.content],
             objects.txtbox1.el.content, objects.txtbox2.el.content, objects.method.el.content],
             nav: {
