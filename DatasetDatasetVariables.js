@@ -1,14 +1,14 @@
 
 
-/*DatasetDatasetVariables*/
-class exploreDatasetVariables extends baseModal {
-    static dialogId = 'exploreDatasetVariables'
-    static t = baseModal.makeT(exploreDatasetVariables.dialogId)
+
+class DatasetDatasetVariables extends baseModal {
+    static dialogId = 'DatasetDatasetVariables'
+    static t = baseModal.makeT(DatasetDatasetVariables.dialogId)
 
     constructor() {
         var config = {
-            id: exploreDatasetVariables.dialogId,
-            label: exploreDatasetVariables.t('title'),
+            id: DatasetDatasetVariables.dialogId,
+            label: DatasetDatasetVariables.t('title'),
             modalType: "two",
             RCode:`
 	
@@ -160,7 +160,7 @@ class exploreDatasetVariables extends baseModal {
 			content_var: { el: new srcVariableList(config, {action: "move", scroll:true}) }, 
 			/*summaryPrintChk: {
                 el: new checkbox(config, {
-                    label: exploreDatasetVariables.t('summaryPrintChk'), 
+                    label: DatasetDatasetVariables.t('summaryPrintChk'), 
 					no: "summaryPrintChk",
                     bs_type: "valuebox",
                     style: "mt-2 mb-3",
@@ -173,7 +173,7 @@ class exploreDatasetVariables extends baseModal {
 			
 			variableListSelcted: {
                 el: new dstVariableList(config, {
-                    label: exploreDatasetVariables.t('variableListSelcted'),
+                    label: DatasetDatasetVariables.t('variableListSelcted'),
                     no: "variableListSelcted",
                     required: true,
                     filter: "String|Numeric|Logical|Ordinal|Nominal|Scale",
@@ -184,7 +184,7 @@ class exploreDatasetVariables extends baseModal {
             },
 			statTableOrientionChk: {
                 el: new checkbox(config, {
-                    label: exploreDatasetVariables.t('statTableOrientionChk'), 
+                    label: DatasetDatasetVariables.t('statTableOrientionChk'), 
 					no: "statTableOrientionChk",
                     bs_type: "valuebox",
                     style: "mt-2 mb-2",
@@ -197,7 +197,7 @@ class exploreDatasetVariables extends baseModal {
             },
 			histCurveDispChk: {
                 el: new checkbox(config, {
-                    label: exploreDatasetVariables.t('histCurveDispChk'), 
+                    label: DatasetDatasetVariables.t('histCurveDispChk'), 
 					no: "histCurveDispChk",
                     bs_type: "valuebox",
                     style: "mt-2 mb-1",
@@ -211,7 +211,7 @@ class exploreDatasetVariables extends baseModal {
 			histBins: {
                 el: new input(config, {
                     no: 'histBins',
-                    label: exploreDatasetVariables.t('histBins'),
+                    label: DatasetDatasetVariables.t('histBins'),
                     placeholder: "",
                     required: false,
                     type: "numeric",
@@ -234,7 +234,7 @@ class exploreDatasetVariables extends baseModal {
 					objects.statTableOrientionChk.el.content
 					],
             nav: {
-                name: exploreDatasetVariables.t('navigation'),
+                name: DatasetDatasetVariables.t('navigation'),
                 icon: "icon-list-2",
                 modal: config.id
             }
@@ -242,9 +242,9 @@ class exploreDatasetVariables extends baseModal {
         super(config, objects, content);
         
         this.help = {
-            title: exploreDatasetVariables.t('help.title'),
+            title: DatasetDatasetVariables.t('help.title'),
             r_help: "help(data,package='utils')",
-            body: exploreDatasetVariables.t('help.body')
+            body: DatasetDatasetVariables.t('help.body')
         }
 ;
     }
@@ -252,5 +252,5 @@ class exploreDatasetVariables extends baseModal {
 }
 
 module.exports = {
-    render: () => new exploreDatasetVariables().render()
+    render: () => new DatasetDatasetVariables().render()
 }

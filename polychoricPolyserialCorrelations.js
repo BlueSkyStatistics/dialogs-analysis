@@ -198,8 +198,6 @@ polycor::polyserial(x={{dataset.name}}\${{selected.Target | safe}}, y={{dataset.
                 res.push({ cmd: temp, cgid: newCommandGroup(), oriR: instance.config.RCode, code_vars: code_vars })
             }
             count++
-
-
         })
         //res.push({ cmd: temp, cgid: newCommandGroup() })
         return res;

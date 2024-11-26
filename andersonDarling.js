@@ -67,7 +67,12 @@ BSkyFormat( BSkyResults, outputTableIndex = c(tableone=1), outputTableRenames = 
             }
             count++
         });
+						   
         return res
     }
 }
-module.exports.item = new andersonDarling().render()
+
+module.exports = {
+    render: () => new andersonDarling().render()
+}
+

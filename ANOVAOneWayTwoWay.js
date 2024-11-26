@@ -284,7 +284,7 @@ fittedVals: {
         var temp = "";
         let header = ""
         let count_for_title = 0
-        let loop_iterator = 0
+        let loop_iterator = 0        
         var noFactorvars = instance.objects.dest.el.getVal().length;
         let snippet1 = {
             RCode: `
@@ -567,6 +567,10 @@ if (exists("resEmmeans")) rm (resEmmeans)
                 stuResiduals: instance.objects.stuResiduals.el.getVal(),
                 fittedVals: instance.objects.fittedVals.el.getVal(),
                 prefixForSavedStatistics: instance.objects.prefixForSavedStatistics.el.getVal(),
+
+
+                //We may introduce this based on feedback
+                // showEffectSizes: instance.objects.showEffectSizes.el.getVal() ? "TRUE" : "FALSE",
             }
         }
         if (noFactorvars == 1) {
@@ -578,7 +582,6 @@ if (exists("resEmmeans")) rm (resEmmeans)
             code_vars.selected.commaSepDest = instance.objects.dest.el.getVal();
             header = snippet3 + "\n";
             header = header + "\n#Generating summaries";
-            loop_iterator =0
             //Generating summaries for each factor
             instance.objects.dest.el.getVal().forEach(function (value) {
                 code_vars.selected.dest = instance.dialog.prepareSelected({ dest: value }, instance.objects.dest.r);
@@ -596,8 +599,8 @@ if (exists("resEmmeans")) rm (resEmmeans)
             //Generating summaries for the target by both groups
             code_vars.selected.dest = instance.objects.dest.el.getVal()[0]
             cmd = instance.dialog.renderSample(snippet5.RCode, code_vars)
-            //cmd = removenewline(cmd);
-            //temp = temp + cmd;
+            // cmd = removenewline(cmd);
+            // temp = temp + cmd;
             res.push({ cmd: cmd, cgid: newCommandGroup(), oriR: snippet5.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
             let vars = "";
             vars = code_vars.selected.commaSepDest.toString();
@@ -629,7 +632,6 @@ if (exists("resEmmeans")) rm (resEmmeans)
 
             //Generating estimated marginal means for each group
             let i = 1;
-            header =""
             header = header + "\n\n#Displaying estimated marginal means";
             header = header + "\nresEmmeans = list()"
             instance.objects.dest.el.getVal().forEach(function (value) {
@@ -671,7 +673,6 @@ if (exists("resEmmeans")) rm (resEmmeans)
             }
             //post-hoc tests
             i = 1;
-            
             header = "\n\n#Post-hoc tests";
             header = header + "\nresContrasts = list()";
             instance.objects.dest.el.getVal().forEach(function (value) {
@@ -702,7 +703,6 @@ if (exists("resEmmeans")) rm (resEmmeans)
                 temp = cmd + "\n";
                 res.push({ cmd: temp, cgid: newCommandGroup(), oriR: newsnippet101.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
                 temp = ""
-
             }
             /*   if (code_vars.selected.Interaction == "FALSE") {
                   temp = temp + "\n#Simple effects";

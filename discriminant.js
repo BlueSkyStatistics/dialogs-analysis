@@ -221,7 +221,7 @@ if (exists('BSkyLeveneTest')){rm(BSkyLeveneTest)}
         cmd = instance.dialog.renderSample(snippet3.RCode, code_vars)
         temp = temp + cmd;
         cmd = removenewline(cmd);
-        res.push({ cmd: cmd, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: instance.config.RCode, code_vars: code_vars })
+        res.push({ cmd: temp, cgid: newCommandGroup() })
         return res;
     }
 }

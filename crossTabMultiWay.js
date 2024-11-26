@@ -6,7 +6,7 @@ class crossTabMultiWay extends baseModal {
     constructor() {
         var config = {
             id: crossTabMultiWay.dialogId,
-            label: "Crosstab",
+            label: crossTabMultiWay.t('title'),
             modalType: "two",
             splitProcessing: false,
             RCode: `#Create the crosstab
@@ -39,10 +39,10 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
         }
         var objects = {
             content_var: { el: new srcVariableList(config, { action: "move", scroll: true }) },
-            label6: { el: new labelVar(config, { no: "label6", label: "When multiple row and column variables are specified, we generate a separate cross table for each pair of row and column variables.", h: 5 }) },
+            label6: { el: new labelVar(config, { no: "label6", label: crossTabMultiWay.t('label6'), h: 5 }) },
             row: {
                 el: new dstVariableList(config, {
-                    label: "Row Variable",
+                    label: crossTabMultiWay.t('rowlabel'),
                     no: "row",
                     filter: "Numeric|Ordinal|Nominal",
                     extraction: "NoPrefix|UseComma",
@@ -51,7 +51,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             },
             column: {
                 el: new dstVariableList(config, {
-                    label: "Column Variable",
+                    label: crossTabMultiWay.t('collabel'),
                     no: "column",
                     filter: "Numeric|Ordinal|Nominal",
                     extraction: "NoPrefix|UseComma",
@@ -60,7 +60,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             },
             layer: {
                 el: new dstVariableList(config, {
-                    label: "Layer Variable(s)",
+                    label: crossTabMultiWay.t('layerlabel'),
                     no: "layer",
                     filter: "Numeric|Ordinal|Nominal|Scale",
                     extraction: "NoPrefix|UseComma",
@@ -69,17 +69,17 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             },
             weight: {
                 el: new dstVariable(config, {
-                    label: "Weight (one)",
+                    label: crossTabMultiWay.t('weightlabel'),
                     no: "weight",
                     filter: "Numeric|Scale",
                     extraction: "NoPrefix|UseComma|Enclosed",
                     wrapped: 'weight=c(%val%),\n'
                 })
             },
-            label1: { el: new labelVar(config, { no: "label1", label: "Statistics", h: 5 }) },
+            label1: { el: new labelVar(config, { no: "label1", label: crossTabMultiWay.t('label1'), h: 5 }) },
             chisq: {
                 el: new checkbox(config, {
-                    label: "Chisq",
+                    label: crossTabMultiWay.t('chisqlabel'),
                     style: "mt-2",
                     no: "chisq",
                     extraction: "Boolean",
@@ -87,7 +87,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             },
             chisqNoContCorrection: {
                 el: new radioButton(config, {
-                    label: "No continuity correction for Chi-squared test",
+                    label: crossTabMultiWay.t('chisqNoContCorrection'),
                     style: "ml-2",
                     //   dependant_objects: ['chisq'],
                     increment: "chisqNoContCorrection",
@@ -99,7 +99,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             },
             chisqContCorrection: {
                 el: new radioButton(config, {
-                    label: "Apply continuity correction for Chi-squared test (Applies to a 2 by 2 table)",
+                    label: crossTabMultiWay.t('chisqContCorrection'),
                     style: "ml-2",
                     //  dependant_objects: ['chisq'],
                     increment: "chisqContCorrection",
@@ -110,7 +110,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             },
             chisqSimulatePValues: {
                 el: new radioButton(config, {
-                    label: "Compute p-values using Monte Carlo simulation",
+                    label: crossTabMultiWay.t('chisqSimulatePValues'),
                     increment: "chisqSimulatePValues",
                     style: "ml-2",
                     //  dependant_objects: ['chisq'],
@@ -122,7 +122,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             chisqNoOfReplicates: {
                 el: new inputSpinner(config, {
                     no: 'chisqNoOfReplicates',
-                    label: "Number of replicates used in the Monte Carlo test",
+                    label: crossTabMultiWay.t('chisqNoOfReplicates'),
                     min: 0,
                     style: "ml-4",
                     max: 999999999999999,
@@ -133,7 +133,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             },
             mcnemar: {
                 el: new checkbox(config, {
-                    label: "McNemar",
+                    label: crossTabMultiWay.t('mcnemar'),
                     no: "mcnemar",
                     style: "mt-4",
                     extraction: "Boolean",
@@ -141,7 +141,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             },
             mcnemarContCorrection: {
                 el: new checkbox(config, {
-                    label: "Apply continuity correction for McNemar's test (Applies to a 2 by 2 table)",
+                    label: crossTabMultiWay.t('mcnemarContCorrection'),
                     style: "ml-2",
                     // dependant_objects: ['mcnemar'],
                     newline: true,
@@ -151,7 +151,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             },
             fisher: {
                 el: new checkbox(config, {
-                    label: "Fisher",
+                    label: crossTabMultiWay.t('fisher'),
                     no: "fisher",
                     style: "mt-4",
                     newline: true,
@@ -160,7 +160,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             },
             fisherSimulatePValues: {
                 el: new checkbox(config, {
-                    label: "Compute p-values using Monte Carlo simulation",
+                    label: crossTabMultiWay.t('fisherSimulatePValues'),
                     style: "ml-2",
                     newline: true,
                     no: "fisherSimulatePValues",
@@ -170,7 +170,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             fisherNoOfReplicates: {
                 el: new inputSpinner(config, {
                     no: 'fisherNoOfReplicates',
-                    label: "Number of replicates used in the Monte Carlo test",
+                    label: crossTabMultiWay.t('fisherNoOfReplicates'),
                     min: 0,
                     style: "ml-4",
                     max: 999999999999999,
@@ -182,7 +182,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             fishersAlternative: {
                 el: new comboBox(config, {
                     no: "fishersAlternative",
-                    label: "Alternative hypothesis for Fisher's Exact test",
+                    label: crossTabMultiWay.t('fishersAlternative'),
                     multiple: false,
                     style: "ml-2",
                     extraction: "NoPrefix|UseComma",
@@ -190,55 +190,55 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
                     default: "two.sided"
                 })
             },
-            label2: { el: new labelVar(config, { no: "label2", label: "Residuals", h: 5 }) },
+            label2: { el: new labelVar(config, { no: "label2", label: crossTabMultiWay.t('label2'), h: 5 }) },
             unstandardized: {
                 el: new checkbox(config, {
-                    label: "Unstandardized",
+                    label: crossTabMultiWay.t('unstandardized'),
                     no: "unstandardized",
                     extraction: "Boolean",
                 })
             },
             standardized: {
                 el: new checkbox(config, {
-                    label: "Standardized",
+                    label: crossTabMultiWay.t('standardized'),
                     no: "standardized",
                     extraction: "Boolean",
                 })
             },
             adjusted: {
                 el: new checkbox(config, {
-                    label: "Adjusted",
+                    label: crossTabMultiWay.t('adjusted'),
                     no: "adjusted",
                     extraction: "Boolean",
                 })
             },
-            label3: { el: new labelVar(config, { no: "label3", label: "Percentages", h: 5 }) },
+            label3: { el: new labelVar(config, { no: "label3", label: crossTabMultiWay.t('label3'), h: 5 }) },
             rowpercent: {
                 el: new checkbox(config, {
-                    label: "Row",
+                    label: crossTabMultiWay.t('rowpercent'),
                     no: "rowpercent",
                     extraction: "Boolean",
                 })
             },
             colpercent: {
                 el: new checkbox(config, {
-                    label: "Column",
+                    label: crossTabMultiWay.t('colpercent'),
                     no: "colpercent",
                     extraction: "Boolean",
                 })
             },
-            label4: { el: new labelVar(config, { no: "label4", label: "Counts", h: 5 }) },
+            label4: { el: new labelVar(config, { no: "label4", label: crossTabMultiWay.t('label4'), h: 5 }) },
             expected: {
                 el: new checkbox(config, {
-                    label: "Expected",
+                    label: crossTabMultiWay.t('expected'),
                     no: "expected",
                     extraction: "Boolean",
                 })
             },
-            label5: { el: new labelVar(config, { no: "label5", label: "Output format", h: 5 }) },
+            label5: { el: new labelVar(config, { no: "label5", label: crossTabMultiWay.t('label5'), h: 5 }) },
             longTbl: {
                 el: new checkbox(config, {
-                    label: "List-style table (Constrain table width when many levels)",
+                    label: crossTabMultiWay.t('longTbl'),
                     no: "longTbl",
                     extraction: "Boolean",
                 })
@@ -281,7 +281,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             right: [objects.row.el.content, objects.column.el.content, objects.layer.el.content, objects.weight.el.content],
             bottom: [advoptions.el.content],
             nav: {
-                name: "Crosstab",
+                name: crossTabMultiWay.t('navigation'),
                 icon: "icon-crosstab",
                 modal: config.id,
                 datasetRequired: true
@@ -293,7 +293,8 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
             title: crossTabMultiWay.t('help.title'),
             r_help: "help(data,package='utils')",
             body: crossTabMultiWay.t('help.body')
-        };
+        }
+;
     }
     prepareExecution(instance) {
         var res = [];

@@ -47,7 +47,6 @@ BSkyFormat( BSkyResults, outputTableRenames = c("Kolmogorov-Smirnov Test results
     }
     prepareExecution(instance) {
         var res = [];
-
         let count = 0     
         let temp = ""
         instance.objects.trg.el.getVal().forEach(function (value) {
@@ -73,4 +72,8 @@ BSkyFormat( BSkyResults, outputTableRenames = c("Kolmogorov-Smirnov Test results
         return res
     }
 }
-module.exports.item = new kstest().render()
+
+module.exports = {
+    render: () => new kstest().render()
+}
+

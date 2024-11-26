@@ -102,7 +102,7 @@ library(kableExtra)
         super(config, objects, content);
         
         this.help = {
-            title: frequencyTable.t('help.title'),
+            title: frequencyTable.t('help.title') ,
             r_help: "help(data,package='utils')",
             body: frequencyTable.t('help.body')
         }

@@ -1,9 +1,11 @@
-const nav = {
-    "name": "Analysis",
+// const i18next = require("i18next");
+// let t = getT('menutoolbar')
+const nav = () => ({
+    "name": i18next.t('analysis_top_level_title', {ns: 'menutoolbar'}),
     "tab": "analysis",
     "buttons": [
         {
-            "name": "Association Rules",
+            "name": i18next.t('analysis_Association_Rules', {ns: 'menutoolbar'}),
             "icon": "icon-shoppingcart_1",
             "children": [
                 "./generateRuleBasketData",
@@ -19,7 +21,7 @@ const nav = {
             ]
         }, 
         {
-            "name": "Cluster",
+            "name": i18next.t('analysis_Cluster', {ns: 'menutoolbar'}),
             "icon": "icon-cluster",
             "children": [
                 "./hierarchicalCluster",
@@ -27,40 +29,40 @@ const nav = {
             ]
         },        
         {
-            "name": "Correlations",
+            "name": i18next.t('analysis_Correlations', {ns: 'menutoolbar'}),
             "icon": "icon-link",
             "children": [
-                "./partialCorrelations",
+                "./semipartialCorrelation",
                 "./correlationTestMultivariableLegacy",
                 "./correlationTestMultivariable",
-                "./polychorserial",
-                "./semipartialCorrelations"
+                "./polychoricPolyserialCorrelations",
+                "./partialCorrelation"
 
             ]
         },
         {
-            "name": "Crosstab",
+            "name": i18next.t('analysis_Crosstab', {ns: 'menutoolbar'}),
             "icon": "icon-crosstab",
             "children": [
                 "./crossTabMultiWay"
             ]
         },    
         {
-            "name": "Distribution Analysis",
+            "name": i18next.t('analysis_Distribution_Analysis', {ns: 'menutoolbar'}),
             "icon": "icon-gaussian-function",
             "children": [
                 "./andersonDarling",
                 "./kstest",
                 "./shapiroWilkNormalityTest",
                 "./shapiroWilkNormalityTestLegacy",
-                "./distributionFits",
+                "./distributionFit",
                 "./distributionGamlssAutoFitTests",
                 "./distributionDescriptives"
             ]
         },    
       
         {
-            "name": "Factor Analysis",
+            "name": i18next.t('analysis_Factor_Analysis', {ns: 'menutoolbar'}),
             "icon": "icon-teamwork",
             "children": [
                 "./factorAnalysis",
@@ -68,7 +70,7 @@ const nav = {
             ]
         },
         {
-            "name": "Means",
+            "name": i18next.t('analysis_Means', {ns: 'menutoolbar'}),
             "icon": "icon-mean",
             "children": [
                 "./ANCOVA",
@@ -87,7 +89,7 @@ const nav = {
             ]
         },
         {
-            "name": "Missing Values",
+            "name": i18next.t('analysis_Missing_Values', {ns: 'menutoolbar'}),
             "icon": "icon-na",
             "children": [
                 "./missingValsColOutput",
@@ -96,18 +98,18 @@ const nav = {
             ]
         },
         {
-            "name": "Moments",
+            "name": i18next.t('analysis_Moments', {ns: 'menutoolbar'}),
             "icon": "icon-target-1",
             "children": [
                 "./Anscombe",
                 "./Bonnett",
-                "./DAgostino",       
+                "./agostino",       
                 "./sampleMoment"     
             ]
         },
         "./multiDimensionalScaling",
         {
-            "name": "Non-Parametric",
+            "name": i18next.t('analysis_Non_Parametric', {ns: 'menutoolbar'}),
             "icon": "icon-non_parametric_fix",
             "children": [
                 "./chiSquaredTest",
@@ -119,42 +121,42 @@ const nav = {
             ]
         },
         {
-            "name": "Proportions",
+            "name": i18next.t('analysis_Proportions', {ns: 'menutoolbar'}),
             "icon": "icon-percent",
             "children": [
-                "./proportionTestOneSampleBinomialMini",
-                "./proportionTestTwoSampleBinomialMini",
                 "./proportionIndependentSamples",
                 "./binomialTestSingleSample",
-                "./proportionTestSingleSample"
+                "./proportionTestSingleSample",
+                "./proportionTestOneSampleBinomialMini",
+                "./proportionTestTwoSampleBinomialMini"
             ]
         },       
         {
-            "name": "Summary",
+            "name": i18next.t('analysis_Summary', {ns: 'menutoolbar'}),
             "icon": "icon-sigma",
             "children": [
                 "./UberSummary",
-				"./exploreDatasetVariables",
+				"./DatasetDatasetVariables",
                 "./frequencyTable"
                             
             ]
         },
         {
-			"name": "Survival",
+			"name": i18next.t('analysis_Survival', {ns: 'menutoolbar'}),
 			"icon": "icon-survival",
             "children": [
       
             ]
         },	
         {
-            "name": "Tables",
+            "name": i18next.t('analysis_Tables', {ns: 'menutoolbar'}),
             "icon": "icon-table_basic",
             "children": [
       
             ]
         },	        	
         {
-            "name": "Variance",
+            "name": i18next.t('analysis_Variance', {ns: 'menutoolbar'}),
             "icon": "icon-variance",
             "children": [
                 "./bartlettsTest",
@@ -163,6 +165,9 @@ const nav = {
             ]
         }
     ]
-}
+})
 
-module.exports.nav = nav
+module.exports = {
+    nav: nav(),
+    render: () => nav()
+}

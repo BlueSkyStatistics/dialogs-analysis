@@ -1,12 +1,4 @@
 
-
-
-
-
-
-
-
-
 class crossTabMultiWayLegacy extends baseModal {
     static dialogId = 'crossTabMultiWayLegacy'
     static t = baseModal.makeT(crossTabMultiWayLegacy.dialogId)
@@ -14,7 +6,7 @@ class crossTabMultiWayLegacy extends baseModal {
     constructor() {
         var config = {
             id: crossTabMultiWayLegacy.dialogId,
-            label: "Crosstab",
+            label: crossTabMultiWayLegacy.t('title'),
             modalType: "two",
             splitProcessing:false,
             RCode: `#Create the crosstab
@@ -32,7 +24,7 @@ BSkyFormat(BSky_Multiway_Cross_Tab)`
                 content_var: { el: new srcVariableList(config, {action: "move", scroll:true}) },
                 row: {
                         el: new dstVariableList(config, {
-                            label: "Row Variable",
+                            label: crossTabMultiWayLegacy.t('row'),
                             no: "row",
                             filter: "Numeric|Ordinal|Nominal",
                             extraction: "NoPrefix|UseComma|Enclosed",
@@ -41,7 +33,7 @@ BSkyFormat(BSky_Multiway_Cross_Tab)`
                     },
                     column: {
                         el: new dstVariableList(config, {
-                            label: "Column Variable",
+                            label: crossTabMultiWayLegacy.t('column'),
                             no: "column",
                             filter: "Numeric|Ordinal|Nominal",
                             extraction: "NoPrefix|UseComma|Enclosed",
@@ -50,7 +42,7 @@ BSkyFormat(BSky_Multiway_Cross_Tab)`
                     },
                     layer: {
                         el: new dstVariableList(config, {
-                            label: "Layer Variable(s)",
+                            label: crossTabMultiWayLegacy.t('layer'),
                             no: "layer",
                             filter: "Numeric|Ordinal|Nominal|Scale",
                             extraction: "NoPrefix|UseComma|Enclosed",
@@ -59,18 +51,18 @@ BSkyFormat(BSky_Multiway_Cross_Tab)`
                     },
                     weight: {
                         el: new dstVariable(config, {
-                            label: "Weight (one)",
+                            label: crossTabMultiWayLegacy.t('weight'),
                             no: "weight",
                             filter: "Numeric|Scale",
                             extraction: "NoPrefix|UseComma|Enclosed",
                             wrapped: 'weight=c(%val%),'
                         })},
 
-                        label1: { el: new labelVar(config, { no:"label1", label: "Statistics", h: 5 })},				
+                        label1: { el: new labelVar(config, { no:"label1", label: crossTabMultiWayLegacy.t('label1'), h: 5 })},				
                                 
                         chisq: {
                                 el: new checkbox(config, {
-                                            label: "Chisq",
+                                            label: crossTabMultiWayLegacy.t('chisq'),
                                             no: "chisq",
                                             extraction: "Boolean",
                                         })
@@ -79,7 +71,7 @@ BSkyFormat(BSky_Multiway_Cross_Tab)`
                                         
                         mcnemar: {
                                 el:	new checkbox(config, {
-                                            label: "McNemar",
+                                            label: crossTabMultiWayLegacy.t('mcnemar'),
                                             no: "mcnemar",
                                             extraction: "Boolean",
                                         })
@@ -88,23 +80,23 @@ BSkyFormat(BSky_Multiway_Cross_Tab)`
                                         
                             fisher: {
                                 el:	 new checkbox(config, {
-                                            label: "Fisher",
+                                            label: crossTabMultiWayLegacy.t('fisher'),
                                             no: "fisher",
                                             extraction: "Boolean",
                                         })
                                         },
                                         
                                         
-                        label2: { el: new labelVar(config, { no:"label2", label: "Residuals", h: 5 })},						
+                        label2: { el: new labelVar(config, { no:"label2", label: crossTabMultiWayLegacy.t('label2'), h: 5 })},						
                                         
                     unstandardized: { el: new checkbox(config, {
-                                        label: "Unstandardized",
+                                        label: crossTabMultiWayLegacy.t('unstandardized'),
                                         no: "unstandardized",
                                         extraction: "Boolean",
                                     })},
                                     
                         standardized: { el: new checkbox(config, {
-                                        label: "Standardized",
+                                        label: crossTabMultiWayLegacy.t('standardized'),
                                         no: "standardized",
                                         extraction: "Boolean",
                                     })},
@@ -112,16 +104,16 @@ BSkyFormat(BSky_Multiway_Cross_Tab)`
                                     
                         adjusted: {
                                     el: new checkbox(config, {
-                                        label: "Adjusted",
+                                        label: crossTabMultiWayLegacy.t('adjusted'),
                                         no: "adjusted",
                                         extraction: "Boolean",
                                     })},
                                     
                     
-                    label3: { el: new labelVar(config, { no:"label3", label: "Percentages", h: 5 })},	
+                    label3: { el: new labelVar(config, { no:"label3", label: crossTabMultiWayLegacy.t('label3'), h: 5 })},	
                                     
                             rowpercent: { el:  new checkbox(config, {
-                                        label: "Row",
+                                        label: crossTabMultiWayLegacy.t('rowpercent'),
                                         no: "rowpercent",
                                         extraction: "Boolean",
                                     })},
@@ -129,26 +121,26 @@ BSkyFormat(BSky_Multiway_Cross_Tab)`
                                     
                                     
                                 colpercent: { el: new checkbox(config, {
-                                        label: "Column",
+                                        label: crossTabMultiWayLegacy.t('colpercent'),
                                         no: "colpercent",
                                         extraction: "Boolean",
                                     })},
                                     
                                     
-                            label4: { el: new labelVar(config, { no:"label4", label: "Counts", h: 5 })},			
+                            label4: { el: new labelVar(config, { no:"label4", label: crossTabMultiWayLegacy.t('label4'), h: 5 })},			
                             
                                     
                         expected: { el: new checkbox(config, {
-                                        label: "Expected",
+                                        label: crossTabMultiWayLegacy.t('expected'),
                                         no: "expected",
                                         extraction: "Boolean",
                                     })},
 
-                        label5: { el: new labelVar(config, { no:"label5", label: "Long table output format", h: 5 })},			
+                        label5: { el: new labelVar(config, { no:"label5", label: crossTabMultiWayLegacy.t('label5'), h: 5 })},			
                 
                         
                         longTbl: { el: new checkbox(config, {
-                                        label: "Long table",
+                                        label: crossTabMultiWayLegacy.t('longTbl'),
                                         no: "longTbl",
                                         extraction: "Boolean",
                                     })},
@@ -182,7 +174,7 @@ BSkyFormat(BSky_Multiway_Cross_Tab)`
             right: [objects.row.el.content, objects.column.el.content, objects.layer.el.content, objects.weight.el.content],
             bottom: [advoptions.el.content],
             nav: {
-                name: "Crosstab (Legacy)",
+                name: crossTabMultiWayLegacy.t('navigation'),
                 icon: "icon-crosstab",
                 modal: config.id,
                 datasetRequired: true

@@ -7,90 +7,16 @@
 
 
 
-var localization ={
-    en:{  
-        title: "ANOVA, one-way with random blocks",
-        navigation: "ANOVA, Random Blocks",    
-        tvarbox1: "Response Variable",
-            tvarbox2: "Fixed Effect",
-            blockVar: "Blocking Variable(s)",
-            Post_hoc: "Post-hoc analysis",
-            chk1: "Histogram of residuals",
-            help: {
-                title: "ANOVA, one-way with random blocks",
-                r_help: "help(lmer, package ='lme4')",            
-                body: `
-<b>Description</b></br>
-Fit a linear mixed-effects model (LMM) to data, via REML or maximum likelihood.
-<br/>
-<b>Usage</b>
-<br/>
-<code> 
-lmer(formula, data = NULL, REML = TRUE, control = lmerControl(),
-        start = NULL, verbose = 0L, subset, weights, na.action,
-        offset, contrasts = NULL, devFunOnly = FALSE, ...)
-</code> <br/>
-<b>Arguments</b><br/>
-<ul>
-<li>
-formula: a two-sided linear formula object describing both the fixed-effects and random-effects part of the model, with the response on the left of a ~ operator and the terms, separated by +operators, on the right. Random-effects terms are distinguished by vertical bars (|) separating expressions for design matrices from grouping factors. Two vertical bars (||) can be used to specify multiple uncorrelated random effects for the same grouping variable. (Because of the way it is implemented, the ||-syntax works only for design matrices containing numeric (continuous) predictors; to fit models with independent categorical effects, see dummy or the lmer_alt function from the afex package.)
-</li>
-<li>
-data: an optional data frame containing the variables named in formula. By default the variables are taken from the environment from which lmer is called. While data is optional, the package authors strongly recommend its use, especially when later applying methods such as update and drop1 to the fitted model (such methods are not guaranteed to work properly if data is omitted). If data is omitted, variables will be taken from the environment of formula (if specified as a formula) or from the parent frame (if specified as a character vector).
-</li>
-<li>
-REML: logical scalar - Should the estimates be chosen to optimize the REML criterion (as opposed to the log-likelihood)?
-na.action: a function that indicates what should happen when the data contain NAs. The default action (na.omit, inherited from the 'factory fresh' value of getOption("na.action")) strips any observations with any missing values in any variables.
-</li>
-</ul>
-<b>Value</b></br>
-An object of class merMod (more specifically, an object of subclass lmerMod), for which many methods are available (e.g. methods(class="merMod"))</br>
-<b>Package</b></br>
-lme4</br>
-<b>Help</b></br>
-help(lmer, package ='lme4')</br></br>
-<b>Description</b></br>
-Description Methods for Function anova in Package lmerTest
-<br/>
-<b>Usage</b>
-<br/>
-<code> 
-## S4 method for signature 'merModLmerTest' anova(object, ... , ddf="Satterthwaite", type=3)
-</code> <br/>
-<b>Arguments</b><br/>
-<ul>
-<li>
-object: object of class "merModLmerTest" ... object of class "merModLmerTest". Then the model comparison statistisc will be calculated
-</li>
-<li>
-ddf: By default the Satterthwaite’s approximation to degrees of freedom is calculated. If ddf="Kenward-Roger", then the Kenward-Roger’s approximation is calculated using KRmodcomp function from pbkrtest package. If ddf="lme4" then the anova table that comes from lme4 package is returned.
-</li>
-<li>
-Type: type of hypothesis to be tested. Could be type=3 or type=2 or type = 1 (The definition comes from SAS theory) Details According to (Goodnight, J.H. 1976) the behaviour of the type 3 hypothesis is not fully studied for the situations with missing cells (where observations are missing at some factor-level combination). A warning is returned in such cases.
-</li>
-</ul>
-<b>Details</b></br>
-According to (Goodnight, J.H. 1976) the behaviour of the type 3 hypothesis is not fully studied for the situations with missing cells (where observations are missing at some factor-level combination). A warning is returned in such cases.</br>
-<b>Package</b></br>
-lme4;lmerTest;rcompanion;ggplot2;multcomp</br>
-<b>Help</b></br>
-https://cran.r-project.org/web/packages/lmerTest/lmerTest.pdf</br>
-help(nagelkerke, package ='rcompanion')</br>
-help(emmeans,package="cld")</br>
-help(cld,package='emmeans')</br>
-<b>Reference material</b></br>
-http://rcompanion.org/handbook/I_07.html
-`}
-            
-}
 
-}
 
 class ANOVAOneWayWithRanBlocks extends baseModal {
+    static dialogId = 'ANOVAOneWayWithRanBlocks'
+    static t = baseModal.makeT(ANOVAOneWayWithRanBlocks.dialogId)
+
     constructor() {
         var config = {
-            id: "ANOVAOneWayWithRanBlocks",
-            label:localization.en.title ,
+            id: ANOVAOneWayWithRanBlocks.dialogId,
+            label:ANOVAOneWayWithRanBlocks.t('title') ,
             modalType: "two",
             RCode: `
 require(lme4)
@@ -181,14 +107,14 @@ if ({{selected.chk1 | safe}})
         var objects = {
             content_var: {el: new srcVariableList(config, {action: "move"})},
             response: {el: new dstVariable(config, {
-                label: localization.en.tvarbox1, 
+                label: ANOVAOneWayWithRanBlocks.t('tvarbox1'), 
                 no: "tvarbox1", 
                 filter: "Numeric|Ordinal|Nominal|Scale",
                 extraction: "NoPrefix|UseComma",
                 required: true,
             })},
             Fixed: {el: new dstVariable(config, {
-                label: localization.en.tvarbox2, 
+                label: ANOVAOneWayWithRanBlocks.t('tvarbox2'), 
                 no: "tvarbox2", 
                 filter: "Numeric|Ordinal|Nominal|Scale",
                 extraction: "NoPrefix|UseComma",
@@ -196,28 +122,37 @@ if ({{selected.chk1 | safe}})
             })},
             Block: {
                 el: new dstVariableList(config, {
-                    label: localization.en.blockVar, 
+                    label: ANOVAOneWayWithRanBlocks.t('blockVar'), 
                     no: "blockVar", 
                     filter: "Numeric|Ordinal|Nominal|Scale", 
                     extraction: "NoPrefix|UsePlus",
                     required: true,
                 })},
-                chk1: { el: new checkbox(config, { label: localization.en.chk1, no: "chk1", extraction: "Boolean" }) },
-             Post_hoc: {el: new checkbox(config, {label: localization.en.Post_hoc, no: "chk2", newline:true,extraction: "Boolean"})}
+                chk1: { el: new checkbox(config, { label: ANOVAOneWayWithRanBlocks.t('chk1'), no: "chk1", extraction: "Boolean" }) },
+             Post_hoc: {el: new checkbox(config, {label: ANOVAOneWayWithRanBlocks.t('Post_hoc'), no: "chk2", newline:true,extraction: "Boolean"})}
         }
         
         const content = {
             left: [ objects.content_var.el.content ],
             right: [ objects.response.el.content, objects.Fixed.el.content, objects.Block.el.content, objects.chk1.el.content, objects.Post_hoc.el.content ],
             nav: {
-                name: "ANOVA, 1 way (random blocks)",
+                name: ANOVAOneWayWithRanBlocks.t('navigation'),
                 icon: "icon-anova_random_blocks",
                 modal: config.id
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: ANOVAOneWayWithRanBlocks.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: ANOVAOneWayWithRanBlocks.t('help.body')
+        }
+;
     }
 }
 
-module.exports.item = new ANOVAOneWayWithRanBlocks().render()
+
+module.exports = {
+    render: () => new ANOVAOneWayWithRanBlocks().render()
+}
