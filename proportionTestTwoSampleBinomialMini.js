@@ -19,8 +19,20 @@ class proportionTestTwoSampleBinomialMini extends baseModal {
             modalType: "two",
             RCode: `
 {{if (options.selected.gpbox1 =="dataInCols")}}
+{{if (options.selected.tvarbox1 =="" || options.selected.tvarbox2 =="")}}
+    cat("You need to drag and drop variables to the list boxes with labels numeric of factor with 2 levels/values only and numeric or factor with 2 levels/values only")
+{{#else}}
 twoPropTestBothSamplesSingleColMini( dataset ="{{dataset.name}}", col1_name ="{{ selected.tvarbox1 | safe}}", col2_name= "{{ selected.tvarbox2 | safe}}",
     p={{selected.txtbox2 | safe}}, alternate="{{selected.gpbox2 | safe}}", conf.level={{selected.txtbox1 | safe}}, testMethod ="{{selected.method | safe}}")
+{{/if}}
+{{/if}}
+{{if (options.selected.gpbox1 =="dataInOneCols")}}
+{{if (options.selected.tvarbox3 =="" || options.selected.tvarbox4 =="")}}
+    cat("You need to drag and drop variables to the list boxes with labels numeric label and factor variable with 2 levels/values only")
+{{#else}}
+BSkyTwoPropTestSingleColMini( dataset ="{{dataset.name}}", col1_name ="{{ selected.tvarbox3 | safe}}", col2_name= "{{ selected.tvarbox4 | safe}}",
+    p={{selected.txtbox2 | safe}}, alternate="{{selected.gpbox2 | safe}}", conf.level={{selected.txtbox1 | safe}}, testMethod ="{{selected.method | safe}}")
+{{/if}}
 {{/if}}
 {{if (options.selected.gpbox1 =="summarized")}}
 BSky2SampleProportionMT( x1={{selected.noOfEvents | safe}}, x2={{selected.noOfEvents2 | safe}},
@@ -42,7 +54,20 @@ BSky2SampleProportionMT( x1={{selected.noOfEvents | safe}}, x2={{selected.noOfEv
                   state: "checked",
                   extraction: "ValueAsIs"
                 })
-              },           
+              },  
+              dataInOneCols: {
+                el: new radioButton(config, {
+                  label: proportionTestTwoSampleBinomialMini.t('dataInOneCols'),
+                  no: "gpbox1",
+                  increment: "dataInOneCols",
+                  dependant_objects: ["tvarbox3", "tvarbox4"],
+                  required:true,
+                  value: "dataInOneCols",
+                  state: "",
+                  extraction: "ValueAsIs"
+                })
+              },     
+              
               summarized: {
                 el: new radioButton(config, {
                   label: proportionTestTwoSampleBinomialMini.t('summarized'),
@@ -68,6 +93,23 @@ BSky2SampleProportionMT( x1={{selected.noOfEvents | safe}}, x2={{selected.noOfEv
                 el: new dstVariable(config, {
                     label: proportionTestTwoSampleBinomialMini.t('tvarbox2'),
                     no: "tvarbox2",
+                    filter: "Numeric|Logical|Ordinal|Nominal|Scale",
+                    extraction: "NoPrefix|UseComma",    
+                })
+            },
+            tvarbox3: {
+                el: new dstVariable(config, {
+                    label: proportionTestTwoSampleBinomialMini.t('tvarbox3'),
+                    no: "tvarbox3",
+                    filter: "Numeric|Logical|Ordinal|Nominal|Scale",
+                    extraction: "NoPrefix|UseComma",
+                  
+                })
+            },
+            tvarbox4: {
+                el: new dstVariable(config, {
+                    label: proportionTestTwoSampleBinomialMini.t('tvarbox4'),
+                    no: "tvarbox4",
                     filter: "Numeric|Logical|Ordinal|Nominal|Scale",
                     extraction: "NoPrefix|UseComma",    
                 })
@@ -209,8 +251,8 @@ BSky2SampleProportionMT( x1={{selected.noOfEvents | safe}}, x2={{selected.noOfEv
         }
         const content = {
             left: [objects.content_var.el.content],
-            right: [objects.dataInCols.el.content, objects.tvarbox1.el.content,objects.tvarbox2.el.content, objects.summarized.el.content,objects.label2.el.content,objects.noOfEvents.el.content,objects.noOfTrials.el.content,objects.label3.el.content,objects.noOfEvents2.el.content,objects.noOfTrials2.el.content,objects.label1.el.content,
-                objects.test1.el.content, objects.test2.el.content, objects.test3.el.content,
+            right: [objects.dataInCols.el.content, objects.tvarbox1.el.content,objects.tvarbox2.el.content, objects.dataInOneCols.el.content, objects.tvarbox3.el.content,objects.tvarbox4.el.content,objects.summarized.el.content,objects.label2.el.content,objects.noOfEvents.el.content,objects.noOfTrials.el.content,objects.label3.el.content,objects.noOfEvents2.el.content,objects.noOfTrials2.el.content,objects.label1.el.content,
+            objects.test1.el.content, objects.test2.el.content, objects.test3.el.content,
             //objects.txtbox1.el.content, objects.txtbox2.el.content, objects.chkbox1.el.content],
             objects.txtbox1.el.content, objects.txtbox2.el.content, objects.method.el.content],
             nav: {
