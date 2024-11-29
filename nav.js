@@ -1,11 +1,10 @@
-// const i18next = require("i18next");
-// let t = getT('menutoolbar')
+let t = getT('menutoolbar')
 const nav = () => ({
-    "name": i18next.t('analysis_top_level_title', {ns: 'menutoolbar'}),
+    "name": t('analysis_top_level_title'),// {ns: 'menutoolbar'}),
     "tab": "analysis",
     "buttons": [
         {
-            "name": i18next.t('analysis_Association_Rules', {ns: 'menutoolbar'}),
+            "name": t('analysis_Association_Rules'),// {ns: 'menutoolbar'}),
             "icon": "icon-shoppingcart_1",
             "children": [
                 "./generateRuleBasketData",
@@ -21,7 +20,7 @@ const nav = () => ({
             ]
         }, 
         {
-            "name": i18next.t('analysis_Cluster', {ns: 'menutoolbar'}),
+            "name": t('analysis_Cluster'),// {ns: 'menutoolbar'}),
             "icon": "icon-cluster",
             "children": [
                 "./hierarchicalCluster",
@@ -29,7 +28,7 @@ const nav = () => ({
             ]
         },        
         {
-            "name": i18next.t('analysis_Correlations', {ns: 'menutoolbar'}),
+            "name": t('analysis_Correlations'),// {ns: 'menutoolbar'}),
             "icon": "icon-link",
             "children": [
                 "./semipartialCorrelation",
@@ -41,14 +40,14 @@ const nav = () => ({
             ]
         },
         {
-            "name": i18next.t('analysis_Crosstab', {ns: 'menutoolbar'}),
+            "name": t('analysis_Crosstab'),// {ns: 'menutoolbar'}),
             "icon": "icon-crosstab",
             "children": [
                 "./crossTabMultiWay"
             ]
         },    
         {
-            "name": i18next.t('analysis_Distribution_Analysis', {ns: 'menutoolbar'}),
+            "name": t('analysis_Distribution_Analysis'),// {ns: 'menutoolbar'}),
             "icon": "icon-gaussian-function",
             "children": [
                 "./andersonDarling",
@@ -62,7 +61,7 @@ const nav = () => ({
         },    
       
         {
-            "name": i18next.t('analysis_Factor_Analysis', {ns: 'menutoolbar'}),
+            "name": t('analysis_Factor_Analysis'),// {ns: 'menutoolbar'}),
             "icon": "icon-teamwork",
             "children": [
                 "./factorAnalysis",
@@ -70,7 +69,7 @@ const nav = () => ({
             ]
         },
         {
-            "name": i18next.t('analysis_Means', {ns: 'menutoolbar'}),
+            "name": t('analysis_Means'),// {ns: 'menutoolbar'}),
             "icon": "icon-mean",
             "children": [
                 "./ANCOVA",
@@ -89,7 +88,7 @@ const nav = () => ({
             ]
         },
         {
-            "name": i18next.t('analysis_Missing_Values', {ns: 'menutoolbar'}),
+            "name": t('analysis_Missing_Values'),// {ns: 'menutoolbar'}),
             "icon": "icon-na",
             "children": [
                 "./missingValsColOutput",
@@ -98,7 +97,7 @@ const nav = () => ({
             ]
         },
         {
-            "name": i18next.t('analysis_Moments', {ns: 'menutoolbar'}),
+            "name": t('analysis_Moments'),// {ns: 'menutoolbar'}),
             "icon": "icon-target-1",
             "children": [
                 "./Anscombe",
@@ -109,7 +108,7 @@ const nav = () => ({
         },
         "./multiDimensionalScaling",
         {
-            "name": i18next.t('analysis_Non_Parametric', {ns: 'menutoolbar'}),
+            "name": t('analysis_Non_Parametric'),// {ns: 'menutoolbar'}),
             "icon": "icon-non_parametric_fix",
             "children": [
                 "./chiSquaredTest",
@@ -121,7 +120,7 @@ const nav = () => ({
             ]
         },
         {
-            "name": i18next.t('analysis_Proportions', {ns: 'menutoolbar'}),
+            "name": t('analysis_Proportions'),// {ns: 'menutoolbar'}),
             "icon": "icon-percent",
             "children": [
                 "./proportionIndependentSamples",
@@ -132,7 +131,7 @@ const nav = () => ({
             ]
         },       
         {
-            "name": i18next.t('analysis_Summary', {ns: 'menutoolbar'}),
+            "name": t('analysis_Summary'),// {ns: 'menutoolbar'}),
             "icon": "icon-sigma",
             "children": [
                 "./UberSummary",
@@ -142,21 +141,21 @@ const nav = () => ({
             ]
         },
         {
-			"name": i18next.t('analysis_Survival', {ns: 'menutoolbar'}),
+			"name": t('analysis_Survival'),// {ns: 'menutoolbar'}),
 			"icon": "icon-survival",
             "children": [
       
             ]
         },	
         {
-            "name": i18next.t('analysis_Tables', {ns: 'menutoolbar'}),
+            "name": t('analysis_Tables'),// {ns: 'menutoolbar'}),
             "icon": "icon-table_basic",
             "children": [
       
             ]
         },	        	
         {
-            "name": i18next.t('analysis_Variance', {ns: 'menutoolbar'}),
+            "name": t('analysis_Variance'),// {ns: 'menutoolbar'}),
             "icon": "icon-variance",
             "children": [
                 "./bartlettsTest",
