@@ -122,11 +122,13 @@ const nav = {
             "name": "Proportions",
             "icon": "icon-percent",
             "children": [
-                "./proportionIndependentSamples",
+                
                 "./binomialTestSingleSample",
-                "./proportionTestSingleSample",
                 "./proportionTestOneSampleBinomialMini",
-                "./proportionTestTwoSampleBinomialMini"
+                "./proportionTestTwoSampleBinomialMini",
+                "./proportionTestSingleSample",
+                "./proportionIndependentSamples"
+                
             ]
         },       
         {
