@@ -3,6 +3,19 @@ var localization = {
     en: {
         title: "Wilcoxon Test, paired samples",
         navigation: "Wilcoxon Test, paired samples",
+
+        tvarbox1 : "First Variable (one)",
+        tvarbox2 : "Second Variable (one)",
+        label1 : "Aternative Hypothesis",
+        twosided : "Difference != mu",
+        greater : "Difference > mu",
+        less : "Difference < mu",
+        label2 : "Test Method",
+        default : "Default",
+        exact : "Exact",
+        normal : "Normal Approximation",
+        contingency  : "Normal Approximation (Continuity correction)",
+
         textbox1: "Confidence interval",
         textbox2: "Null hypothesis (mu)",
         help: {
@@ -123,7 +136,7 @@ BSkyFormat(BSky_Paired_Wilcoxon_Test)
             content_var: { el: new srcVariableList(config, {action: "move"}) },
             tvarbox1: {
                 el: new dstVariable(config, {
-                    label: "First Variable (one)",
+                    label: localization.en.tvarbox1,
                     no: "tvarbox1",
                     required: true,
                     filter: "Numeric|Scale",
@@ -133,7 +146,7 @@ BSkyFormat(BSky_Paired_Wilcoxon_Test)
             },
             tvarbox2: {
                 el: new dstVariable(config, {
-                    label: "Second Variable (one)",
+                    label: localization.en.tvarbox2,
                     no: "tvarbox2",
                     required: true,
                     filter: "Numeric|Logical|Ordinal|Nominal|Scale",
@@ -141,10 +154,10 @@ BSkyFormat(BSky_Paired_Wilcoxon_Test)
                     required: true,
                 })
             },
-            label1: { el: new labelVar(config, { label: "Aternative Hypothesis", style: "mt-4", h: 6 }) },
+            label1: { el: new labelVar(config, { label: localization.en.label1, style: "mt-4", h: 6 }) },
             twosided: {
                 el: new radioButton(config, {
-                    label: "Difference != mu",
+                    label: localization.en.twosided,
                     no: "gpbox2",
                     increment: "twosided",
                     value: "two.sided",
@@ -154,7 +167,7 @@ BSkyFormat(BSky_Paired_Wilcoxon_Test)
             },
             greater: {
                 el: new radioButton(config, {
-                    label: "Difference > mu",
+                    label: localization.en.greater,
                     no: "gpbox2",
                     increment: "greater",
                     value: "greater",
@@ -164,7 +177,7 @@ BSkyFormat(BSky_Paired_Wilcoxon_Test)
             },
             less: {
                 el: new radioButton(config, {
-                    label: "Difference < mu",
+                    label: localization.en.less,
                     no: "gpbox2",
                     increment: "less",
                     value: "less",
@@ -172,10 +185,10 @@ BSkyFormat(BSky_Paired_Wilcoxon_Test)
                     extraction: "ValueAsIs"
                 })
             },
-            label2: { el: new labelVar(config, { label: "Test Method", style: "mt-4", h: 6 }) },
+            label2: { el: new labelVar(config, { label: localization.en.label2, style: "mt-4", h: 6 }) },
             default: {
                 el: new radioButton(config, {
-                    label: "Default",
+                    label: localization.en.default,
                     no: "gpbox1",
                     increment: "default",
                     value: "exact = NULL, correct = TRUE",
@@ -185,7 +198,7 @@ BSkyFormat(BSky_Paired_Wilcoxon_Test)
             },
             exact: {
                 el: new radioButton(config, {
-                    label: "Exact",
+                    label: localization.en.exact,
                     no: "gpbox1",
                     increment: "exact",
                     value: "exact = TRUE, correct = FALSE",
@@ -195,7 +208,7 @@ BSkyFormat(BSky_Paired_Wilcoxon_Test)
             },
             normal: {
                 el: new radioButton(config, {
-                    label: "Normal Approximation",
+                    label: localization.en.normal,
                     no: "gpbox1",
                     increment: "normal",
                     value: "exact = FALSE, correct = FALSE",
@@ -205,7 +218,7 @@ BSkyFormat(BSky_Paired_Wilcoxon_Test)
             },
             contingency: {
                 el: new radioButton(config, {
-                    label: "Normal Approximation (Continuity correction)",
+                    label: localization.en.contingency,
                     no: "gpbox1",
                     increment: "contingency",
                     value: "exact = FALSE, correct = TRUE",
