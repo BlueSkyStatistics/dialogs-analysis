@@ -2,7 +2,7 @@
 var localization = {
     en: {
         title: "Two Sample Proportion Test",
-        navigation: "2 samples",
+        navigation: "Two sample (Continuity Correction)",
         tvarbox1: "GroupBy, specify a factor variable",
         response: "Response variable, factor variable with 2 levels only",
         label1: "Alternative hypothesis",

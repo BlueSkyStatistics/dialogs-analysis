@@ -2,7 +2,7 @@
 var localization = {
     en: {
         title: "Single Sample Proportion Test",
-        navigation: "Single sample",
+        navigation: "Single sample (Continuity Correction)",
         tvarbox1: "Numeric or factor with 2 levels/values only",
         label1: "Alternative hypothesis",
         test1: "Population mean != mu",
