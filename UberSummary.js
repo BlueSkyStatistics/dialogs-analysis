@@ -24,6 +24,7 @@ var localization = {
         addIsstatnames: "Additonal statistical function names comma separated, for e.g. var)",
         label1: "Options for numeric variables",
         label3: "Options for factor variables",
+		label4: "Summary statistics in columns",
         help: {
             title: "Descriptives",
             r_help: "",
@@ -182,7 +183,7 @@ dplyr::group_by({{selected.tvarbox2 | safe}}) %>%
             },
             label2: { el: new labelVar(config, { label: localization.en.label2, style: "mb-3", h: 6 }) },
             longTbl: { el: new checkbox(config, {
-                label: "Summary statistics in columns",
+                label: localization.en.label4,
                 style: "mt-2",
                 no: "longTbl",
                 extraction: "Boolean",
