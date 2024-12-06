@@ -10,6 +10,22 @@ var localization = {
         biplot: "Show cluster biplot",
         dendogram: "Plot cluster dendogram",
         labelForClusteringMethod: "Clustering method",
+		
+		Methodlabel: "Method",
+		MethodRadlabel1: "Wards Method",
+		MethodRadlabel2: "Single Linkage",
+		MethodRadlabel3: "Complete Linkage",
+		MethodRadlabel4: "Average Linkage",
+		MethodRadlabel5: "McQuitty's Method",
+		MethodRadlabel6: "Median Linkage",
+		MethodRadlabel7: "Centroid Linkage",
+		
+		Metriclabel: "Metric",
+		MetricRadlabel1: "Euclidean",
+		MetricRadlabel2: "Squared-Euclidean",
+		MetricRadlabel3: "Manhattan (City Block)",
+		MetricRadlabel4: "No Transformation",
+		
         help: {
             title: "Hierarchical Cluster",
             r_help: "help(hclust, package ='stats')",
@@ -146,9 +162,9 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
                 el: new optionsVar(config, {
                     no: "barchart_options",
                     content: [
-                        new labelVar(config, { label: "Method", h: 6 }),
+                        new labelVar(config, { label: localization.en.Methodlabel, h: 6 }),
                         new radioButton(config, {
-                            label: "Wards Method",
+                            label: localization.en.MethodRadlabel1,
                             no: "rdgrp1",
                             increment: "wards",
                             value: "ward.D",
@@ -157,7 +173,7 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
                         })
                         ,
                         new radioButton(config, {
-                            label: "Single Linkage",
+                            label: localization.en.MethodRadlabel2,
                             no: "rdgrp1",
                             increment: "single",
                             value: "single",
@@ -165,7 +181,7 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
                             extraction: "ValueAsIs"
                         }),
                         new radioButton(config, {
-                            label: "Complete Linkage",
+                            label: localization.en.MethodRadlabel3,
                             no: "rdgrp1",
                             increment: "complete",
                             value: "complete",
@@ -174,7 +190,7 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
                         })
                         ,
                         new radioButton(config, {
-                            label: "Average Linkage",
+                            label: localization.en.MethodRadlabel4,
                             no: "rdgrp1",
                             increment: "linkage",
                             value: "average",
@@ -182,7 +198,7 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
                             extraction: "ValueAsIs"
                         }),
                         new radioButton(config, {
-                            label: "McQuitty's Method",
+                            label: localization.en.MethodRadlabel5,
                             no: "rdgrp1",
                             increment: "mcquitty",
                             value: "mcquitty",
@@ -190,7 +206,7 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
                             extraction: "ValueAsIs"
                         }),
                         new radioButton(config, {
-                            label: "Median Linkage",
+                            label: localization.en.MethodRadlabel6,
                             no: "rdgrp1",
                             increment: "median",
                             value: "median",
@@ -198,16 +214,16 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
                             extraction: "ValueAsIs"
                         }),
                         new radioButton(config, {
-                            label: "Centroid Linkage",
+                            label: localization.en.MethodRadlabel7,
                             no: "rdgrp1",
                             increment: "centroid",
                             value: "centroid",
                             state: "",
                             extraction: "ValueAsIs"
                         }),
-                        new labelVar(config, { label: "Metric", h: 6, style: "mt-3" }),
+                        new labelVar(config, { label: localization.en.Metriclabel, h: 6, style: "mt-3" }),
                         new radioButton(config, {
-                            label: "Euclidean",
+                            label: localization.en.MetricRadlabel1,
                             no: "rdgrp2",
                             increment: "euclidean",
                             value: "euclidean",
@@ -216,7 +232,7 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
                         })
                         ,
                         new radioButton(config, {
-                            label: "Squared-Euclidean",
+                            label: localization.en.MetricRadlabel2,
                             no: "rdgrp2",
                             increment: "squared-euclidean",
                             value: "squared-euclidean",
@@ -225,7 +241,7 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
                         })
                         ,
                         new radioButton(config, {
-                            label: "Manhattan (City Block)",
+                            label: localization.en.MetricRadlabel3,
                             no: "rdgrp2",
                             increment: "city-block",
                             value: "city-block",
@@ -234,7 +250,7 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
                         })
                         ,
                         new radioButton(config, {
-                            label: "No Transformation",
+                            label: localization.en.MetricRadlabel4,
                             no: "rdgrp2",
                             increment: "untransformed",
                             value: "untransformed",
