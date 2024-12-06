@@ -108,7 +108,7 @@ dplyr::group_by({{selected.tvarbox2 | safe}}) %>%
             },
             label2: { el: new labelVar(config, { label: UberSummary.t('label2'), style: "mb-3", h: 6 }) },
             longTbl: { el: new checkbox(config, {
-                label: "Summary statistics in columns",
+                label: UberSummary.t('label4'),
                 style: "mt-2",
                 no: "longTbl",
                 extraction: "Boolean",

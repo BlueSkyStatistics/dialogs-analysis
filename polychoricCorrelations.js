@@ -101,7 +101,7 @@ polycor::polychor(x={{dataset.name}}\${{selected.Target | safe}}, y={{dataset.na
         var MissingVals = {
             el: new optionsVar(config, {
                 no: "MissingVals",
-                name: "Advanced",
+                name: polychoricCorrelations.t('advanced_lbl'),
                 content: [
                     objects.conf_level.el,
                     objects.Seed.el,

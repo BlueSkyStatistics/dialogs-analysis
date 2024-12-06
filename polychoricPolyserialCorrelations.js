@@ -146,7 +146,7 @@ polycor::polyserial(x={{dataset.name}}\${{selected.Target | safe}}, y={{dataset.
         var MissingVals = {
             el: new optionsVar(config, {
                 no: "MissingVals",
-                name: "Advanced",
+                name: polychoricPolyserialCorrelations.t('advanced_lbl'),
                 content: [
                     objects.conf_level.el,
                     objects.Seed.el,

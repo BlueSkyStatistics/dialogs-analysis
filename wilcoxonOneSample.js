@@ -28,17 +28,17 @@ BSkyFormat(BSky_Wilcoxon_Test)
             content_var: { el: new srcVariableList(config, {action: "move"}) },
             tvarbox1: {
                 el: new dstVariable(config, {
-                    label: "Outcome",
+                    label: wilcoxonOneSample.t('tvarbox1'),
                     no: "tvarbox1",
                     required: true,
                     filter: "Numeric|Scale",
                     extraction: "NoPrefix|UseComma",
                 })
             },
-            label1: { el: new labelVar(config, { label: "Aternative Hypothesis", style: "mt-4", h: 6}) },
+            label1: { el: new labelVar(config, { label: wilcoxonOneSample.t('label1'), style: "mt-4", h: 6}) },
             twosided: {
                 el: new radioButton(config, {
-                    label: "Median != mu",
+                    label: wilcoxonOneSample.t('twosided'),
                     no: "gpbox2",
                     increment: "twosided",
                     value: "two.sided",
@@ -48,7 +48,7 @@ BSkyFormat(BSky_Wilcoxon_Test)
             },
             greater: {
                 el: new radioButton(config, {
-                    label: "Median > mu",
+                    label: wilcoxonOneSample.t('greater'),
                     no: "gpbox2",
                     increment: "greater",
                     value: "greater",
@@ -58,7 +58,7 @@ BSkyFormat(BSky_Wilcoxon_Test)
             },
             less: {
                 el: new radioButton(config, {
-                    label: "Median < mu",
+                    label: wilcoxonOneSample.t('less'),
                     no: "gpbox2",
                     increment: "less",
                     value: "less",
@@ -66,10 +66,10 @@ BSkyFormat(BSky_Wilcoxon_Test)
                     extraction: "ValueAsIs"
                 })
             },
-            label2: { el: new labelVar(config, { label: "Test Method", style: "mt-4", h: 6 }) },
+            label2: { el: new labelVar(config, { label: wilcoxonOneSample.t('label2'), style: "mt-4", h: 6 }) },
             default: {
                 el: new radioButton(config, {
-                    label: "Default",
+                    label: wilcoxonOneSample.t('default'),
                     no: "gpbox1",
                     increment: "default",
                     value: "exact = NULL, correct = TRUE",
@@ -79,7 +79,7 @@ BSkyFormat(BSky_Wilcoxon_Test)
             },
             exact: {
                 el: new radioButton(config, {
-                    label: "Exact",
+                    label: wilcoxonOneSample.t('exact'),
                     no: "gpbox1",
                     increment: "exact",
                     value: "exact = TRUE, correct = FALSE",
@@ -89,7 +89,7 @@ BSkyFormat(BSky_Wilcoxon_Test)
             },
             normal: {
                 el: new radioButton(config, {
-                    label: "Normal Approximation",
+                    label: wilcoxonOneSample.t('normal'),
                     no: "gpbox1",
                     increment: "normal",
                     value: "exact = FALSE, correct = FALSE",
@@ -99,7 +99,7 @@ BSkyFormat(BSky_Wilcoxon_Test)
             },
             contingency: {
                 el: new radioButton(config, {
-                    label: "Normal Approximation (Continuity correction)",
+                    label: wilcoxonOneSample.t('contingency'),
                     no: "gpbox1",
                     style: "mb-2",
                     increment: "contingency",

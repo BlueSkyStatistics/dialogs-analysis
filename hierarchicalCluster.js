@@ -73,9 +73,9 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
                 el: new optionsVar(config, {
                     no: "barchart_options",
                     content: [
-                        new labelVar(config, { label: "Method", h: 6 }),
+                        new labelVar(config, { label: hierarchicalCluster.t('Methodlabel'), h: 6 }),
                         new radioButton(config, {
-                            label: "Wards Method",
+                            label: hierarchicalCluster.t('MethodRadlabel1'),
                             no: "rdgrp1",
                             increment: "wards",
                             value: "ward.D",
@@ -84,7 +84,7 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
                         })
                         ,
                         new radioButton(config, {
-                            label: "Single Linkage",
+                            label: hierarchicalCluster.t('MethodRadlabel2'),
                             no: "rdgrp1",
                             increment: "single",
                             value: "single",
@@ -92,7 +92,7 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
                             extraction: "ValueAsIs"
                         }),
                         new radioButton(config, {
-                            label: "Complete Linkage",
+                            label: hierarchicalCluster.t('MethodRadlabel3'),
                             no: "rdgrp1",
                             increment: "complete",
                             value: "complete",
@@ -101,7 +101,7 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
                         })
                         ,
                         new radioButton(config, {
-                            label: "Average Linkage",
+                            label: hierarchicalCluster.t('MethodRadlabel4'),
                             no: "rdgrp1",
                             increment: "linkage",
                             value: "average",
@@ -109,7 +109,7 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
                             extraction: "ValueAsIs"
                         }),
                         new radioButton(config, {
-                            label: "McQuitty's Method",
+                            label: hierarchicalCluster.t('MethodRadlabel5'),
                             no: "rdgrp1",
                             increment: "mcquitty",
                             value: "mcquitty",
@@ -117,7 +117,7 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
                             extraction: "ValueAsIs"
                         }),
                         new radioButton(config, {
-                            label: "Median Linkage",
+                            label: hierarchicalCluster.t('MethodRadlabel6'),
                             no: "rdgrp1",
                             increment: "median",
                             value: "median",
@@ -125,16 +125,16 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
                             extraction: "ValueAsIs"
                         }),
                         new radioButton(config, {
-                            label: "Centroid Linkage",
+                            label: hierarchicalCluster.t('MethodRadlabel7'),
                             no: "rdgrp1",
                             increment: "centroid",
                             value: "centroid",
                             state: "",
                             extraction: "ValueAsIs"
                         }),
-                        new labelVar(config, { label: "Metric", h: 6, style: "mt-3" }),
+                        new labelVar(config, { label: hierarchicalCluster.t('Metriclabel'), h: 6, style: "mt-3" }),
                         new radioButton(config, {
-                            label: "Euclidean",
+                            label: hierarchicalCluster.t('MetricRadlabel1'),
                             no: "rdgrp2",
                             increment: "euclidean",
                             value: "euclidean",
@@ -143,7 +143,7 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
                         })
                         ,
                         new radioButton(config, {
-                            label: "Squared-Euclidean",
+                            label: hierarchicalCluster.t('MetricRadlabel2'),
                             no: "rdgrp2",
                             increment: "squared-euclidean",
                             value: "squared-euclidean",
@@ -152,7 +152,7 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
                         })
                         ,
                         new radioButton(config, {
-                            label: "Manhattan (City Block)",
+                            label: hierarchicalCluster.t('MetricRadlabel3'),
                             no: "rdgrp2",
                             increment: "city-block",
                             value: "city-block",
@@ -161,7 +161,7 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
                         })
                         ,
                         new radioButton(config, {
-                            label: "No Transformation",
+                            label: hierarchicalCluster.t('MetricRadlabel4'),
                             no: "rdgrp2",
                             increment: "untransformed",
                             value: "untransformed",

@@ -31,7 +31,7 @@ BSkyFormat(BSky_Paired_Wilcoxon_Test)
             content_var: { el: new srcVariableList(config, {action: "move"}) },
             tvarbox1: {
                 el: new dstVariable(config, {
-                    label: "First Variable (one)",
+                    label: pairedWilcoxon.t('tvarbox1'),
                     no: "tvarbox1",
                     required: true,
                     filter: "Numeric|Scale",
@@ -41,7 +41,7 @@ BSkyFormat(BSky_Paired_Wilcoxon_Test)
             },
             tvarbox2: {
                 el: new dstVariable(config, {
-                    label: "Second Variable (one)",
+                    label: pairedWilcoxon.t('tvarbox2'),
                     no: "tvarbox2",
                     required: true,
                     filter: "Numeric|Logical|Ordinal|Nominal|Scale",
@@ -49,10 +49,10 @@ BSkyFormat(BSky_Paired_Wilcoxon_Test)
                     required: true,
                 })
             },
-            label1: { el: new labelVar(config, { label: "Aternative Hypothesis", style: "mt-4", h: 6 }) },
+            label1: { el: new labelVar(config, { label: pairedWilcoxon.t('label1'), style: "mt-4", h: 6 }) },
             twosided: {
                 el: new radioButton(config, {
-                    label: "Difference != mu",
+                    label: pairedWilcoxon.t('twosided'),
                     no: "gpbox2",
                     increment: "twosided",
                     value: "two.sided",
@@ -62,7 +62,7 @@ BSkyFormat(BSky_Paired_Wilcoxon_Test)
             },
             greater: {
                 el: new radioButton(config, {
-                    label: "Difference > mu",
+                    label: pairedWilcoxon.t('greater'),
                     no: "gpbox2",
                     increment: "greater",
                     value: "greater",
@@ -72,7 +72,7 @@ BSkyFormat(BSky_Paired_Wilcoxon_Test)
             },
             less: {
                 el: new radioButton(config, {
-                    label: "Difference < mu",
+                    label: pairedWilcoxon.t('less'),
                     no: "gpbox2",
                     increment: "less",
                     value: "less",
@@ -80,10 +80,10 @@ BSkyFormat(BSky_Paired_Wilcoxon_Test)
                     extraction: "ValueAsIs"
                 })
             },
-            label2: { el: new labelVar(config, { label: "Test Method", style: "mt-4", h: 6 }) },
+            label2: { el: new labelVar(config, { label: pairedWilcoxon.t('label2'), style: "mt-4", h: 6 }) },
             default: {
                 el: new radioButton(config, {
-                    label: "Default",
+                    label: pairedWilcoxon.t('default'),
                     no: "gpbox1",
                     increment: "default",
                     value: "exact = NULL, correct = TRUE",
@@ -93,7 +93,7 @@ BSkyFormat(BSky_Paired_Wilcoxon_Test)
             },
             exact: {
                 el: new radioButton(config, {
-                    label: "Exact",
+                    label: pairedWilcoxon.t('exact'),
                     no: "gpbox1",
                     increment: "exact",
                     value: "exact = TRUE, correct = FALSE",
@@ -103,7 +103,7 @@ BSkyFormat(BSky_Paired_Wilcoxon_Test)
             },
             normal: {
                 el: new radioButton(config, {
-                    label: "Normal Approximation",
+                    label: pairedWilcoxon.t('normal'),
                     no: "gpbox1",
                     increment: "normal",
                     value: "exact = FALSE, correct = FALSE",
@@ -113,7 +113,7 @@ BSkyFormat(BSky_Paired_Wilcoxon_Test)
             },
             contingency: {
                 el: new radioButton(config, {
-                    label: "Normal Approximation (Continuity correction)",
+                    label: pairedWilcoxon.t('contingency'),
                     no: "gpbox1",
                     increment: "contingency",
                     value: "exact = FALSE, correct = TRUE",

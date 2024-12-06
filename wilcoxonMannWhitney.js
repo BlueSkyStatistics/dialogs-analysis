@@ -1,12 +1,6 @@
 
 
 
-
-
-
-
-
-
 class wilcoxonMannWhitney extends baseModal {
     static dialogId = 'wilcoxonMannWhitney'
     static t = baseModal.makeT(wilcoxonMannWhitney.dialogId)
@@ -28,7 +22,7 @@ BSkyFormat(BSky_Wilcoxon_Test)
             content_var: { el: new srcVariableList(config, {action: "move"}) },
             tvarbox1: {
                 el: new dstVariable(config, {
-                    label: "Response Variable (one)",
+                    label: wilcoxonMannWhitney.t('tvarbox1'),
                     no: "tvarbox1",
                     required: true,
                     filter: "Numeric|Scale",
@@ -37,17 +31,17 @@ BSkyFormat(BSky_Wilcoxon_Test)
             },
             tvarbox2: {
                 el: new dstVariable(config, {
-                    label: "Factor (one) with only two levels",
+                    label: wilcoxonMannWhitney.t('tvarbox2'),
                     no: "tvarbox2",
                     required: true,
                     filter: "Numeric|Logical|Ordinal|Nominal",
                     extraction: "NoPrefix|UseComma",
                 })
             },
-            label1: { el: new labelVar(config, { label: "Aternative Hypothesis", style: "mt-4",h: 6 }) },
+            label1: { el: new labelVar(config, { label: wilcoxonMannWhitney.t('label1'), style: "mt-4",h: 6 }) },
             twosided: {
                 el: new radioButton(config, {
-                    label: "Group1 - Group2 != mu",
+                    label: wilcoxonMannWhitney.t('twosided'),
                     no: "gpbox2",
                     increment: "twosided",
                     value: "two.sided",
@@ -57,7 +51,7 @@ BSkyFormat(BSky_Wilcoxon_Test)
             },
             greater: {
                 el: new radioButton(config, {
-                    label: "Group1 - Group2 > mu",
+                    label: wilcoxonMannWhitney.t('greater'),
                     no: "gpbox2",
                     increment: "greater",
                     value: "greater",
@@ -67,7 +61,7 @@ BSkyFormat(BSky_Wilcoxon_Test)
             },
             less: {
                 el: new radioButton(config, {
-                    label: "Group1 - Group2 < mu",
+                    label: wilcoxonMannWhitney.t('less'),
                     no: "gpbox2",
                     increment: "less",
                     value: "less",
@@ -75,10 +69,10 @@ BSkyFormat(BSky_Wilcoxon_Test)
                     extraction: "ValueAsIs"
                 })
             },
-            label2: { el: new labelVar(config, { label: "Test Method",style: "mt-4", h: 6 }) },
+            label2: { el: new labelVar(config, { label: wilcoxonMannWhitney.t('label2'),style: "mt-4", h: 6 }) },
             default: {
                 el: new radioButton(config, {
-                    label: "Default",
+                    label: wilcoxonMannWhitney.t('default'),
                     no: "gpbox1",
                     increment: "default",
                     value: "exact = NULL, correct = TRUE",
@@ -88,7 +82,7 @@ BSkyFormat(BSky_Wilcoxon_Test)
             },
             exact: {
                 el: new radioButton(config, {
-                    label: "Exact",
+                    label: wilcoxonMannWhitney.t('exact'),
                     no: "gpbox1",
                     increment: "exact",
                     value: "exact = TRUE, correct = FALSE",
@@ -98,7 +92,7 @@ BSkyFormat(BSky_Wilcoxon_Test)
             },
             normal: {
                 el: new radioButton(config, {
-                    label: "Normal Approximation",
+                    label: wilcoxonMannWhitney.t('normal'),
                     no: "gpbox1",
                     increment: "normal",
                     value: "exact = FALSE, correct = FALSE",
@@ -108,7 +102,7 @@ BSkyFormat(BSky_Wilcoxon_Test)
             },
             contingency: {
                 el: new radioButton(config, {
-                    label: "Normal Approximation (Continuity correction)",
+                    label: wilcoxonMannWhitney.t('contingency'),
                     no: "gpbox1",
                     increment: "contingency",
                     value: "exact = FALSE, correct = TRUE",
