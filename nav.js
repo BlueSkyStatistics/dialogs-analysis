@@ -123,11 +123,11 @@ const nav = () => ({
             "name": t('analysis_Proportions'),// {ns: 'menutoolbar'}),
             "icon": "icon-percent",
             "children": [
-                "./proportionIndependentSamples",
                 "./binomialTestSingleSample",
-                "./proportionTestSingleSample",
                 "./proportionTestOneSampleBinomialMini",
-                "./proportionTestTwoSampleBinomialMini"
+                "./proportionTestTwoSampleBinomialMini",
+                "./proportionTestSingleSample",
+                "./proportionIndependentSamples"				
             ]
         },       
         {
