@@ -247,7 +247,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
         var advoptions = {
             el: new optionsVar(config, {
                 no: "barchart_options",
-                name: "Options",
+                //name: "Options",
                 content: [
                     objects.label1.el,
                     objects.chisq.el,
