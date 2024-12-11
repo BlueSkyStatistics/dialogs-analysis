@@ -3,7 +3,7 @@
     "productName": "Analysis dialogs",
     "description": "BlueSky Statistics Analysis dialogs",
     "main": "nav.js",
-    "version": "1.2.2",
+    "version": "1.2.3",
 	"minBSkyVersion":"8.93",	
     "group": "dialogs",
     "subscriptions": ["BASE (Free Forever)"],
