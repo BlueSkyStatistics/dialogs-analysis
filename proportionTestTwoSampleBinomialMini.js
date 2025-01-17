@@ -5,7 +5,7 @@ var localization = {
         navigation: "Two sample",
         tvarbox1: "Numeric or factor with 2 levels/values only",
         tvarbox2: "Numeric or factor with 2 levels/values only",
-        tvarbox3: "Numeric variable",
+        tvarbox3: "Numeric or factor with 2 levels/values only",
         tvarbox4: "Factor variable with 2 levels/values only",
         label1: "Alternative hypothesis",
         test1: "Proportion != Hypothesized proportion",

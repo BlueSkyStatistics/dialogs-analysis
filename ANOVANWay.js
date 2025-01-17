@@ -610,13 +610,35 @@ if (exists("BSkyEffectSizeResults")) rm (BSkyEffectSizeResults)
         let i = 1;
         //Generating summaries
         //Univariate summaries
+        let header =""
         for (let dest in results) {
             code_vars.selected.dest = dest
             code_vars.selected.counter = i;
             cmd = instance.dialog.renderSample(snippet4.RCode, code_vars)
             cmd = removenewline(cmd);
+            header =temp
             temp = temp + cmd;
-            i = i + 1;
+            if (i != 1){
+                res.push({ cmd: temp, cgid: newCommandGroup(), oriR: snippet4.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
+            }else{
+            res.push({ cmd: temp, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: header + snippet4.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
+            }
+            temp = ""
+            header =""
+            i++
+
+            //Pasted code
+            /* temp = header + cmd;
+            if (count_for_title !=0){
+                res.push({ cmd: temp, cgid: newCommandGroup(), oriR: snippet4.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
+            }else{
+            res.push({ cmd: temp, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: header+snippet4.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
+            }
+            header = ""
+            count_for_title++ */
+
+
+
         }
         //WE generate multivariate statistics only when there are more than 1 fixed effect/factor
         if (Object.keys(results).length > 1) {
@@ -634,52 +656,73 @@ if (exists("BSkyEffectSizeResults")) rm (BSkyEffectSizeResults)
                 code_vars.selected.dest = interaction.substring(0, interaction.indexOf(":"));
                 code_vars.selected.commaSepDest = interaction.replaceAll(':', ',');
                 cmd = instance.dialog.renderSample(snippet5.RCode, code_vars)
-                cmd = removenewline(cmd);
-                temp = temp + cmd;
+                //Added to support reproducability
+                res.push({ cmd: cmd, cgid: newCommandGroup(), oriR: snippet5.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
+                /* cmd = removenewline(cmd);
+                temp = temp + cmd; */
             }
         }
-        temp = temp + "\n#Setting contrasts";
+        //temp = temp + "\n#Setting contrasts";
+        header = "\n#Setting contrasts";
         for (let dest in results) {
             code_vars.selected.dest = dest
             cmd = instance.dialog.renderSample(snippet6.RCode, code_vars)
             cmd = removenewline(cmd);
-            temp = temp + cmd;
+            //temp = temp + cmd;
+            //Copied  code
+            //cmd = removenewline(cmd);
+                temp = header + cmd;
+                res.push({ cmd: temp, cgid: newCommandGroup(), oriR: header+snippet6.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
+                temp =""
+                header = ""
+
+
         }
         //Creating the model and optionally plotting diagnostics
-        temp = temp + "\n\n#Creating the model";
+        header = "\n\n#Creating the model";
         cmd = instance.dialog.renderSample(snippet7.RCode, code_vars)
         cmd = removenewline(cmd);
-        temp = temp + cmd;
+        temp = header + cmd;
+        res.push({ cmd: temp, cgid: newCommandGroup(), oriR: header+snippet7.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
         //Generating estimated marginal means for each group
         i = 1
-        temp = temp + "\n\n#Displaying estimated marginal means";
-        temp = temp + "\nresEmmeans = list()"
+        header = "\n\n#Displaying estimated marginal means";
+        header = header + "\nresEmmeans = list()"
         for (let dest in results) {
             code_vars.selected.dest = dest
             code_vars.selected.counter = i;
             cmd = instance.dialog.renderSample(snippet8.RCode, code_vars)
             cmd = removenewline(cmd);
-            temp = temp + cmd;
+            temp = header + cmd;
+            res.push({ cmd: temp, cgid: newCommandGroup(), oriR: header + snippet8.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
             i = i + 1;
+            temp = ""
+            header=""
         }
         for (let interaction in NWayInteractions) {
             code_vars.selected.dest = interaction;
             code_vars.selected.counter = i;
             cmd = instance.dialog.renderSample(snippet8.RCode, code_vars)
             cmd = removenewline(cmd);
-            temp = temp + cmd + "\n";
+            //temp = temp + cmd + "\n";
+            res.push({ cmd: cmd, cgid: newCommandGroup(), oriR: snippet8.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
             i = i + 1;
+            //temp = ""
+            //header=""
         }
         //post-hoc tests
         i = 1;
-        temp = temp + "\n\n#Post-hoc tests";
-        temp = temp + "\nresContrasts = list()";
+        header = "\n\n#Post-hoc tests";
+        header = header + "\nresContrasts = list()";
         for (let dest in results) {
             code_vars.selected.dest = dest
             code_vars.selected.counter = i;
             cmd = instance.dialog.renderSample(snippet10.RCode, code_vars)
             cmd = removenewline(cmd);
-            temp = temp + cmd;
+            temp = header + cmd + "\n";
+            res.push({ cmd: temp, cgid: newCommandGroup(), oriR: header+snippet10.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
+            temp = ""
+            header = ""
             i = i + 1;
         }
         /*   for (let interaction in NWayInteractions) {
@@ -699,7 +742,8 @@ if (exists("BSkyEffectSizeResults")) rm (BSkyEffectSizeResults)
                 code_vars.selected.secondFactor = interaction.split(regexpression)[1];
                 cmd = instance.dialog.renderSample(newsnippet1012.RCode, code_vars)
                 cmd = removenewline(cmd);
-                temp = temp + cmd + "\n";
+                // temp = temp + cmd + "\n";
+                res.push({ cmd: cmd, cgid: newCommandGroup(), oriR: newsnippet1012.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
             }
             if (interaction.split(regexpression).length == 3) {
                 code_vars.selected.firstFactor = interaction.split(regexpression)[0];
@@ -707,7 +751,8 @@ if (exists("BSkyEffectSizeResults")) rm (BSkyEffectSizeResults)
                 code_vars.selected.thirdFactor = interaction.split(regexpression)[2];
                 cmd = instance.dialog.renderSample(newsnippet101.RCode, code_vars)
                 cmd = removenewline(cmd);
-                temp = temp + cmd + "\n";;
+                //temp = temp + cmd + "\n";;
+                res.push({ cmd: cmd, cgid: newCommandGroup(), oriR: newsnippet101.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
                 i = i + 1;
             }
         }
@@ -731,81 +776,101 @@ if (exists("BSkyEffectSizeResults")) rm (BSkyEffectSizeResults)
           } */
         //Levene's test           
         if (code_vars.selected.levene == "TRUE") {
-            temp = temp + "\n\n#Levenes test";
+            header= "\n\n#Levenes test";
             for (let dest in results) {
                 code_vars.selected.dest = dest
                 cmd = instance.dialog.renderSample(snippet9.RCode, code_vars)
                 cmd = removenewline(cmd);
-                temp = temp + cmd + "\n";;
+                temp = header + cmd + "\n";
+                res.push({ cmd: temp, cgid: newCommandGroup(), oriR: header+snippet9.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
+                temp = ""
+                header=""
             }
         }
         //Univariate plots
         if (code_vars.selected.horizontalAxis != "" && code_vars.selected.separateLines != "" && code_vars.selected.separatePlots != "") {
             cmd = instance.dialog.renderSample(snippet15.RCode, code_vars)
             cmd = removenewline(cmd);
-            temp = temp + cmd + "\n";;
+            res.push({ cmd: cmd, cgid: newCommandGroup(), oriR: snippet15.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
+            //temp = temp + cmd + "\n";;
         }
         else if (code_vars.selected.horizontalAxis != "" && code_vars.selected.separateLines != "") {
             cmd = instance.dialog.renderSample(snippet16.RCode, code_vars)
             cmd = removenewline(cmd);
-            temp = temp + cmd + "\n";;
+            res.push({ cmd: cmd, cgid: newCommandGroup(), oriR: snippet16.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
+            //temp = temp + cmd + "\n";;
         }
         else if (code_vars.selected.horizontalAxis != "" && code_vars.selected.separatePlots != "") {
             cmd = instance.dialog.renderSample(snippet17.RCode, code_vars)
             cmd = removenewline(cmd);
-            temp = temp + cmd + "\n";;
+            res.push({ cmd: cmd, cgid: newCommandGroup(), oriR: snippet17.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
+            //temp = temp + cmd + "\n";;
         }
         else if (code_vars.selected.horizontalAxis == "" && (code_vars.selected.separatePlots != "" || code_vars.selected.separateLines != "")) {
-            temp = temp + "cat(\"ERROR: You need to specify a variable on the horizontal axis for the plot to display\")" + "\n";;
+            cmd = "cat(\"ERROR: You need to specify a variable on the horizontal axis for the plot to display\")" + "\n";;
+            res.push({ cmd: cmd, cgid: newCommandGroup(), oriR: cmd, code_vars: JSON.parse(JSON.stringify(code_vars)) })
         }
         //Plot all comparisons
         if (code_vars.selected.plot1 == "TRUE") {
             i = 1;
-            temp = temp + "\n\n#Plot all comparisons";
+            header = "\n\n#Plot all comparisons";
             for (let dest in results) {
                 code_vars.selected.dest = dest
                 code_vars.selected.counter = i;
                 cmd = instance.dialog.renderSample(snippet12.RCode, code_vars)
                 cmd = removenewline(cmd);
-                temp = temp + cmd + "\n";;
+                temp = header + cmd + "\n";
+                res.push({ cmd: temp, cgid: newCommandGroup(), oriR: header +snippet12.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
+                //temp = temp + cmd + "\n";;
+                temp = ""
+                header = ""
                 i = i + 1;
+               
             }
             for (let interaction in NWayInteractions) {
                 code_vars.selected.dest = interaction
                 code_vars.selected.counter = i;
                 cmd = instance.dialog.renderSample(snippet12.RCode, code_vars)
                 cmd = removenewline(cmd);
-                temp = temp + cmd + "\n";;
+                //temp = temp + cmd + "\n";;
+                res.push({ cmd: cmd, cgid: newCommandGroup(), oriR: snippet12.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
                 i = i + 1;
             }
         }
         //Comparing means compactly
         if (code_vars.selected.compactly == "TRUE") {
             i = 1;
-            temp = temp + "\n\n#Comparing means compactly";
-            temp = temp + "\nresultsContrasts = list()";
+            header = "\n\n#Comparing means compactly";
+            header = header + "\nresultsContrasts = list()";
             for (let dest in results) {
                 code_vars.selected.dest = dest
                 code_vars.selected.counter = i;
                 cmd = instance.dialog.renderSample(snippet11.RCode, code_vars)
                 cmd = removenewline(cmd);
-                temp = temp + cmd + "\n";;
+                temp = header + cmd + "\n";
+                res.push({ cmd: temp, cgid: newCommandGroup(), oriR: header+snippet11.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
                 i = i + 1;
+                temp = ""
+                header=""
+
             }
             for (let interaction in NWayInteractions) {
                 code_vars.selected.dest = interaction
                 code_vars.selected.counter = i;
                 cmd = instance.dialog.renderSample(snippet11.RCode, code_vars)
                 cmd = removenewline(cmd);
-                temp = temp + cmd + "\n";;
+                res.push({ cmd: temp, cgid: newCommandGroup(), oriR: header+snippet11.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
+                //temp = temp + cmd + "\n";;
                 i = i + 1;
             }
         }
-        temp = temp + "\n\n#Effect sizes and diagnostic plots";
+        header = "\n\n#Effect sizes and diagnostic plots";
         cmd = instance.dialog.renderSample(snippet14.RCode, code_vars)
         cmd = removenewline(cmd);
-        temp = temp + cmd + "\n";
-        res.push({ cmd: temp, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: instance.config.RCode, code_vars: code_vars })
+        temp = header + cmd + "\n";
+        //res.push({ cmd: temp, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: instance.config.RCode, code_vars: code_vars })
+        res.push({ cmd: temp, cgid: newCommandGroup(), oriR: snippet14.RCode, code_vars: JSON.parse(JSON.stringify(code_vars)) })
+
         return res;
     }
 }
