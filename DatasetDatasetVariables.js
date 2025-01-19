@@ -7,6 +7,7 @@ var localization = {
 		variableListSelcted: "Select one or more variables to explore",
 		
 		histCurveDispChk: "Display a normal curve on the histogram (missing values are removed for curve to display)",
+		showCountsChk: "Display counts on the histogram bins",
 		statTableOrientionChk: "Summary statistics in columns",
 		histBins: "Specify the number of bins for the histogram",
 		
@@ -163,21 +164,49 @@ class DatasetDatasetVariables extends baseModal {
 		
 			suppressWarnings(stats::ks.test(x=var_list[[i]], y="pnorm") %>% BSkyFormat(outputTableIndex = c(1), outputTableRenames = paste("Kolmogorov-Smirnov Test resusts for variable:", names(col))))
 	
-			{{if(options.selected.histCurveDispChk === 'TRUE')}}
-				histPlot = ggplot(data={{dataset.name}}, aes(x = col[[1]])) +
-					geom_histogram(bins = {{selected.histBins | safe}}, alpha=1,  fill ="#727272"  , aes(y =..density..)) +
-					stat_function(fun = dnorm, args = list(mean = mean(var_list[[i]], na.rm = TRUE) , sd = sd(var_list[[i]], na.rm = TRUE)) , col = "#eaf820", linewidth = 2) +
-					labs(x=names(col), title= paste("Histogram for variable", names(col))) +
-					xlab(names(col)) + 
-					ylab("Density") + {{selected.BSkyThemes | safe}} \n
-			{{#else}}
-				histPlot = ggplot(data={{dataset.name}}, aes(x = col[[1]])) +
-					geom_histogram(bins = {{selected.histBins | safe}}, alpha=1,  fill ="#727272") +
-					labs(x=names(col), title= paste("Histogram for variable", names(col))) +
-					xlab(names(col)) + 
-					ylab("Counts") + {{selected.BSkyThemes | safe}}	\n	
+			bsky_hist_plot = NULL 
+			bsky_col_no_na = na.omit(col[[1]])
+			bsky_col_no_na_df = data.frame(bsky_col_no_na = bsky_col_no_na)
+			
+			# Define the bin width for histogram
+			bsky_bin_width <- (max(bsky_col_no_na) - min(bsky_col_no_na))/({{if (options.selected.histBins != "")}}{{selected.histBins | safe}}{{#else}}30{{/if}})
+			
+			bsky_hist_plot = ggplot(data = bsky_col_no_na_df, aes(x = bsky_col_no_na)) +
+			# Histogram showing counts
+			geom_histogram(
+			{{if (options.selected.histBins != "")}}  bins ={{selected.histBins | safe}}, {{/if}}
+			alpha=0.4,  
+			fill = "#ada9a9", #"#727272",
+			color = "black"
+			) +
+			labs(x=names(col), title= paste("Histogram for variable", names(col))) +
+			xlab(names(col)) + 
+			ylab("Counts") + 
+			{{selected.BSkyThemes | safe}}
+			
+			{{if(options.selected.showCountsChk === "TRUE")}}
+			# Add count labels on the histogram bars
+			bsky_hist_plot = bsky_hist_plot + stat_bin(
+			aes(label = ..count..), # Count values for labels
+			geom = "text",
+			{{if (options.selected.histBins != "")}}  bins ={{selected.histBins | safe}}, {{/if}}
+			vjust = -0.5,
+			color = "black",
+			size = 5
+			)
 			{{/if}}
-			suppressWarnings(plot(histPlot))
+			
+			{{if(options.selected.histCurveDispChk === 'TRUE')}}
+			bsky_hist_plot = bsky_hist_plot +
+			geom_density(
+				aes(y = ..density.. * nrow(bsky_col_no_na_df) * bsky_bin_width) # Rescale density
+				#color = "#F8766D",
+				#size = 1
+			)
+			{{/if}}
+				
+			suppressWarnings(plot(bsky_hist_plot))
+			
 			qqPlot = ggplot(data={{dataset.name}}, aes(sample = col[[1]])) +
 			stat_qq_point(distribution = "norm", detrend = FALSE) +
 			stat_qq_line(detrend = FALSE) + 
@@ -231,6 +260,17 @@ class DatasetDatasetVariables extends baseModal {
 					newline: true,
                 })
             },
+			showCountsChk: { el: new checkbox(config, { 
+				label: localization.en.showCountsChk, 
+				no: "showCountsChk",
+				bs_type: "valuebox",
+				extraction: "BooleanValue",
+                true_value: "TRUE",
+                false_value: "FALSE",
+				state:"checked",
+				newline:true
+				}),
+			},
 			histCurveDispChk: {
                 el: new checkbox(config, {
                     label: localization.en.histCurveDispChk, 
@@ -264,7 +304,8 @@ class DatasetDatasetVariables extends baseModal {
         const content = {
             left: [objects.content_var.el.content],
             right: [
-					objects.variableListSelcted.el.content, 
+					objects.variableListSelcted.el.content,
+					objects.showCountsChk.el.content,
 					objects.histCurveDispChk.el.content,
 					objects.histBins.el.content,
 					objects.statTableOrientionChk.el.content
