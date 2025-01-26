@@ -9,7 +9,7 @@ var localization = {
         test2: "Proportion > Hypothesized proportion",
         test3: "Proportion < Hypothesized proportion",
         txtbox1: "Confidence level",
-        txtbox2: "Null hypothesis (mu in range 0-1)",
+        txtbox2: "Null hypothesis (Hypothesized proportion in range 0-1)",
         chkbox1: "With continuity correction",
         dataInCols: "One or more variables contain samples",
         summarized: "Summarized data",
