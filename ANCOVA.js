@@ -97,7 +97,7 @@ BSkyFormat(as.data.frame(Anova(modelInteractionCtrl)), decimalDigitsRounding=4, 
         
         this.help = {
             title: ANCOVA.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: ANCOVA.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: ANCOVA.t('help.body')
         }
 ;

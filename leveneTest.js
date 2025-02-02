@@ -65,7 +65,7 @@ BSkyFormat(as.data.frame(BSky_Levene_Test), singleTableOutputHeader=paste ("Leve
         
         this.help = {
             title: leveneTest.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: leveneTest.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: leveneTest.t('help.body')
         }
 ;

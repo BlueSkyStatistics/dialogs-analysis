@@ -543,7 +543,7 @@ local(
         
         this.help = {
             title: targetingItemsMultiVarFormat.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: targetingItemsMultiVarFormat.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: targetingItemsMultiVarFormat.t('help.body')
         }
 ;

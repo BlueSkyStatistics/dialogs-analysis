@@ -250,7 +250,7 @@ if ( exists('BSky_Independent_Sample_T_Test')) rm(BSky_Independent_Sample_T_Test
         
         this.help = {
             title: ttestIndependentSamplesLegacy.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: ttestIndependentSamplesLegacy.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: ttestIndependentSamplesLegacy.t('help.body')
         }
 ;

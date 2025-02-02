@@ -114,7 +114,7 @@ if ({{selected.chk2 | safe}})
         
         this.help = {
             title: ANOVAOneWayWithBlocks.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: ANOVAOneWayWithBlocks.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: ANOVAOneWayWithBlocks.t('help.body')
         }
 ;

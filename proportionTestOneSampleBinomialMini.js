@@ -230,7 +230,7 @@ if (exists('BSky_Single_Sample_Proportion_Test')){rm(BSky_Single_Sample_Proporti
         
         this.help = {
             title: proportionTestOneSampleBinomialMini.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: proportionTestOneSampleBinomialMini.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: proportionTestOneSampleBinomialMini.t('help.body')
         }
 ;

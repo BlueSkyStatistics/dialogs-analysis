@@ -114,7 +114,7 @@ cat("ERROR: The target variable has a single unique value")
         
         this.help = {
             title: binomialTestSingleSample.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: binomialTestSingleSample.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: binomialTestSingleSample.t('help.body')
         }
 ;

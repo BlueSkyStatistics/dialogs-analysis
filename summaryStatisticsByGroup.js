@@ -59,7 +59,7 @@ BSkyFormat(BSky_Summary_Statistics, singleTableOutputHeader=c("Summary Statistic
         
         this.help = {
             title: summaryStatisticsByGroup.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: summaryStatisticsByGroup.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: summaryStatisticsByGroup.t('help.body')
         }
 ;

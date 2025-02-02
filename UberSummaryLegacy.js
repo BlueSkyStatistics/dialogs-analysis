@@ -100,7 +100,7 @@ BSkyFormat(BSky_Numerical_Statistics_Analysis, singleTableOutputHeader=c("Numeri
         
         this.help = {
             title: UberSummaryLegacy.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: UberSummaryLegacy.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: UberSummaryLegacy.t('help.body')
         }
 ;

@@ -40,7 +40,7 @@ BSkyFormat( BSkyResults, outputTableIndex = c(tableone=1), outputTableRenames = 
         
         this.help = {
             title: andersonDarling.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: andersonDarling.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: andersonDarling.t('help.body')
         }
 ;

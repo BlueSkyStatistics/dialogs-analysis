@@ -215,7 +215,7 @@ if (exists('BSky_glassd_Res')) rm(BSky_glassd_Res)
         
         this.help = {
             title: tTestIndependentSamplesTwoNumericVars.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: tTestIndependentSamplesTwoNumericVars.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: tTestIndependentSamplesTwoNumericVars.t('help.body')
         }
 ;

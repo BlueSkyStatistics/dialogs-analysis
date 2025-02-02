@@ -217,7 +217,7 @@ BSkyLoadRefresh(bskyDatasetName="{{selected.datasetName | safe}}")\n
         
         this.help = {
             title: multiDimensionalScaling.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: multiDimensionalScaling.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: multiDimensionalScaling.t('help.body')
         }
 ;

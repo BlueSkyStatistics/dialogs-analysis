@@ -131,7 +131,7 @@ BSkyFormat(results, singleTableOutputHeader =paste("Bonett-Seier test of Geary's
         
         this.help = {
             title: Bonnett.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: Bonnett.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: Bonnett.t('help.body')
         }
 ;

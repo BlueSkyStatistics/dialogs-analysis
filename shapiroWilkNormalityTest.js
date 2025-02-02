@@ -47,7 +47,7 @@ dplyr::select({{selected.tvarbox1 | safe}}) %>%
         
         this.help = {
             title: shapiroWilkNormalityTest.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: shapiroWilkNormalityTest.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: shapiroWilkNormalityTest.t('help.body')
         }
 ;

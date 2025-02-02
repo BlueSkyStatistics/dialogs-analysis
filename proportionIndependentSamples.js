@@ -106,7 +106,7 @@ BSkyFormat(BSky_Two_Sample_Proportion_Test)
         
         this.help = {
             title: proportionIndependentSamples.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: proportionIndependentSamples.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: proportionIndependentSamples.t('help.body')
         }
 ;

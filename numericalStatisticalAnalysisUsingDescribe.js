@@ -58,7 +58,7 @@ BSkyFormat (as.data.frame(psych::describe({{dataset.name}}[,c({{selected.tvarbox
         
         this.help = {
             title: numericalStatisticalAnalysisUsingDescribe.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: numericalStatisticalAnalysisUsingDescribe.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: numericalStatisticalAnalysisUsingDescribe.t('help.body')
         }
 ;

@@ -317,7 +317,7 @@ plot({{selected.rulesobj | safe}}, method = "{{selected.methgrp | safe}}", engin
         
         this.help = {
             title: plotRules.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: plotRules.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: plotRules.t('help.body')
         }
 ;

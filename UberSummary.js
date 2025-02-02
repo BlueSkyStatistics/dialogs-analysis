@@ -136,7 +136,7 @@ dplyr::group_by({{selected.tvarbox2 | safe}}) %>%
         
         this.help = {
             title: UberSummary.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: UberSummary.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: UberSummary.t('help.body')
         }
 ;

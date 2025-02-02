@@ -107,7 +107,7 @@ BSkyLoadRefresh("{{dataset.name}}",{{selected.addToDataset | safe}})
         
         this.help = {
             title: principalComponentAnalysis.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: principalComponentAnalysis.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: principalComponentAnalysis.t('help.body')
         }
 ;

@@ -272,7 +272,7 @@ fittedVals: {
         
         this.help = {
             title: ANOVAOneWayTwoWay.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: ANOVAOneWayTwoWay.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: ANOVAOneWayTwoWay.t('help.body')
         }
 ;

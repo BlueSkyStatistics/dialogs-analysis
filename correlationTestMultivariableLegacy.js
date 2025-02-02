@@ -61,7 +61,7 @@ if (exists('BSkyResults')){rm(BSkyResults)}
         
         this.help = {
             title: correlationTestMultivariableLegacy.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: correlationTestMultivariableLegacy.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: correlationTestMultivariableLegacy.t('help.body')
         }
 ;

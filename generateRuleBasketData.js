@@ -444,7 +444,7 @@ local(
         
         this.help = {
             title: generateRuleBasketData.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: generateRuleBasketData.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: generateRuleBasketData.t('help.body')
         }
 ;

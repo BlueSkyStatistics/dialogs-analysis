@@ -129,7 +129,7 @@ BSkyFormat(results,singleTableOutputHeader = paste("Anscombe-Glynn test of kurto
         
         this.help = {
             title: Anscombe.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: Anscombe.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: Anscombe.t('help.body')
         }
 ;

@@ -291,7 +291,7 @@ dplyr::select({{@this}}, {{selected.col | safe}}, {{selected.layer | safe}} ) %>
         
         this.help = {
             title: crossTabMultiWay.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: crossTabMultiWay.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: crossTabMultiWay.t('help.body')
         }
 ;

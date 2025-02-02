@@ -274,7 +274,7 @@ local(
         
         this.help = {
             title: displayRules.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: displayRules.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: displayRules.t('help.body')
         }
 ;

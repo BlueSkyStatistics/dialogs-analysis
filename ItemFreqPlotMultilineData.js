@@ -126,7 +126,7 @@ local(
         
         this.help = {
             title: ItemFreqPlotMultilineData.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: ItemFreqPlotMultilineData.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: ItemFreqPlotMultilineData.t('help.body')
         }
 ;

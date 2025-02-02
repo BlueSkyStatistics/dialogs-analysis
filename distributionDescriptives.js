@@ -115,7 +115,7 @@ if(!is.null(descdist_ret_vals))
         
         this.help = {
             title: distributionDescriptives.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: distributionDescriptives.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: distributionDescriptives.t('help.body')
         }
 ;

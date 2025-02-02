@@ -184,7 +184,7 @@ BSkyFormat(BSky_Multiway_Cross_Tab)`
         
         this.help = {
             title: crossTabMultiWayLegacy.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: crossTabMultiWayLegacy.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: crossTabMultiWayLegacy.t('help.body')
         }
 ;

@@ -87,7 +87,7 @@ for(variable in vars)
         
         this.help = {
             title: chiSquaredTest.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: chiSquaredTest.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: chiSquaredTest.t('help.body')
         }
 ;

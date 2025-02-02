@@ -442,7 +442,7 @@ local(
         
         this.help = {
             title: generateRuleMultilineData.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: generateRuleMultilineData.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: generateRuleMultilineData.t('help.body')
         }
 ;

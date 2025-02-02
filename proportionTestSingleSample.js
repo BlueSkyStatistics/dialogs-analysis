@@ -176,7 +176,7 @@ if (exists('BSky_Single_Sample_Proportion_Test')){rm(BSky_Single_Sample_Proporti
         
         this.help = {
             title: proportionTestSingleSample.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: proportionTestSingleSample.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: proportionTestSingleSample.t('help.body')
         }
 ;

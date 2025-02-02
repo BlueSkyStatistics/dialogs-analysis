@@ -40,7 +40,7 @@ BSkyFormat( BSkyResults, outputTableRenames = c("Kolmogorov-Smirnov Test results
         
         this.help = {
             title: kstest.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: kstest.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: kstest.t('help.body')
         }
 ;

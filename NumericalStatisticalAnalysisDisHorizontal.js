@@ -90,7 +90,7 @@ BSkyFormat(BSkyResults, singleTableOutputHeader = "Summaries")
         
         this.help = {
             title: NumericalStatisticalAnalysisDisHorizontal.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: NumericalStatisticalAnalysisDisHorizontal.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: NumericalStatisticalAnalysisDisHorizontal.t('help.body')
         }
 ;

@@ -72,7 +72,7 @@ BSkyFormat(as.data.frame(missCaseSummary), singleTableOutputHeader = "Missing Ca
         
         this.help = {
             title: missingValueAnalysis.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: missingValueAnalysis.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: missingValueAnalysis.t('help.body')
         }
 ;

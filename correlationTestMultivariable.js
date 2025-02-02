@@ -68,7 +68,7 @@ dplyr::select({{selected.tvarbox1 | safe}}) %T>%
         
         this.help = {
             title: correlationTestMultivariable.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: correlationTestMultivariable.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: correlationTestMultivariable.t('help.body')
         }
 ;

@@ -557,7 +557,7 @@ local(
         
         this.help = {
             title: targetingItemsBasketData.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: targetingItemsBasketData.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: targetingItemsBasketData.t('help.body')
         }
 ;

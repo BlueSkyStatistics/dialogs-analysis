@@ -129,7 +129,7 @@ local(
         
         this.help = {
             title: ItemFreqPlotBasketData.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: ItemFreqPlotBasketData.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: ItemFreqPlotBasketData.t('help.body')
         }
 ;

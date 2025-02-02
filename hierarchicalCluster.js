@@ -187,7 +187,7 @@ if({{selected.biplot | safe}}) {BSkyHClustBiPlot ( noOfClusters={{selected.clust
         
         this.help = {
             title: hierarchicalCluster.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: hierarchicalCluster.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: hierarchicalCluster.t('help.body')
         }
 ;

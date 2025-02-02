@@ -237,7 +237,7 @@ require(effectsize)
         
         this.help = {
             title: ttestOneSample.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: ttestOneSample.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: ttestOneSample.t('help.body')
         }
 ;

@@ -164,7 +164,7 @@ if(!is.null(dist_fit)){
         
         this.help = {
             title: distributionGamlssAutoFitTests.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: distributionGamlssAutoFitTests.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: distributionGamlssAutoFitTests.t('help.body')
         }
 ;

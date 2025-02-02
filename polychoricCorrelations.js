@@ -125,7 +125,7 @@ polycor::polychor(x={{dataset.name}}\${{selected.Target | safe}}, y={{dataset.na
         
         this.help = {
             title: polychoricCorrelations.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: polychoricCorrelations.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: polychoricCorrelations.t('help.body')
         }
 ;

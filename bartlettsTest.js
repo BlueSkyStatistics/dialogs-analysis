@@ -59,7 +59,7 @@ BSkyFormat(BSky_Bartlett_Test )
         
         this.help = {
             title: bartlettsTest.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: bartlettsTest.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: bartlettsTest.t('help.body')
         }
 ;

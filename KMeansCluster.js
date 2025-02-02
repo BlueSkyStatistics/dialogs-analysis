@@ -102,7 +102,7 @@ BSkyLoadRefresh("{{dataset.name}}", {{selected.storeClusterInDataset | safe}})
         
         this.help = {
             title: KMeansCluster.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: KMeansCluster.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: KMeansCluster.t('help.body')
         }
 ;

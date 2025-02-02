@@ -231,7 +231,7 @@ if (exists('BSky_One_Sample_T_Test')) rm(BSky_One_Sample_T_Test)
         
         this.help = {
             title: ttestOneSampleLegacy.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: ttestOneSampleLegacy.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: ttestOneSampleLegacy.t('help.body')
         }
 ;

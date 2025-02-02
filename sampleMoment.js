@@ -137,7 +137,7 @@ BSkyFormat(results,singleTableOutputHeader ="Statistical Moment" )
         
         this.help = {
             title: sampleMoment.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: sampleMoment.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: sampleMoment.t('help.body')
         }
 ;

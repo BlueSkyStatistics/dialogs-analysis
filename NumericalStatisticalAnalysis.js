@@ -91,7 +91,7 @@ BSkyFormat(BSky_Numerical_Statistics_Analysis, singleTableOutputHeader=c("Numeri
         
         this.help = {
             title: NumericalStatisticalAnalysis.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: NumericalStatisticalAnalysis.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: NumericalStatisticalAnalysis.t('help.body')
         }
 ;

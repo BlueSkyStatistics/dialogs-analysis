@@ -161,7 +161,7 @@ BSkyFormat(BSky_Paired_Wilcoxon_Test)
         
         this.help = {
             title: pairedWilcoxon.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: pairedWilcoxon.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: pairedWilcoxon.t('help.body')
         }
 ;

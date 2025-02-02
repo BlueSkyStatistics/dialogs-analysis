@@ -170,7 +170,7 @@ polycor::polyserial(x={{dataset.name}}\${{selected.Target | safe}}, y={{dataset.
         
         this.help = {
             title: polychoricPolyserialCorrelations.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: polychoricPolyserialCorrelations.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: polychoricPolyserialCorrelations.t('help.body')
         }
 ;

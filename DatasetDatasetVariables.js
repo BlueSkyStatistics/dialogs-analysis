@@ -283,7 +283,7 @@ class DatasetDatasetVariables extends baseModal {
         
         this.help = {
             title: DatasetDatasetVariables.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: DatasetDatasetVariables.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: DatasetDatasetVariables.t('help.body')
         }
 ;

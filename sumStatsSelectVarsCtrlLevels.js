@@ -64,7 +64,7 @@ BSkyFormat(BSky_Summary_By_Variable, singleTableOutputHeader=c("Summary By Varia
         
         this.help = {
             title: sumStatsSelectVarsCtrlLevels.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: sumStatsSelectVarsCtrlLevels.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: sumStatsSelectVarsCtrlLevels.t('help.body')
         }
 ;

@@ -49,7 +49,7 @@ BSkyFormat(BSky_Dataset_Summary, singleTableOutputHeader=c("Summary for All Vari
         
         this.help = {
             title: summaryStatsAllVarsControlLevels.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: summaryStatsAllVarsControlLevels.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: summaryStatsAllVarsControlLevels.t('help.body')
         }
 ;

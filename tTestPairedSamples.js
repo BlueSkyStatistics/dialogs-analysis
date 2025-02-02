@@ -84,7 +84,7 @@ BSkyFormat(BSky_Paired_t_Test)
         
         this.help = {
             title: tTestPairedSamples.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: tTestPairedSamples.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: tTestPairedSamples.t('help.body')
         }
 ;

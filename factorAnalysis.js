@@ -102,7 +102,7 @@ psych::fa.parallel({{dataset.name}}[,c({{selected.destination | safe}})],fa="fa"
         
         this.help = {
             title: factorAnalysis.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: factorAnalysis.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: factorAnalysis.t('help.body')
         }
 ;

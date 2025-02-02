@@ -557,7 +557,7 @@ local(
         
         this.help = {
             title: targetingItemsMultilineData.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: targetingItemsMultilineData.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: targetingItemsMultilineData.t('help.body')
         }
 ;

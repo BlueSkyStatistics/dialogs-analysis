@@ -43,7 +43,7 @@ if (exists('BSkyFreqResults')) rm (BSkyFreqResults)
         
         this.help = {
             title: frequencyTableLegacy.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: frequencyTableLegacy.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: frequencyTableLegacy.t('help.body')
         }
 ;

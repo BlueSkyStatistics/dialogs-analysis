@@ -266,7 +266,7 @@ BSky2SampleProportionMT( x1={{selected.noOfEvents | safe}}, x2={{selected.noOfEv
         
         this.help = {
             title: proportionTestTwoSampleBinomialMini.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: proportionTestTwoSampleBinomialMini.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: proportionTestTwoSampleBinomialMini.t('help.body')
         }
 ;

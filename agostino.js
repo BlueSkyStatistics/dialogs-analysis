@@ -129,7 +129,7 @@ BSkyFormat(results,singleTableOutputHeader = paste("D'Agostino test of skewness 
         
         this.help = {
             title: agostino.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: agostino.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: agostino.t('help.body')
         }
 ;

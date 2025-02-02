@@ -53,7 +53,7 @@ BSkyFormat(BSky_Friedman_Test )
         
         this.help = {
             title: friedmanTest.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: friedmanTest.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: friedmanTest.t('help.body')
         }
 ;
