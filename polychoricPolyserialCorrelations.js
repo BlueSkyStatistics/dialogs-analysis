@@ -19,6 +19,7 @@ var localization = {
         Seed: "Optional start value(s)",
         header: "Correlation is estimated between each x variable and the y variable",
         showEffectSizes: "Return estimated thresholds",
+		advanced_lbl : "Advanced",
         help: {
             title: "Polychoric/Polyserial correlation",
             r_help: "help(polychor, package ='polycor')",
@@ -314,7 +315,7 @@ polycor::polyserial(x={{dataset.name}}\${{selected.Target | safe}}, y={{dataset.
         var MissingVals = {
             el: new optionsVar(config, {
                 no: "MissingVals",
-                name: "Advanced",
+                name: localization.en.advanced_lbl,
                 content: [
                     objects.conf_level.el,
                     objects.Seed.el,
