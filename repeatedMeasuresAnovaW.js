@@ -1,3 +1,9 @@
+/**
+  * This file is protected by copyright (c) 2023-2025 by BlueSky Statistics, LLC.
+  * All rights reserved. The copy, modification, or distribution of this file is not
+  * allowed without the prior written permission from BlueSky Statistics, LLC.
+ */
+
 var localization = {
     en: {
         helpText: "Repeated measures ANOVA requires data to be in the long format. If your data is not in the long format, see Datasets > ReShape > Longer",
