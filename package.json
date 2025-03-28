@@ -1,7 +1,7 @@
 {
     "name": "@BlueSkyStatistics/dialogs/analysis",
     "productName": "Analysis dialogs",
-    "description": "BlueSky Statistics Analysis dialogs",
+    "description": "BioStat Prime Analysis dialogs",
     "main": "nav.js",
     "version": "1.2.3",
 	"minBSkyVersion":"8.93",	
@@ -21,7 +21,7 @@
     "minAppVersion": null,
     "requiredPackages": [],
     "keywords": [],
-    "author": "BlueSky Statistics",
+    "author": "BioStat Prime",
     "scripts": {},
     "dependencies": {
         "squirrelly": "7.9.2"

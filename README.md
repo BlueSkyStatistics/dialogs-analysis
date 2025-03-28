@@ -1,2 +1,2 @@
 # analysisDialogs
-BlueSky Statistics Analysis dialogs
+BioStat Prime Analysis dialogs
