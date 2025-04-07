@@ -24,16 +24,16 @@ class DatasetDatasetVariables extends baseModal {
 	qqPlot = NULL
 	
 	
-	cv <- function(x, na.rm = TRUE)  {
+	cv <<- function(x, na.rm = TRUE)  {
 			sd(x, na.rm = na.rm)/mean(x, na.rm = na.rm)
 	}
 	
-	range_spread <- function(x, na.rm = TRUE)  {
+	range_spread <<- function(x, na.rm = TRUE)  {
 			spread = max(x, na.rm = na.rm) - min(x, na.rm = na.rm)
 			invisible(return(spread))
 	}
 	
-	modes <- function(x, na.rm = TRUE, max_display = 25) {
+	modes <<- function(x, na.rm = TRUE, max_display = 25) {
 	  if(length(x) != length(unique(x))){
 		x = x[!is.na(x)]
 		ux <- unique(x)
@@ -50,7 +50,7 @@ class DatasetDatasetVariables extends baseModal {
 	  }
 	}
 	
-	sdMeanCI <- function(x, na.rm = TRUE) {
+	sdMeanCI <<- function(x, na.rm = TRUE) {
 		# Calculate the mean of the sample data
 		mean_value = mean(x, na.rm = na.rm)
 		 

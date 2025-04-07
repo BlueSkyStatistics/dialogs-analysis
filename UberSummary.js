@@ -12,7 +12,7 @@ class UberSummary extends baseModal {
 require(psych);
 require(dplyr);
 
-cv <- function(x, na.rm = TRUE)  {
+cv <<- function(x, na.rm = TRUE)  {
 			sd(x, na.rm = na.rm)/mean(x, na.rm = na.rm)
 }
 
