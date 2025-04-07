@@ -20,7 +20,7 @@ class distributionFit extends baseModal {
 
 require(fitdistrplus)
 
-gofstat_format <- function(dist_test_list = list(), fitname_list = c())
+gofstat_format <<- function(dist_test_list = list(), fitname_list = c())
 {
 	if(length(dist_test_list) > 0){
 		gofstat_comp = gofstat(dist_test_list, fitnames = fitname_list)
