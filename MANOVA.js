@@ -72,7 +72,7 @@ class MANOVA extends baseModal {
                     required: true,
                     type: "character",
                     extraction: "TextAsIs",
-                    value: "BSkyMANOVAModel",
+                    value: "MANOVAModel",
                     overwrite: "dataset"
                 })
             },
