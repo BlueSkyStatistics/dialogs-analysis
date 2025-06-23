@@ -126,6 +126,13 @@ const nav = () => ({
             ]
         },
         {
+            "name": t('analysis_Outlier'),// {ns: 'menutoolbar'}),
+            "icon": "icon-outlier",
+            "children": [
+      
+            ]
+        },		
+        {
             "name": t('analysis_Proportions'),// {ns: 'menutoolbar'}),
             "icon": "icon-percent",
             "children": [
