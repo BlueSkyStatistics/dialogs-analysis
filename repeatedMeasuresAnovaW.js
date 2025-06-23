@@ -108,7 +108,7 @@ require(heplots)
 require(tidyr)
 #Using pivot longer to convert the dataset to longer format
 {{if(options.selected.no_subjectID =="TRUE")}}
-.GlobalEnv\${{dataset.name}}_rehapedLonger <- {{dataset.name}} %>% mutate( {{selected.subjectID | safe}} = dplyr::row_number()) %>%
+.GlobalEnv\${{dataset.name}}_rehapedLonger <- {{dataset.name}} %>% dplyr::mutate( {{selected.subjectID | safe}} = dplyr::row_number()) %>%
 	pivot_longer( cols = c({{selected.repMeasuresConfig_depVar_1 | safe}}), 
 	names_to = c( "{{selected.repMeasuresConfig_factorList | safe}}"), 
 	values_to = c("{{selected.repMeasuresConfig_measureList | safe}}" ) ) 
