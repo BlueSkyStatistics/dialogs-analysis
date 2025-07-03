@@ -367,7 +367,7 @@ require(multcomp);
 require(effectsize);
 #Generating summaries
 BSkyTemp <-{{dataset.name }} %>%\n\t group_by({{selected.dest | safe}}) %>%\n\t
-    summarise(n = n(),mean = mean({{selected.target | safe}},na.rm = TRUE),median = median({{selected.target | safe}},na.rm = TRUE),min = min({{selected.target | safe}},na.rm = TRUE),max = max({{selected.target | safe}},na.rm = TRUE),sd = sd({{selected.target | safe}},na.rm = TRUE),variance = var({{selected.target | safe}},na.rm = TRUE))
+    dplyr::summarise(n = n(),mean = mean({{selected.target | safe}},na.rm = TRUE),median = median({{selected.target | safe}},na.rm = TRUE),min = min({{selected.target | safe}},na.rm = TRUE),max = max({{selected.target | safe}},na.rm = TRUE),sd = sd({{selected.target | safe}},na.rm = TRUE),variance = var({{selected.target | safe}},na.rm = TRUE))
 names(BSkyTemp)[1] ="{{selected.dest | safe}}"
 BSkyFormat( as.data.frame(BSkyTemp),singleTableOutputHeader = "Summaries for {{selected.target | safe}} by factor variable {{selected.dest | safe}} ")
 #Setting contrasts
@@ -406,14 +406,14 @@ print(plot( contrast(resultsEmmeans,method = "{{selected.combon | safe}}", adjus
         let snippet4 = {
             RCode: `
 BSkyTemp <-{{dataset.name }} %>%\n\tgroup_by({{selected.dest | safe}}) %>%\n\t
-    summarise(n = n(),mean = mean({{selected.target | safe}},na.rm = TRUE),median = median({{selected.target | safe}},na.rm = TRUE),min = min({{selected.target | safe}},na.rm = TRUE),max = max({{selected.target | safe}},na.rm = TRUE),sd = sd({{selected.target | safe}},na.rm = TRUE),variance = var({{selected.target | safe}},na.rm = TRUE))
+    dplyr::summarise(n = n(),mean = mean({{selected.target | safe}},na.rm = TRUE),median = median({{selected.target | safe}},na.rm = TRUE),min = min({{selected.target | safe}},na.rm = TRUE),max = max({{selected.target | safe}},na.rm = TRUE),sd = sd({{selected.target | safe}},na.rm = TRUE),variance = var({{selected.target | safe}},na.rm = TRUE))
 names(BSkyTemp)[1] ="{{selected.dest | safe}}"
 BSkyFormat( as.data.frame(BSkyTemp),singleTableOutputHeader = "Summaries for {{selected.target | safe}} by factor variable {{selected.dest | safe}} ")
 `};
         let snippet5 = {
             RCode: `
 BSkyTemp <-{{dataset.name }} %>%\n\t group_by({{selected.commaSepDest | safe}}) %>%\n\t
-    summarise(n = n(),mean = mean({{selected.target | safe}},na.rm = TRUE),median = median({{selected.target | safe}},na.rm = TRUE),min = min({{selected.target | safe}},na.rm = TRUE),max = max({{selected.target | safe}},na.rm = TRUE),sd = sd({{selected.target | safe}},na.rm = TRUE),variance = var({{selected.target | safe}},na.rm = TRUE))
+    dplyr::summarise(n = n(),mean = mean({{selected.target | safe}},na.rm = TRUE),median = median({{selected.target | safe}},na.rm = TRUE),min = min({{selected.target | safe}},na.rm = TRUE),max = max({{selected.target | safe}},na.rm = TRUE),sd = sd({{selected.target | safe}},na.rm = TRUE),variance = var({{selected.target | safe}},na.rm = TRUE))
 names(BSkyTemp)[1] ="{{selected.dest | safe}}"
 BSkyFormat( as.data.frame(BSkyTemp),singleTableOutputHeader = "Summaries for {{selected.target | safe}} by factor variables {{selected.commaSepDest | safe}}")
 `};
