@@ -4,6 +4,7 @@
   * allowed without the prior written permission from BlueSky Statistics, LLC.
  */
 
+//const {getT} = global.requireFromRoot("localization");
 let t = getT('menutoolbar')
 const nav = () => ({
     "name": t('analysis_top_level_title'),// {ns: 'menutoolbar'}),
@@ -125,6 +126,13 @@ const nav = () => ({
                 "./pairedWilcoxon"
             ]
         },
+        {
+            "name": t('analysis_Outlier'),// {ns: 'menutoolbar'}),
+            "icon": "icon-outlier",
+            "children": [
+      
+            ]
+        },		
         {
             "name": t('analysis_Proportions'),// {ns: 'menutoolbar'}),
             "icon": "icon-percent",
