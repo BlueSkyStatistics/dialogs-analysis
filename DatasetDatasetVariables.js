@@ -169,7 +169,7 @@ class DatasetDatasetVariables extends baseModal {
 			
 			# Kolmogorov-Smirnov Test
 			#suppressWarnings(stats::ks.test(x=var_list[[i]], y="pnorm") %>% BSkyFormat(outputTableIndex = c(1), outputTableRenames = paste("Kolmogorov-Smirnov Test resusts for variable:", names(col))))
-			bsky_ks = suppressWarnings(stats::ks.test(x=var_list[[1]], y="pnorm"))
+			bsky_ks = suppressWarnings(stats::ks.test(x=var_list[[i]], y="pnorm"))
 			bsky_ks_df = data.frame(bsky_ks$statistic, bsky_ks$p.value)
 			names(bsky_ks_df) = c("D", "p-value")
 			rownames(bsky_ks_df) = names(col)              
@@ -178,7 +178,7 @@ class DatasetDatasetVariables extends baseModal {
 			#Anderson-Darling Test
 			#nortest::ad.test(x=var_list[[i]]) %>%
 			#		BSkyFormat(outputTableIndex = c(tableone=1), outputTableRenames = paste("Anderson-Darling Test results for variable:", names(col)))
-			bsky_ad = suppressWarnings(nortest::ad.test(x=var_list[[1]]))
+			bsky_ad = suppressWarnings(nortest::ad.test(x=var_list[[i]]))
 			bsky_ad_df = data.frame(bsky_ad$statistic, bsky_ad$p.value)
 			names(bsky_ad_df) = c("A", "p-value")
 			rownames(bsky_ad_df) = names(col)              
