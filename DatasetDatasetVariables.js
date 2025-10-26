@@ -16,6 +16,7 @@ var localization = {
 		showCountsChk: "Display counts on the histogram bins",
 		statTableOrientionChk: "Summary statistics in columns",
 		histBins: "Specify the number of bins for the histogram",
+		//binwidth: "Bin width",
 		
 		help: {
             title: "Explore characteristics of one or more variable(s)",
@@ -162,66 +163,178 @@ class DatasetDatasetVariables extends baseModal {
 			sdMeanCI(col[[1]]) %>%
 			BSkyFormat(outputTableRenames = paste("Confidence Interval of mean and sd for variable:", names(col)))
 		
-			BSky_Shapiro_Wilk_normality_test(vars = c(names(col)), dataset = '{{dataset.name}}') %>%
+			# Shapiro Test
+			t(as.data.frame(BSky_Shapiro_Wilk_normality_test(vars = c(names(col)), dataset = '{{dataset.name}}'))) %>%
 					BSkyFormat(outputTableRenames = paste("Shapiro Wilk Test results for variable:", names(col)))
-
-			nortest::ad.test(x=var_list[[i]]) %>%
-					BSkyFormat(outputTableIndex = c(tableone=1), outputTableRenames = paste("Anderson-Darling Test results for variable:", names(col)))
-		
-			suppressWarnings(stats::ks.test(x=var_list[[i]], y="pnorm") %>% BSkyFormat(outputTableIndex = c(1), outputTableRenames = paste("Kolmogorov-Smirnov Test resusts for variable:", names(col))))
-	
-			bsky_hist_plot = NULL 
+			
+			# Kolmogorov-Smirnov Test
+			#suppressWarnings(stats::ks.test(x=var_list[[i]], y="pnorm") %>% BSkyFormat(outputTableIndex = c(1), outputTableRenames = paste("Kolmogorov-Smirnov Test resusts for variable:", names(col))))
+			bsky_ks = suppressWarnings(stats::ks.test(x=var_list[[i]], y="pnorm"))
+			bsky_ks_df = data.frame(bsky_ks$statistic, bsky_ks$p.value)
+			names(bsky_ks_df) = c("D", "p-value")
+			rownames(bsky_ks_df) = names(col)              
+			bsky_ks_df%>% BSkyFormat(outputTableIndex = c(1), outputTableRenames = paste("Kolmogorov-Smirnov Test resusts for variable:", names(col)))
+			
+			#Anderson-Darling Test
+			#nortest::ad.test(x=var_list[[i]]) %>%
+			#		BSkyFormat(outputTableIndex = c(tableone=1), outputTableRenames = paste("Anderson-Darling Test results for variable:", names(col)))
+			bsky_ad = suppressWarnings(nortest::ad.test(x=var_list[[i]]))
+			bsky_ad_df = data.frame(bsky_ad$statistic, bsky_ad$p.value)
+			names(bsky_ad_df) = c("A", "p-value")
+			rownames(bsky_ad_df) = names(col)              
+			bsky_ad_df%>% BSkyFormat(outputTableIndex = c(tableone=1), outputTableRenames = paste("Anderson-Darling Test results for variable:", names(col)))
+			
 			bsky_col_no_na = na.omit(col[[1]])
-			bsky_col_no_na_df = data.frame(bsky_col_no_na = bsky_col_no_na)
+			bsky_col_no_na_df = data.frame(bsky_col_no_na = col[[1]], row_id = 1:nrow({{dataset.name}}))
+			bsky_col_no_na_df = na.omit(bsky_col_no_na_df)
 			
-			# Define the bin width for histogram
-			bsky_bin_width <- (max(bsky_col_no_na) - min(bsky_col_no_na))/({{if (options.selected.histBins != "")}}{{selected.histBins | safe}}{{#else}}30{{/if}})
-			
-			bsky_hist_plot = ggplot(data = bsky_col_no_na_df, aes(x = bsky_col_no_na)) +
-			# Histogram showing counts
-			geom_histogram(
-			{{if (options.selected.histBins != "")}}  bins ={{selected.histBins | safe}}, {{/if}}
-			alpha=0.4,  
-			fill = "#ada9a9", #"#727272",
-			color = "black"
-			) +
-			labs(x=names(col), title= paste("Histogram for variable", names(col))) +
-			xlab(names(col)) + 
-			ylab("Counts") + 
-			{{selected.BSkyThemes | safe}}
-			
-			{{if(options.selected.showCountsChk === "TRUE")}}
-			# Add count labels on the histogram bars
-			bsky_hist_plot = bsky_hist_plot + stat_bin(
-			aes(label = ..count..), # Count values for labels
-			geom = "text",
-			{{if (options.selected.histBins != "")}}  bins ={{selected.histBins | safe}}, {{/if}}
-			vjust = -0.5,
-			color = "black",
-			size = 5
-			)
-			{{/if}}
-			
-			{{if(options.selected.histCurveDispChk === 'TRUE')}}
-			bsky_hist_plot = bsky_hist_plot +
-			geom_density(
-				aes(y = ..density.. * nrow(bsky_col_no_na_df) * bsky_bin_width) # Rescale density
-				#color = "#F8766D",
-				#size = 1
-			)
-			{{/if}}
+			####################
+			# Histogram with normal curve and bin counts
+			####################
+				bsky_hist_plot = NULL 
 				
+				{{if(options.selected.showCountsChk != "TRUE" && options.selected.histCurveDispChk !="TRUE")}}
+				bsky_hist_plot = ggplot(data= bsky_col_no_na_df, aes(x = bsky_col_no_na)) +
+					geom_histogram(alpha=0.4, fill = "#ada9a9",color = "black", {{if (options.selected.histBins != "")}}  bins ={{selected.histBins | safe}}{{/if}} {{if( options.selected.histCurveDispChk =="TRUE")}}, aes(y =after_stat(density)){{/if}})
+				{{#else}}
+					{{if(options.selected.histCurveDispChk =="TRUE")}}
+						#Compute scale factor between density and count
+						bsky_hist_data <- ggplot_build(
+						  ggplot(data = bsky_col_no_na_df, aes(x = bsky_col_no_na)) + 
+							geom_histogram(
+								alpha=0.4,  
+								fill = "#ada9a9",
+								color = "black"
+								{{if (options.selected.histBins != "")}} , bins ={{selected.histBins | safe}} {{/if}}
+								{{if(options.selected.histCurveDispChk =="TRUE")}} , aes(y = after_stat(density)) {{/if}}
+						))$data[[1]]
+
+							bsky_max_density <- max(bsky_hist_data$density, na.rm = TRUE)
+							bsky_max_count <- max(bsky_hist_data$count, na.rm = TRUE)
+						bsky_scale_factor <- bsky_max_count / bsky_max_density
+					{{/if}}
+
+					bsky_hist_plot = ggplot(data = bsky_col_no_na_df, aes(x = bsky_col_no_na)) +
+					  # Histogram showing counts
+					  geom_histogram(
+						{{if(options.selected.histCurveDispChk =="TRUE")}} aes(y = after_stat(density)), {{/if}}
+						{{if (options.selected.histBins != "")}}  bins ={{selected.histBins | safe}}, {{/if}}
+						alpha=0.4,  
+						fill = "#ada9a9", #"#727272"
+						color = "black"
+					  ){{if(options.selected.histCurveDispChk =="TRUE")}}+
+						  # Add normal curve
+						  stat_function(
+							fun = dnorm,
+							args = list(mean = mean(bsky_col_no_na_df\$bsky_col_no_na), sd = sd(bsky_col_no_na_df\$bsky_col_no_na)),
+							color = "black",
+							linewidth = 1
+						  ) {{/if}}{{if(options.selected.showCountsChk =="TRUE")}} +
+					  # Count labels without breaking y scale
+					  stat_bin(
+						{{if(options.selected.histCurveDispChk =="TRUE")}}
+						aes(y = after_stat(density) {{if(options.selected.showCountsChk =="TRUE")}}, label = after_stat(count){{/if}}),
+						{{#else}}
+							{{if(options.selected.showCountsChk =="TRUE")}} aes(label = after_stat(count)), {{/if}}
+						{{/if}}
+						{{if (options.selected.histBins != "")}}  bins ={{selected.histBins | safe}}, {{/if}}
+						geom = "text",
+						vjust = -0.5,
+						size = 5
+					  ){{/if}}{{if(options.selected.histCurveDispChk =="TRUE")}}+ 
+						  # Secondary Y-axis for counts
+						  scale_y_continuous(
+							name = "Density",
+							sec.axis = sec_axis(~ . * bsky_scale_factor, name = "Counts")
+						  ) 
+					 {{/if}}
+				{{/if}}
+				
+				# To remove padding of margin on the x axis on both side of the histogram plot
+				# bsky_hist_plot = bsky_hist_plot + scale_x_continuous(expand = c(0, 0)) 
+				
+				bsky_hist_plot = bsky_hist_plot + labs(x=names(col), title= paste("Histogram for variable", names(col))) +
+								xlab(names(col)) + 
+								{{selected.BSkyThemes | safe}} \n
+			
 			suppressWarnings(plot(bsky_hist_plot))
 			
-			qqPlot = ggplot(data={{dataset.name}}, aes(sample = col[[1]])) +
+			######################
+			# Box Plot
+			######################
+			bsky_box_plot = NULL
+			
+			bsky_box_plot = ggplot(data= bsky_col_no_na_df, aes(x = "", y = bsky_col_no_na)) +
+			geom_boxplot(fill = "#ada9a9", alpha=0.4, width = 0.2, outlier.colour = "red") +
+			stat_summary(
+				fun.data = function(y) {
+				data.frame(
+					y = c(median(y), quantile(y, probs = 0.25), quantile(y, probs = 0.75)),
+					label = c(
+						paste("Median\n",round(median(y), 2)),
+						paste("Q1\n",round(quantile(y, probs = 0.25), 2)),
+						paste("Q3\n",round(quantile(y, probs = 0.75), 2))
+					)
+				)
+				},
+			geom = "text",
+			#aes(label = ..label..), 
+			aes(label = after_stat(label)),
+			position = position_dodge(width = 0.75),
+			#hjust = -0.5,
+			vjust = -1.5,
+			color = "black",
+			size = 4
+			) + 
+			labs(title = paste("Box Plot for variable", names(col)), x = "", y = "Value") +
+			  {{selected.BSkyThemes | safe}} +
+			coord_flip()
+			 
+			suppressWarnings(plot(bsky_box_plot))
+			
+			
+			######################
+			# P-P Plot
+			bsky_ppPlot = NULL
+			
+			bsky_ppPlot = ggplot(data=bsky_col_no_na_df, aes(sample = bsky_col_no_na)) +
+			stat_pp_point(distribution = "norm", detrend = FALSE) +
+			stat_pp_line(detrend = FALSE) +      
+			stat_pp_band(distribution="norm", detrend = FALSE) +     
+			labs(sample=names(col) , title= paste("P-P Plot for variable", names(col))) +
+			xlab("Probability Points") +
+			ylab("Cumulative Probability") + 
+			{{selected.BSkyThemes | safe}} \n
+			
+			suppressWarnings(plot(bsky_ppPlot))
+
+			####################
+			# Q-Q Plot
+			bsky_qqPlot = NULL
+			
+			bsky_qqPlot = ggplot(data=bsky_col_no_na_df, aes(sample = bsky_col_no_na)) +
 			stat_qq_point(distribution = "norm", detrend = FALSE) +
 			stat_qq_line(detrend = FALSE) + 
+			stat_qq_band(distribution="norm", detrend = FALSE) +
 			labs(x=names(col) , title= paste("Q-Q Plot for variable",names(col))) +
 			xlab("Theoretical Quantiles") +
 			ylab("Sample Quantiles") + {{selected.BSkyThemes | safe}} \n
-			suppressWarnings(plot(qqPlot))
 			
-			BSkyGraphicsFormat(bSkyFormatAppRequest = FALSE, noOfGraphics= 2, isRmarkdownOutputOn = TRUE)
+			suppressWarnings(plot(bsky_qqPlot))
+			
+			#######################
+			# Line chart
+			bsky_lineChart = NULL
+			
+			bsky_lineChart = ggplot(data=bsky_col_no_na_df, aes(x=row_id, y=bsky_col_no_na )) +
+			geom_line(stat = "identity", position = "identity", alpha=0.5, linewidth = 1) +
+			geom_point(size = 1) +
+			labs(x="id",y=names(col), title= paste("Line chart (Observations connected by order of values for variable", names(col),")"))+
+			xlab("id") + ylab(names(col)) + {{selected.BSkyThemes | safe}} \n
+			
+			suppressWarnings(plot(bsky_lineChart))
+			
+			BSkyGraphicsFormat(bSkyFormatAppRequest = FALSE, noOfGraphics= 5, isRmarkdownOutputOn = TRUE)
 		}
 	}
 	
@@ -305,6 +418,19 @@ class DatasetDatasetVariables extends baseModal {
 					width: "w-25",
                 })
             },
+			/*
+			binwidth: {
+                el: new input(config, {
+                no: 'binwidth',
+                allow_spaces: true,
+                width: "w-25",
+                type: "numeric",
+                label: localization.en.binwidth,
+                placeholder: "",
+                extraction: "TextAsIs"
+              }), r: ['{{binwidth|safe}}']
+            },
+			*/
         };
 
         const content = {
@@ -313,7 +439,8 @@ class DatasetDatasetVariables extends baseModal {
 					objects.variableListSelcted.el.content,
 					objects.showCountsChk.el.content,
 					objects.histCurveDispChk.el.content,
-					objects.histBins.el.content,
+					objects.histBins.el.content, 
+					//objects.binwidth.el.content, 
 					objects.statTableOrientionChk.el.content
 					],
             nav: {
