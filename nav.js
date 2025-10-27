@@ -174,7 +174,8 @@ const nav = () => ({
             "children": [
                 "./bartlettsTest",
                 "./leveneTest",
-                "./varianceTest2Samples"
+                "./varianceTest2Samples",
+                "./equalityOfVariances"
             ]
         }
     ]
