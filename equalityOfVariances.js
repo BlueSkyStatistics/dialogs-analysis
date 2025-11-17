@@ -4,6 +4,8 @@
   * allowed without the prior written permission from BlueSky Statistics, LLC.
  */
 
+
+
 class equalityOfVariances extends baseModal {
     static dialogId = 'equalityOfVariances'
     static t = baseModal.makeT(equalityOfVariances.dialogId)
@@ -22,7 +24,7 @@ library(ggplot2)
 library(grid)
 
 {{if(options.selected.groupvar =="")}}
-test<-BSky_variance_analysis (
+BSkyEqualityVariances<-BSky_variance_analysis (
     data_format = c("wide" ),
     cols_to_compare = c({{selected.tvarbox1 | safe}}),
     response_col = NULL,
@@ -36,7 +38,7 @@ test<-BSky_variance_analysis (
     data_name="{{dataset.name}}"
 )
 {{#else}}
-test<-BSky_variance_analysis (
+BSkyEqualityVariances<-BSky_variance_analysis (
     data_format = c("long" ),
     cols_to_compare = NULL,
     response_col = c({{selected.tvarbox1 | safe}}),
@@ -50,7 +52,7 @@ test<-BSky_variance_analysis (
     data_name="{{dataset.name}}"
 )
 {{/if}}
-
+if (exists('BSkyEqualityVariances'))rm(BSkyEqualityVariances)
 `
         }
 
