@@ -119,6 +119,7 @@ const nav = () => ({
             "icon": "icon-non_parametric_fix",
             "children": [
                 "./chiSquaredTest",
+				"./chiSquareAssociationSummarized",
                 "./friedmanTest",
                 "./kruskalWallisTest",
                 "./wilcoxonMannWhitney",
@@ -175,7 +176,8 @@ const nav = () => ({
                 "./bartlettsTest",
                 "./leveneTest",
                 "./varianceTest2Samples",
-                "./equalityOfVariances"
+                "./equalityOfVariances",
+				"./oneSampleVariance"
             ]
         }
     ]
