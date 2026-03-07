@@ -84,7 +84,11 @@ Please contact support@blueskystatistics.com for additional information.
       `
     }
   }
+<<<<<<< HEAD
 }
+=======
+};
+>>>>>>> a1a7b441e460bbc773b5fdbea6cabe4c785f2a8d
 
 class oneSampleVariance extends baseModal {
   constructor() {
