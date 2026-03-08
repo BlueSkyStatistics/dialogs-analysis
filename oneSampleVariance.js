@@ -188,7 +188,7 @@ if (exists('BSkyOneSampleVar')) rm(BSkyOneSampleVar)
         el: new dstVariable(config, {
           label: localization.en.label_group,
           no: "groupvar",
-          filter: "Nominal|Ordinal|Factor",
+          filter: "Numeric|Nominal|Ordinal|Factor|Scale",
           extraction: "NoPrefix|UseComma|Enclosed"
         })
       },
