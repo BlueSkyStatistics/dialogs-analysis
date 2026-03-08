@@ -198,7 +198,7 @@ if (exists('res')){
       ],
       nav: {
         name: chiSquareAssociationSummarized.t('navigation'),
-        icon: "icon-chi-square",
+        icon: "icon-chi_squared",
         modal: config.id
       }
     };
