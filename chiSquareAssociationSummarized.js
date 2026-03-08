@@ -79,7 +79,7 @@ Please contact support@blueskystatistics.com for additional information.
       `
     }
   }
-};
+}
 
 class chiSquareAssociationSummarized extends baseModal {
   constructor() {
@@ -139,7 +139,6 @@ if (exists('res')){
     var objects = {
       // Left: source variable list
       content_var: { el: new srcVariableList(config, { action: "move" }) },
-
       // Right: table columns (counts)
       label_table_cols: { el: new labelVar(config, { label: localization.en.label_table_cols, style: "mt-2", h: 6 }) },
       table_cols: {
@@ -150,10 +149,9 @@ if (exists('res')){
           extraction: "NoPrefix|UseComma|Enclosed"
         })
       },
-
       // Optional row labels
-      label_row_labels: { el: new labelVar(config, { label: localization.en.label_row_labels, style: "mt-3", h: 6 }) },
-      row_labels: {
+     // label_row_labels: { el: new labelVar(config, { label: localization.en.label_row_labels, style: "mt-3", h: 6 }) },
+    /*   row_labels: {
         el: new dstVariable(config, {
           label: "",
           no: "row_labels",
@@ -161,11 +159,21 @@ if (exists('res')){
           filter: "Nominal|Ordinal|Factor|Text",
           extraction: "NoPrefix|UseComma|Enclosed"
         })
-      },
-
+      }, */
+   /*    row_labels: {
+                el: new input(config, {
+                    no: 'row_labels',
+                    label: localization.en.row_labels,
+                    placeholder: "",
+                    required: true,
+                    type: "character",
+                    enforceRobjectRules:false,
+                    extraction: "TextAsIs",
+                    
+                })},
+ */
       // Cell contents
       label_cell_contents: { el: new labelVar(config, { label: localization.en.label_cell_contents, style: "mt-3", h: 6 }) },
-
       chk_counts: {
         el: new checkbox(config, {
           label: localization.en.opt_counts,
@@ -231,10 +239,8 @@ if (exists('res')){
       right: [
         objects.label_table_cols.el.content,
         objects.table_cols.el.content,
-
-        objects.label_row_labels.el.content,
-        objects.row_labels.el.content,
-
+      /*   objects.label_row_labels.el.content, */
+       /*  objects.row_labels.el.content, */
         objects.label_cell_contents.el.content,
         objects.chk_counts.el.content,
         objects.chk_margins.el.content,

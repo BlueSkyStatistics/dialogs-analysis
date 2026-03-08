@@ -86,7 +86,7 @@ BSkyTemp <<- na.omit({{dataset.name}}[,c({{selected.tvarbox1 | safe }},{{selecte
 BSkyResults <- BSkyPartialSemiCorrelations ( vars = c({{selected.tvarbox1 | safe }}), constants = c({{selected.tvarbox2 | safe}}), 
     type = "semipartial", method = {{selected.statistic | safe}}, data = "BSkyTemp")
 #Formatting the results
-BSkyFormat(BSkyResults, "Results")
+BSkyFormat(BSkyResults, outputTableRenames = "Results")
 #Removing the R object after displaying the results
 if (exists("BSkyResults"))
 {
