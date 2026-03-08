@@ -252,7 +252,7 @@ if (exists('res')){
       ],
       nav: {
         name: localization.en.navigation,
-        icon: "icon-chi-squared",
+        icon: "icon-chi_squared",
         modal: config.id
       }
     };
