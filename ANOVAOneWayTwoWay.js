@@ -278,7 +278,7 @@ fittedVals: {
         
         this.help = {
             title: ANOVAOneWayTwoWay.t('help.title'),
-            r_help: ANOVAOneWayTwoWay.t('help.r_help'),  //r_help: "help(data,package='utils')",
+            r_help: ANOVAOneWayTwoWay.t('help.r_help'), //Fix by Anil //r_help: "help(data,package='utils')",
             body: ANOVAOneWayTwoWay.t('help.body')
         }
 ;
@@ -302,15 +302,22 @@ require(multcomp);
 require(effectsize);
 require(DBI)
 #Generating summaries
-BSkyTemp <-{{dataset.name }} %>%\n\t dplyr::group_by({{selected.dest | safe}}) %>%
+BSkyTemp <-{{dataset.name }} %>%\n\t group_by({{selected.dest | safe}}) %>%
 dplyr::summarise(n = dplyr::n(),mean = mean({{selected.target | safe}},na.rm = TRUE),median = median({{selected.target | safe}},na.rm = TRUE),min = min({{selected.target | safe}},na.rm = TRUE),max = max({{selected.target | safe}},na.rm = TRUE),sd = sd({{selected.target | safe}},na.rm = TRUE),variance = var({{selected.target | safe}},na.rm = TRUE))
 names(BSkyTemp)[1] ="{{selected.dest | safe}}"
-BSkyFormat( as.data.frame(BSkyTemp),singleTableOutputHeader = "Summaries for {{selected.target | safe}} by factor variable {{selected.dest | safe}} ")
 #Setting contrasts
 contrasts({{dataset.name }}\${{selected.dest | safe}}) <- contr.sum
 #Creating the model
 BSkyFormula = {{selected.target | safe}}~{{selected.dest | safe}}
 \nBSkyMultiAnova =as.data.frame(summary({{selected.modelname | safe}} <-aov({{selected.target | safe}}~{{selected.dest | safe}},data ={{dataset.name }}))[[1]])
+#Adding Tukey grouping column to summaries (Minitab-style)
+BSkyTempEmmeans <- emmeans::emmeans({{selected.modelname | safe}}, ~{{selected.dest | safe}})
+#BSkyTempCLD <- as.data.frame(multcomp::cld(BSkyTempEmmeans, adjust = "{{selected.adjust | safe}}", Letters = LETTERS, reversed = TRUE))
+BSkyTempCLD <- as.data.frame(suppressMessages(multcomp::cld(BSkyTempEmmeans, adjust = "{{selected.adjust | safe}}", Letters = LETTERS, reversed = TRUE)))
+BSkyTempCLD\$Grouping <- trimws(gsub(" ", "", BSkyTempCLD\$.group))
+BSkyTempCLD <- BSkyTempCLD[, c("{{selected.dest | safe}}", "Grouping")]
+BSkyTemp <- BSkyTemp %>% dplyr::left_join(BSkyTempCLD, by = "{{selected.dest | safe}}") %>% dplyr::arrange(desc(mean))
+BSkyFormat( as.data.frame(BSkyTemp),singleTableOutputHeader = "Summaries for {{selected.target | safe}} by factor variable {{selected.dest | safe}} ", perTableFooter = "Means are significantly different when they do not share a letter")
 #Creating the ANOVA table with type I/II/III sum of squares
 anovaTable =as.data.frame(car::Anova({{selected.modelname | safe}},type ="{{selected.type | safe}}"))
 BSkyFormat(BSkyMultiAnova,singleTableOutputHeader = "ANOVA table with type III sum of squares for {{selected.target | safe}} by {{selected.dest | safe}}")
@@ -367,15 +374,21 @@ require(ggplot2);
 require(multcomp);
 require(effectsize);
 #Generating summaries
-BSkyTemp <-{{dataset.name }} %>%\n\t dplyr::group_by({{selected.dest | safe}}) %>%\n\t
+BSkyTemp <-{{dataset.name }} %>%\n\t group_by({{selected.dest | safe}}) %>%\n\t
     dplyr::summarise(n = dplyr::n(),mean = mean({{selected.target | safe}},na.rm = TRUE),median = median({{selected.target | safe}},na.rm = TRUE),min = min({{selected.target | safe}},na.rm = TRUE),max = max({{selected.target | safe}},na.rm = TRUE),sd = sd({{selected.target | safe}},na.rm = TRUE),variance = var({{selected.target | safe}},na.rm = TRUE))
 names(BSkyTemp)[1] ="{{selected.dest | safe}}"
-BSkyFormat( as.data.frame(BSkyTemp),singleTableOutputHeader = "Summaries for {{selected.target | safe}} by factor variable {{selected.dest | safe}} ")
 #Setting contrasts
 contrasts({{dataset.name }}\${{selected.dest | safe}}) <- contr.sum
 #Creating the model
 BSkyFormula = {{selected.target | safe}}~{{selected.dest | safe}}
 \nBSkyMultiAnova =as.data.frame(summary({{selected.modelname | safe}} <-aov({{selected.target | safe}}~{{selected.dest | safe}},data ={{dataset.name }}))[[1]])
+#Adding Tukey grouping column to summaries (Minitab-style)
+BSkyTempEmmeans <- emmeans::emmeans({{selected.modelname | safe}}, ~{{selected.dest | safe}})
+BSkyTempCLD <- as.data.frame(multcomp::cld(BSkyTempEmmeans, adjust = "{{selected.adjust | safe}}", Letters = LETTERS, reversed = TRUE))
+BSkyTempCLD\$Grouping <- trimws(gsub(" ", "", BSkyTempCLD\$.group))
+BSkyTempCLD <- BSkyTempCLD[, c("{{selected.dest | safe}}", "Grouping")]
+BSkyTemp <- BSkyTemp %>% dplyr::left_join(BSkyTempCLD, by = "{{selected.dest | safe}}") %>% dplyr::arrange(desc(mean))
+BSkyFormat( as.data.frame(BSkyTemp),singleTableOutputHeader = "Summaries for {{selected.target | safe}} by factor variable {{selected.dest | safe}} ", perTableFooter = "Means are significantly different when they do not share a letter")
 {{if (options.selected.diag =="TRUE") }}#Displaying diagnostic plots\nplot({{selected.modelname | safe}}){{/if}}
 #Creating the Anova table with type I/II/III sum of squares
 anovaTable =as.data.frame(car::Anova({{selected.modelname | safe}}, type ="{{selected.type | safe}}"))
@@ -414,11 +427,18 @@ attr(.GlobalEnv\${{selected.modelname | safe}},"depVarSample")= sample({{dataset
 BSkyTemp <-{{dataset.name }} %>%\n\tgroup_by({{selected.dest | safe}}) %>%\n\t
     dplyr::summarise(n = dplyr::n(),mean = mean({{selected.target | safe}},na.rm = TRUE),median = median({{selected.target | safe}},na.rm = TRUE),min = min({{selected.target | safe}},na.rm = TRUE),max = max({{selected.target | safe}},na.rm = TRUE),sd = sd({{selected.target | safe}},na.rm = TRUE),variance = var({{selected.target | safe}},na.rm = TRUE))
 names(BSkyTemp)[1] ="{{selected.dest | safe}}"
-BSkyFormat( as.data.frame(BSkyTemp),singleTableOutputHeader = "Summaries for {{selected.target | safe}} by factor variable {{selected.dest | safe}} ")
+#Adding Tukey grouping column to summaries (Minitab-style)
+BSkyTempAov <- aov({{selected.target | safe}} ~ {{selected.dest | safe}}, data = {{dataset.name }})
+BSkyTempEmmeans <- emmeans::emmeans(BSkyTempAov, ~{{selected.dest | safe}})
+BSkyTempCLD <- as.data.frame(multcomp::cld(BSkyTempEmmeans, adjust = "{{selected.adjust | safe}}", Letters = LETTERS, reversed = TRUE))
+BSkyTempCLD\$Grouping <- trimws(gsub(" ", "", BSkyTempCLD\$.group))
+BSkyTempCLD <- BSkyTempCLD[, c("{{selected.dest | safe}}", "Grouping")]
+BSkyTemp <- BSkyTemp %>% dplyr::left_join(BSkyTempCLD, by = "{{selected.dest | safe}}") %>% dplyr::arrange(desc(mean))
+BSkyFormat( as.data.frame(BSkyTemp),singleTableOutputHeader = "Summaries for {{selected.target | safe}} by factor variable {{selected.dest | safe}} ", perTableFooter = "Means are significantly different when they do not share a letter")
 `};
         let snippet5 = {
             RCode: `
-BSkyTemp <-{{dataset.name }} %>%\n\t dplyr::group_by({{selected.commaSepDest | safe}}) %>%\n\t
+BSkyTemp <-{{dataset.name }} %>%\n\t group_by({{selected.commaSepDest | safe}}) %>%\n\t
     dplyr::summarise(n = dplyr::n(),mean = mean({{selected.target | safe}},na.rm = TRUE),median = median({{selected.target | safe}},na.rm = TRUE),min = min({{selected.target | safe}},na.rm = TRUE),max = max({{selected.target | safe}},na.rm = TRUE),sd = sd({{selected.target | safe}},na.rm = TRUE),variance = var({{selected.target | safe}},na.rm = TRUE))
 names(BSkyTemp)[1] ="{{selected.dest | safe}}"
 BSkyFormat(as.data.frame(BSkyTemp),singleTableOutputHeader = "Summaries for {{selected.target | safe}} by factor variables {{selected.commaSepDest | safe}}")
@@ -547,6 +567,9 @@ if (exists("resContrasts")) rm (resContrasts)
 if (exists("resSummary")) rm (resSummary)
 if (exists("resultsContrasts")) rm (resultsContrasts)
 if (exists("BSkyTemp")) rm (BSkyTemp)
+if (exists("BSkyTempCLD")) rm (BSkyTempCLD)
+if (exists("BSkyTempEmmeans")) rm (BSkyTempEmmeans)
+if (exists("BSkyTempAov")) rm (BSkyTempAov)
 if (exists("resEmmeans")) rm (resEmmeans)
 `
         };
