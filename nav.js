@@ -4,15 +4,11 @@
   * allowed without the prior written permission from BlueSky Statistics, LLC.
  */
 
-//
-const {getT} = global.requireFromRoot("localization");
-let t = getT('menutoolbar')
-const nav = () => ({
-    "name": t('analysis_top_level_title'),// {ns: 'menutoolbar'}),
-    "tab": "analysis",
+const nav = {
+    "id": "menu-analysis",
     "buttons": [
         {
-            "name": t('analysis_Association_Rules'),// {ns: 'menutoolbar'}),
+            "id": "menu-analysis-association-rules",
             "icon": "icon-shoppingcart_1",
             "children": [
                 "./generateRuleBasketData",
@@ -26,9 +22,9 @@ const nav = () => ({
                 "./displayRules",
                 "./plotRules"                                                                
             ]
-        }, 
+        },
         {
-            "name": t('analysis_Cluster'),// {ns: 'menutoolbar'}),
+            "id": "menu-analysis-cluster",
             "icon": "icon-cluster",
             "children": [
                 "./hierarchicalCluster",
@@ -36,7 +32,7 @@ const nav = () => ({
             ]
         },        
         {
-            "name": t('analysis_Correlations'),// {ns: 'menutoolbar'}),
+            "id": "menu-analysis-correlations",
             "icon": "icon-link",
             "children": [
                 "./semipartialCorrelation",
@@ -48,14 +44,14 @@ const nav = () => ({
             ]
         },
         {
-            "name": t('analysis_Crosstab'),// {ns: 'menutoolbar'}),
+            "id": "menu-analysis-crosstab",
             "icon": "icon-crosstab",
             "children": [
                 "./crossTabMultiWay"
             ]
         },    
         {
-            "name": t('analysis_Distribution_Analysis'),// {ns: 'menutoolbar'}),
+            "id": "menu-analysis-distribution-analysis",
             "icon": "icon-gaussian-function",
             "children": [
                 "./andersonDarling",
@@ -69,7 +65,7 @@ const nav = () => ({
         },    
       
         {
-            "name": t('analysis_Factor_Analysis'),// {ns: 'menutoolbar'}),
+            "id": "menu-analysis-factor-analysis",
             "icon": "icon-teamwork",
             "children": [
                 "./factorAnalysis",
@@ -77,7 +73,7 @@ const nav = () => ({
             ]
         },
         {
-            "name": t('analysis_Means'),// {ns: 'menutoolbar'}),
+            "id": "menu-analysis-means",
             "icon": "icon-mean",
             "children": [
                 "./ANCOVA",
@@ -96,7 +92,7 @@ const nav = () => ({
             ]
         },
         {
-            "name": t('analysis_Missing_Values'),// {ns: 'menutoolbar'}),
+            "id": "menu-analysis-missing-values",
             "icon": "icon-na",
             "children": [
                 "./missingValsColOutput",
@@ -105,7 +101,7 @@ const nav = () => ({
             ]
         },
         {
-            "name": t('analysis_Moments'),// {ns: 'menutoolbar'}),
+            "id": "menu-analysis-moments",
             "icon": "icon-target-1",
             "children": [
                 "./Anscombe",
@@ -116,7 +112,7 @@ const nav = () => ({
         },
         "./multiDimensionalScaling",
         {
-            "name": t('analysis_Non_Parametric'),// {ns: 'menutoolbar'}),
+            "id": "menu-analysis-non-parametric",
             "icon": "icon-non_parametric_fix",
             "children": [
                 "./chiSquaredTest",
@@ -129,14 +125,14 @@ const nav = () => ({
             ]
         },
         {
-            "name": t('analysis_Outlier'),// {ns: 'menutoolbar'}),
+            "id": "menu-analysis-outlier",
             "icon": "icon-outlier",
             "children": [
       
             ]
         },		
         {
-            "name": t('analysis_Proportions'),// {ns: 'menutoolbar'}),
+            "id": "menu-analysis-proportions",
             "icon": "icon-percent",
             "children": [
                 "./binomialTestSingleSample",
@@ -147,7 +143,7 @@ const nav = () => ({
             ]
         },       
         {
-            "name": t('analysis_Summary'),// {ns: 'menutoolbar'}),
+            "id": "menu-analysis-summary",
             "icon": "icon-sigma",
             "children": [
                 "./UberSummary",
@@ -157,21 +153,21 @@ const nav = () => ({
             ]
         },
         {
-			"name": t('analysis_Survival'),// {ns: 'menutoolbar'}),
+			"id": "menu-analysis-survival",
 			"icon": "icon-survival",
             "children": [
       
             ]
         },	
         {
-            "name": t('analysis_Tables'),// {ns: 'menutoolbar'}),
+            "id": "menu-analysis-tables",
             "icon": "icon-table_basic",
             "children": [
       
             ]
         },	        	
         {
-            "name": t('analysis_Variance'),// {ns: 'menutoolbar'}),
+            "id": "menu-analysis-variance",
             "icon": "icon-variance",
             "children": [
                 "./bartlettsTest",
@@ -182,9 +178,9 @@ const nav = () => ({
             ]
         }
     ]
-})
+}
 
 module.exports = {
-    nav: nav(),
-    render: () => nav()
+    nav: nav,
+    render: () => nav
 }
