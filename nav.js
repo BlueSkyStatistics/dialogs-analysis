@@ -180,7 +180,4 @@ const nav = {
     ]
 }
 
-module.exports = {
-    nav: nav,
-    render: () => nav
-}
+module.exports.nav = nav
