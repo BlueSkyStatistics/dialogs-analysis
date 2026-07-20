@@ -105,8 +105,22 @@ class ttestOneSample extends baseModal {
 require(effectsize)
 require(ggplot2)
 
+bsky_replace_sig_with_pval <- function(x) {
+  if (is.list(x)) {
+    lapply(x, bsky_replace_sig_with_pval)
+  } else if (is.character(x)) {
+    gsub("Sig\\\\.", "p-value", x)
+  } else {
+    x
+  }
+}
+
+# following line is commented out as the new table-footer strings 
+# have been added to the init.r and BSkyFormat.r
+# uadatasets.sk$BSkySigfColPatterns = c(uadatasets.sk$BSkySigfColPatterns, "p-value(2-tail)", "p-value(1-tail, <)",  "p-value(1-tail, >)")
+
 {{if (options.selected.showEffectSizes == "TRUE")}}
-	bsky_t_test_result = {{dataset.name}} %>%
+	bsky_t_test_result = {{dataset.name}} %>% as.data.frame() %>%
 		dplyr::select({{selected.tvarbox1 | safe}}) %>%
 			BSkyOneSmTTest( 
 			mu = {{selected.testval | safe}}, 
@@ -122,7 +136,7 @@ require(ggplot2)
 			bsky_t_test_result  %>%
 				BSkyFormat()
 {{#else}}
-	bsky_t_test_result = {{dataset.name}} %>%
+	bsky_t_test_result = {{dataset.name}} %>% as.data.frame() %>%
 		dplyr::select({{selected.tvarbox1 | safe}}) %>%
 			BSkyOneSmTTest( 
 			mu = {{selected.testval | safe}}, 
@@ -131,13 +145,14 @@ require(ggplot2)
 			missing={{selected.Missvals | safe}},
 			datasetNameOrDatasetGlobalIndex ='{{dataset.name}}') 
 			
-			bsky_t_test_result %>%
-				BSkyFormat()
+			bsky_t_test_result %>% 
+				bsky_replace_sig_with_pval() %>%
+					BSkyFormat()
 {{/if}}
 
 {{if (options.selected.showHistogramChk == "TRUE")}}
-
-bsky_selected_names = colnames(dplyr::select({{dataset.name}}, {{selected.tvarbox1 | safe}}))
+bsky_plot = NULL
+bsky_selected_names = colnames(dplyr::select(as.data.frame({{dataset.name}}), {{selected.tvarbox1 | safe}}))
 
 for(i in 1:length(bsky_selected_names)){
 	bsky_ci_low   <-  as.numeric(bsky_t_test_result[[2]][2+i, 5])
@@ -241,7 +256,7 @@ for(i in 1:length(bsky_selected_names)){
 					plot.subtitle = element_text(hjust = 0.5)
 				  )
 		
-		print(bsky_plot)
+		if(!is.null(bsky_plot)) print(bsky_plot)
 }
 {{/if}}
 
