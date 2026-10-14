@@ -18,11 +18,120 @@ class UberSummary extends baseModal {
 require(psych);
 require(dplyr);
 
+
+# Transpose the grouped "long" stats table into a wide layout.
+#
+# df           : data frame built by BSkySummaryStats with columns
+#                [group cols..., "stats", var1, var2, ...]
+#                (group labels are only filled on the first stat row of each
+#                group combination; the rest are "")
+# n_group_cols : number of grouping variables
+# layout       : "var_stat"    -> one row per group combo, columns Var.stat ordered by variable
+#                "stat_var"    -> one row per group combo, columns Var.stat ordered by stat
+#                "by_var_rows" -> one row per group combo x variable, columns = stats
+BSkyGroupedStatsToWide <- function(df, n_group_cols,
+                                   layout = c("var_stat", "stat_var", "by_var_rows")) {
+    layout     <- match.arg(layout)
+    group_cols <- names(df)[seq_len(n_group_cols)]
+    var_cols   <- setdiff(names(df), c(group_cols, "stats"))
+
+    df[] <- lapply(df, as.character)
+
+    # 1. Forward-fill blank group labels
+    for (g in group_cols) {
+        last <- ""
+        for (r in seq_len(nrow(df))) {
+            if (!is.na(df[r, g]) && df[r, g] != "") {
+                last <- df[r, g]
+            } else {
+                df[r, g] <- last
+            }
+        }
+    }
+
+    # 2. Preserve original order of group combinations and stats
+    df$.grp    <- do.call(paste, c(df[group_cols], sep = "\r"))
+    grp_order  <- unique(df$.grp)
+    stat_order <- unique(df$stats)
+
+    # 3. Long -> tidy (one row per group x stat x variable)
+    tidy <- do.call(rbind, lapply(var_cols, function(v) {
+        data.frame(.grp = df$.grp, stats = df$stats, variable = v,
+                   value = df[[v]], stringsAsFactors = FALSE)
+    }))
+
+    # 4. Lookup of group labels, one row per group combo, in original order
+    group_lookup <- df[!duplicated(df$.grp), c(".grp", group_cols), drop = FALSE]
+    group_lookup <- group_lookup[match(grp_order, group_lookup$.grp), , drop = FALSE]
+
+    if (layout == "by_var_rows") {
+        # rows = group combo x variable, columns = stats
+        out <- do.call(rbind, lapply(grp_order, function(gk) {
+            do.call(rbind, lapply(var_cols, function(v) {
+                sub  <- tidy[tidy$.grp == gk & tidy$variable == v, ]
+                vals <- sub$value[match(stat_order, sub$stats)]
+                row  <- as.data.frame(as.list(vals), stringsAsFactors = FALSE)
+                names(row) <- stat_order
+                cbind(group_lookup[group_lookup$.grp == gk, group_cols, drop = FALSE],
+                      Variable = v, row, row.names = NULL)
+            }))
+        }))
+    } else {
+        # rows = group combo, columns = variable x stat
+        if (length(var_cols) == 1) {
+            combos    <- data.frame(variable = var_cols[1], stats = stat_order,
+                                    stringsAsFactors = FALSE)
+            col_names <- stat_order
+        } else if (layout == "var_stat") {
+            combos    <- expand.grid(stats = stat_order, variable = var_cols,
+                                     stringsAsFactors = FALSE)
+            col_names <- paste(combos$variable, combos$stats, sep = ".")
+        } else {
+            combos    <- expand.grid(variable = var_cols, stats = stat_order,
+                                     stringsAsFactors = FALSE)
+            col_names <- paste(combos$variable, combos$stats, sep = ".")
+        }
+
+        combo_key <- paste(combos$variable, combos$stats, sep = "\r")
+        mat <- do.call(rbind, lapply(grp_order, function(gk) {
+            sub <- tidy[tidy$.grp == gk, ]
+            sub$value[match(combo_key, paste(sub$variable, sub$stats, sep = "\r"))]
+        }))
+
+        out <- data.frame(group_lookup[group_cols], mat, stringsAsFactors = FALSE)
+        names(out) <- c(group_cols, col_names)
+    }
+
+    # 5. Blank repeated OUTER group labels; always keep the leaf (innermost) filled.
+    #    Keys are computed BEFORE any blanking, using the full path down to each level,
+    #    so "Good|Batch2" is never confused with "Bad|Batch2".
+    n_g  <- length(group_cols)
+    keys <- lapply(seq_len(n_g), function(k)
+        do.call(paste, c(out[group_cols[seq_len(k)]], sep = "\r")))
+
+    if (n_g > 1) {
+        for (k in seq_len(n_g - 1)) {
+            out[duplicated(keys[[k]]), group_cols[k]] <- ""
+        }
+    }
+
+    rownames(out) <- NULL
+    out
+}
+
+
 cv <<- function(x, na.rm = TRUE)  {
 			sd(x, na.rm = na.rm)/mean(x, na.rm = na.rm)
 }
 
-{{dataset.name}} %>%
+
+range_spread <<- function(x, na.rm = TRUE)  {
+			spread = max(x, na.rm = na.rm) - min(x, na.rm = na.rm)
+			invisible(return(spread))
+	}
+
+
+bsky_tmp_stat_tbl = {{dataset.name}} %>%
 dplyr::group_by({{selected.tvarbox2 | safe}}) %>%
     dplyr::select({{selected.tvarbox1 | safe}},{{selected.tvarbox2 | safe}}) %>%
         BSkySummaryStats(stats = c(min={{selected.min | safe}}, 
@@ -40,8 +149,21 @@ dplyr::group_by({{selected.tvarbox2 | safe}}) %>%
                                     quantilesProbs = c({{selected.probs | safe}}), 
                                     {{if (options.selected.ChkboxShowOnlyTopFewFactors=="TRUE")}}maxsum = {{selected.txtNumTopFactorsToShow | safe}}{{#else}}maxsum = 0{{/if}}, datasetName="{{dataset.name}}",
                                     additionalStats = {{selected.addIsstatnames | safe}},
-                                    long_table={{selected.longTbl | safe}}) %>%
-            BSkyFormat()                        
+                                    long_table={{selected.longTbl | safe}}) 
+									
+{{if(options.selected.tvarbox2 === "" || options.selected.longTbl !== "TRUE" )}}
+			bsky_tmp_stat_tbl	%>%
+					BSkyFormat() 
+{{#else}}
+			bsky_tmp_stat_tbl[[1]] %>%
+						BSkyFormat(outputTableRenames = "Dataset Overview") 
+									
+			BSkyGroupedStatsToWide(bsky_tmp_stat_tbl[[2]], 
+															n_group_cols = length(strsplit('{{selected.tvarbox2 | safe}}', ",")[[1]]),
+															layout ="by_var_rows") %>%
+																		BSkyFormat(outputTableRenames = "Numerical Statistical Analysis by Variable") 			
+{{/if}}	
+				
 `
         }
         var objects = {
@@ -142,7 +264,7 @@ dplyr::group_by({{selected.tvarbox2 | safe}}) %>%
         
         this.help = {
             title: UberSummary.t('help.title'),
-            r_help: UberSummary.t('help.r_help'),  //r_help: "help(data,package='utils')",
+            r_help: UberSummary.t('help.r_help'), //Fix by Anil //r_help: "help(data,package='utils')",
             body: UberSummary.t('help.body')
         }
 ;
