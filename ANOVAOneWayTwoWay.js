@@ -59,7 +59,47 @@ class ANOVAOneWayTwoWay extends baseModal {
                     true_value: "TRUE",
                     false_value: "FALSE",
                 })
+            },   
+			
+			 EMMChk: {
+                el: new checkbox(config, {
+                    label: ANOVAOneWayTwoWay.t('EMMChk'),
+                    no: "EMMChk",
+                    bs_type: "valuebox",
+                    newline: true,
+                    extraction: "TextAsIs",
+                    true_value: "TRUE",
+                    false_value: "FALSE",
+					state: "checked"
+                })
             },
+			/*
+			 resContrastsChk: {
+                el: new checkbox(config, {
+                    label: ANOVAOneWayTwoWay.t('resContrastsChk'),
+                    no: "resContrastsChk",
+                    bs_type: "valuebox",
+                    newline: true,
+                    extraction: "TextAsIs",
+                    true_value: "TRUE",
+                    false_value: "FALSE",
+					state: "checked"
+                })
+            },
+			*/
+			 posthocChk: {
+                el: new checkbox(config, {
+                    label: ANOVAOneWayTwoWay.t('posthocChk'),
+                    no: "posthocChk",
+                    bs_type: "valuebox",
+                    newline: true,
+                    extraction: "TextAsIs",
+                    true_value: "TRUE",
+                    false_value: "FALSE",
+					state: "checked"
+                })
+            },
+			
             type: {
                 el: new comboBox(config, {
                     no: 'type',
@@ -266,11 +306,19 @@ fittedVals: {
         };
         const content = {
             left: [objects.content_var.el.content],
-            right: [objects.modelname.el.content,objects.target.el.content, objects.dest.el.content],
+            right: [
+				objects.modelname.el.content,
+				objects.target.el.content, 
+				objects.dest.el.content,   
+				objects.EMMChk.el.content,
+				//objects.resContrastsChk.el.content,
+				objects.posthocChk.el.content
+			],
             bottom: [opts.el.content],
             nav: {
                 name: ANOVAOneWayTwoWay.t('navigation'),
                 icon: "icon-variance",
+				//datasetRequired: true,
                 modal: config.id
             }
         }
@@ -324,17 +372,31 @@ BSkyFormat(BSkyMultiAnova,singleTableOutputHeader = "ANOVA table with type III s
 #Displaying estimated marginal means
 resultsEmmeans = list()
 resultsEmmeans<-emmeans::emmeans({{selected.modelname | safe}},~{{selected.dest | safe}})
+
+{{if (options.selected.EMMChk == "TRUE") }}
 BSkyFormat(data.frame(resultsEmmeans),singleTableOutputHeader ="Estimated Marginal Means for {{selected.target | safe}} by {{selected.dest | safe}}")
+{{/if}}
+
 {{if (options.selected.levene == "TRUE") }}
 #Levene's Test
 BSky_Levene_Test <-with({{dataset.name}},car::leveneTest({{selected.target | safe}},{{selected.dest | safe}}))
-BSkyFormat(as.data.frame(BSky_Levene_Test), singleTableOutputHeader = "Levene's test for homogenity of variances (center=mean) for {{selected.target | safe}} against {{selected.dest | safe}}"){{/if}}
+BSkyFormat(as.data.frame(BSky_Levene_Test), singleTableOutputHeader = "Levene's test for homogenity of variances (center=mean) for {{selected.target | safe}} against {{selected.dest | safe}}")
+{{/if}}
+
 #Post-hoc tests
 resContrasts <-emmeans::contrast(resultsEmmeans,method = "{{selected.combon | safe}}",adjust = "{{selected.adjust | safe}}")
 resSummary <-summary(resContrasts)
+{{if (options.selected.posthocChk == "TRUE") }}
 cat("\\n\\n")
 cat(attributes(resSummary)$mesg,sep = "\\n")
-BSkyFormat(as.data.frame(resContrasts),singleTableOutputHeader = "Post-hoc tests for {{selected.target | safe}} by {{selected.dest | safe}} (using method = {{selected.combon | safe}})")
+bsky_resContrasts_df = t(t(as.data.frame(resContrasts)))
+rownames(bsky_resContrasts_df) <- NULL
+BSkyFormat(
+  bsky_resContrasts_df,
+  singleTableOutputHeader = "Post-hoc tests for {{selected.target | safe}} by {{selected.dest | safe}} (using method = {{selected.combon | safe}})"
+)
+{{/if}}
+
 {{if (options.selected.compactly == "TRUE") }}
 #Compare means compactly
 resultsContrasts = list()
@@ -396,17 +458,31 @@ BSkyFormat(BSkyMultiAnova,singleTableOutputHeader = "Anova table with type {{sel
 #Displaying estimated marginal means
 resultsEmmeans = list()
 resultsEmmeans<-emmeans::emmeans({{selected.modelname | safe}},~{{selected.dest | safe}})
+
+{{if (options.selected.EMMChk == "TRUE") }}
 BSkyFormat(data.frame(resultsEmmeans),singleTableOutputHeader ="Estimated Marginal Means for {{selected.target | safe}} by {{selected.dest | safe}}, CI=0.95")
+{{/if}}
+
 {{if (options.selected.levene == "TRUE") }}
 #Levene's Test
 BSky_Levene_Test <-with({{dataset.name}},car::leveneTest({{selected.target | safe}},{{selected.dest | safe}}))
-BSkyFormat(as.data.frame(BSky_Levene_Test),singleTableOutputHeader = "Levene's test for homogenity of variances (center=mean) for {{selected.target | safe}} against {{selected.dest | safe}}"){{/if}}
+BSkyFormat(as.data.frame(BSky_Levene_Test),singleTableOutputHeader = "Levene's test for homogenity of variances (center=mean) for {{selected.target | safe}} against {{selected.dest | safe}}")
+{{/if}}
 \n#Post-hoc tests
 resContrasts <-emmeans::contrast(resultsEmmeans,method = "{{selected.combon | safe}}",adjust = "{{selected.adjust | safe}}")
 resSummary <-summary(resContrasts)
-cat("\\n\\n\\n")
+{{if (options.selected.posthocChk == "TRUE") }}
+#BSkyFormat(as.data.frame(resContrasts),singleTableOutputHeader = "Post-hoc tests for {{selected.target | safe}} by {{selected.dest | safe}} (using method = {{selected.combon | safe}})")
+cat("\\n\\n")
 cat(attributes(resSummary)$mesg,sep = "\\n")
-BSkyFormat(as.data.frame(resContrasts),singleTableOutputHeader = "Post-hoc tests for {{selected.target | safe}} by {{selected.dest | safe}} (using method = {{selected.combon | safe}})")
+bsky_resContrasts_df = t(t(as.data.frame(resContrasts)))
+rownames(bsky_resContrasts_df) <- NULL
+BSkyFormat(
+  bsky_resContrasts_df,
+  singleTableOutputHeader = "Post-hoc tests for {{selected.target | safe}} by {{selected.dest | safe}} (using method = {{selected.combon | safe}})"
+)
+{{/if}}
+
 {{if (options.selected.compactly == "TRUE") }}
 #Compare means compactly
 resultsContrasts = list()
@@ -481,12 +557,22 @@ BSkyLoadRefresh("{{dataset.name}}")
         let snippet8 = {
             RCode: `
 resEmmeans[[{{selected.counter |safe}}]] <- emmeans::emmeans({{selected.modelname | safe}},~{{selected.dest | safe}})
-BSkyFormat(data.frame(resEmmeans[[{{selected.counter | safe}}]]),singleTableOutputHeader ="Estimated Marginal Means for {{selected.target | safe}} by {{selected.dest | safe}}")`};
+
+{{if (options.selected.EMMChk == "TRUE") }}
+BSkyFormat(data.frame(resEmmeans[[{{selected.counter | safe}}]]),singleTableOutputHeader ="Estimated Marginal Means for {{selected.target | safe}} by {{selected.dest | safe}}")
+{{/if}}
+`};
+
         //Generating conditional means
         let snippet81 = {
             RCode: `
 resEmmeans[[{{selected.counter |safe}}]] <- emmeans::emmeans({{selected.modelname | safe}},~{{selected.dependentVars | safe}})
-BSkyFormat(data.frame(resEmmeans[[{{selected.counter | safe}}]]),singleTableOutputHeader ="Estimated Marginal Means for {{selected.target | safe}} by {{selected.dependentVars | safe}}")`};
+
+{{if (options.selected.EMMChk == "TRUE") }}
+BSkyFormat(data.frame(resEmmeans[[{{selected.counter | safe}}]]),singleTableOutputHeader ="Estimated Marginal Means for {{selected.target | safe}} by {{selected.dependentVars | safe}}")
+{{/if}}
+`};
+
         let snippet9 = {
             RCode: `
 {{if (options.selected.levene == "TRUE") }}
@@ -497,9 +583,17 @@ BSkyFormat(as.data.frame(BSky_Levene_Test),singleTableOutputHeader = "Levene's t
             RCode: `
 resContrasts[[{{selected.counter |safe}}]] <- emmeans::contrast(resEmmeans[[{{selected.counter |safe}}]],method = "{{selected.combon | safe}}",adjust = "{{selected.adjust | safe}}")
 resSummary <- summary(resContrasts[[{{selected.counter |safe}}]])
-cat("\\n\\n\\n")
+{{if (options.selected.posthocChk == "TRUE") }}
+#BSkyFormat(data.frame(resContrasts[[{{selected.counter |safe}}]]),singleTableOutputHeader = "Post-hoc tests for {{selected.target | safe}} by {{selected.dest | safe}} (using method = {{selected.combon | safe}})")
+cat("\\n\\n")
 cat(attributes(resSummary)$mesg,sep = "\\n")
-BSkyFormat(data.frame(resContrasts[[{{selected.counter |safe}}]]),singleTableOutputHeader = "Post-hoc tests for {{selected.target | safe}} by {{selected.dest | safe}} (using method = {{selected.combon | safe}})")
+bsky_resContrasts_df = t(t(data.frame(resContrasts[[{{selected.counter |safe}}]])))
+rownames(bsky_resContrasts_df) <- NULL
+BSkyFormat(
+  bsky_resContrasts_df,
+  singleTableOutputHeader = "Post-hoc tests for {{selected.target | safe}} by {{selected.dest | safe}} (using method = {{selected.combon | safe}})"
+)
+{{/if}}
 `};
         // Simple effects tests
         let snippet101 = {
@@ -508,7 +602,9 @@ resContrasts[[{{selected.counter |safe}}]] <- emmeans::contrast(resEmmeans[[{{se
 resSummary <- summary(resContrasts[[{{selected.counter |safe}}]])
 cat("\\n\\n\\n")
 cat(attributes(resSummary)$mesg,sep = "\\n")
-BSkyFormat(data.frame(resContrasts[[{{selected.counter |safe}}]]), singleTableOutputHeader = "Simple effects test for {{selected.target | safe}} by {{selected.dependentVars | safe}} (using method = {{selected.combon | safe}})")`};
+
+BSkyFormat(data.frame(resContrasts[[{{selected.counter |safe}}]]), singleTableOutputHeader = "Simple effects test for {{selected.target | safe}} by {{selected.dependentVars | safe}} (using method = {{selected.combon | safe}})")
+`};
         // Simple effects tests
         let newsnippet101 = {
             RCode: `
@@ -579,6 +675,11 @@ if (exists("resEmmeans")) rm (resEmmeans)
             },
             selected: {
                 target: instance.dialog.prepareSelected({ target: instance.objects.target.el.getVal()[0] }, instance.objects.target.r),
+				
+				EMMChk: instance.objects.EMMChk.el.getVal(),
+				//resContrastsChk: instance.objects.resContrastsChk.el.getVal(),
+				posthocChk: instance.objects.posthocChk.el.getVal(),
+				
                 levene: instance.objects.levene.el.getVal(),
                 type: instance.objects.type.el.getVal(),
                 combon: instance.objects.combon.el.getVal(),
