@@ -101,7 +101,7 @@ class ttestIndependentSamples extends baseModal {
 require(effectsize)
 {{if (options.selected.showEffectSizes == "TRUE")}}
 	
-	{{dataset.name}} %>%
+	bsky_ind_t_test_result = {{dataset.name}} %>%
 		dplyr::group_by({{selected.Target2 | safe}}) %>%
 			dplyr::select({{selected.Target | safe}}, {{selected.Target2 | safe}}) %>%
 				 BSkyIndSmTTest( 
@@ -114,19 +114,26 @@ require(effectsize)
 					glass_d = {{if (options.selected.glassd =="0")}}TRUE{{#else}}FALSE{{/if}},  
 					glassd_correction = {{if (options.selected.glassd =="1")}}TRUE{{#else}}FALSE{{/if}},
 					missing ={{selected.Missvals | safe}}, center = "{{selected.gpbox1 | safe}}",
-					datasetNameOrDatasetGlobalIndex='{{dataset.name}}') %>%
-						BSkyFormat()			
+					datasetNameOrDatasetGlobalIndex='{{dataset.name}}') 
+					
+	bsky_ind_t_test_result %>% 
+		bsky_replace_sig_with_pval() %>%
+			BSkyFormat()
+			
 {{#else}}
 
-	{{dataset.name}} %>%
+	bsky_ind_t_test_result = {{dataset.name}} %>%
 		dplyr::group_by({{selected.Target2 | safe}}) %>%
 			dplyr::select({{selected.Target | safe}}, {{selected.Target2 | safe}}) %>%
 				 BSkyIndSmTTest(  
 					conf.level = {{selected.conflevel | safe}}, 
 					alternative = '{{selected.gpbox2 | safe}}', 
 					missing ={{selected.Missvals | safe}}, center = "{{selected.gpbox1 | safe}}",
-					datasetNameOrDatasetGlobalIndex='{{dataset.name}}') %>%
-						BSkyFormat()
+					datasetNameOrDatasetGlobalIndex='{{dataset.name}}')
+					
+	bsky_ind_t_test_result %>% 
+		bsky_replace_sig_with_pval() %>%
+			BSkyFormat()
 {{/if}}
 `
         }

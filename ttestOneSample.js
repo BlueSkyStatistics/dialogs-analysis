@@ -133,8 +133,9 @@ bsky_replace_sig_with_pval <- function(x) {
 			missing={{selected.Missvals | safe}},
 			datasetNameOrDatasetGlobalIndex ='{{dataset.name}}') 
 			
-			bsky_t_test_result  %>%
-				BSkyFormat()
+			bsky_t_test_result %>% 
+				bsky_replace_sig_with_pval() %>%
+					BSkyFormat()
 {{#else}}
 	bsky_t_test_result = {{dataset.name}} %>% as.data.frame() %>%
 		dplyr::select({{selected.tvarbox1 | safe}}) %>%
