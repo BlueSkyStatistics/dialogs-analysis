@@ -125,12 +125,6 @@ cv <<- function(x, na.rm = TRUE)  {
 }
 
 
-range_spread <<- function(x, na.rm = TRUE)  {
-			spread = max(x, na.rm = na.rm) - min(x, na.rm = na.rm)
-			invisible(return(spread))
-	}
-
-
 bsky_tmp_stat_tbl = {{dataset.name}} %>%
 dplyr::group_by({{selected.tvarbox2 | safe}}) %>%
     dplyr::select({{selected.tvarbox1 | safe}},{{selected.tvarbox2 | safe}}) %>%
@@ -217,7 +211,7 @@ dplyr::group_by({{selected.tvarbox2 | safe}}) %>%
                     placeholder: "",
                     extraction: "CreateArray|RemoveSpaces",
                     allow_spaces: true,
-                    value: "cv, var"
+                    value: "cv, var, range_spread"
                 })
             },
             label3: { el: new labelVar(config, { label: UberSummary.t('label3'), style: "mt-2", h: 6 }) },
