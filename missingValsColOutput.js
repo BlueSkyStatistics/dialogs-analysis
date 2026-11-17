@@ -32,8 +32,9 @@ names(BSky_Row_Num_With_NAs) = c(rep(c("Row numbers with NAs"), BSkyMaxVarLen))
 BSkyFormat(BSky_Dataset_Overview, singleTableOutputHeader=c("Dataset Overview"))
 BSkyFormat(BSky_Total_Missing_Count, singleTableOutputHeader=c("Missing Value (NAs) Count Per Variable"))
 BSkyFormat(BSky_Total_Count_Excluding_Missing, singleTableOutputHeader=c("Non Missing Value Count Per Variable"))
-BSkyFormat(BSky_Row_Num_With_NAs, singleTableOutputHeader=c("Row Numbers for Variables that have NAs"))
 
+
+BSkyFormat(replace(BSky_Row_Num_With_NAs,BSky_Row_Num_With_NAs == "", " "), singleTableOutputHeader=c("Row Numbers for Variables that have NAs"))
 #remove(BSky_Dataset_Overview)
 #remove(BSky_Total_Missing_Count )
 #remove(BSky_Total_Count_Excluding_Missing)
